@@ -1,0 +1,63 @@
+[
+	{
+		"name": "igz_entreprise_location_api",
+		"version": [
+			{
+				"name": "0.0.1",
+				"host": "localhost",
+				"endpoint": [
+					{
+						"name": "all",
+						"method": [
+							{
+								"name": "Send location",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "latitude",
+										"location": "body",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "43.5",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "longitude",
+										"location": "body",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "-6.2",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZQhLebA3i1-OQoK8s10dAigMM_EUswe8vuB-EvALc-A",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/my_location",
+								"description": ""
+							}
+						],
+						"path": "",
+						"description": ""
+					}
+				],
+				"description": "",
+				"protocol": "http",
+				"port": "3000",
+				"path": ""
+			}
+		]
+	}
+]

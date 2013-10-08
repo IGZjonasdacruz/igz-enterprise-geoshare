@@ -1,0 +1,472 @@
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd,
+q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr,
+th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: "";
+  content: none;
+}
+
+input,
+select {
+  vertical-align: middle;s
+}
+
+body {
+  font: 13px/1.231 sans-serif;
+  *font-size: small;
+}
+
+select,
+input,
+textarea,
+button {
+  font: 99% sans-serif;
+}
+
+pre,
+code,
+kbd,
+samp {
+  font-family: monospace, sans-serif;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+
+small {
+  font-size: 85%;
+}
+
+strong {
+  font-weight: bold;
+}
+
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 15px;
+}
+
+input[type="radio"] {
+  vertical-align: text-bottom;
+}
+
+input[type="checkbox"] {
+  vertical-align: bottom;
+}
+
+.ie7 input[type="checkbox"] {
+  vertical-align: baseline;
+}
+
+.ie6 input {
+  vertical-align: text-bottom;
+}
+
+label,
+input[type="button"],
+input[type="submit"],
+input[type="image"],
+button {
+  cursor: pointer;
+}
+
+button,
+input,
+select,
+textarea {
+  width: auto;
+  overflow: visible;
+  margin: 0;
+}
+
+textarea {
+  overflow: auto;
+}
+
+input::-moz-focus-inner,
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+input:invalid,
+textarea:invalid {
+  -moz-border-radius: 1px;
+  -webkit-border-radius: 1px;
+  -o-border-radius: 1px;
+  -ms-border-radius: 1px;
+  -khtml-border-radius: 1px;
+  border-radius: 1px;
+  -moz-box-shadow: 0, 0, 5px, red;
+  -webkit-box-shadow: 0, 0, 5px, red;
+  -o-box-shadow: 0, 0, 5px, red;
+  box-shadow: 0, 0, 5px, red;
+}
+
+
+body,
+select,
+input,
+textarea {
+  color: #444;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  width: 960px;
+  margin: 15px auto;
+  padding-bottom: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+h2 {
+  font-weight: normal;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+h4 {
+  font-weight: normal;
+  font-size: 14px;
+}
+
+ul {
+  margin: 0;
+}
+
+li {
+  list-style: none;
+  margin-left: 0;
+}
+
+
+.invisible {
+  visibility: hidden;
+  border: none;
+}
+
+
+a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  color: black;
+  text-decoration: underline; 
+}
+
+.inline {
+  display: inline;
+}
+
+.footer {
+  margin-top: 25px;
+}
+
+.footer a{
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+  color: inherit;
+}
+
+.f-left {
+  font-size: 8pt;
+  text-align: left;
+  float: left;
+}
+
+.f-right {
+  font-size: 8pt;
+  text-align: right;
+  float: right;
+}
+
+label {
+   height: 16px;
+   width: 16px;
+   vertical-align: middle;
+   display:inline-block;
+   padding: 0 0 0 0px;
+  background-repeat: no-repeat;
+
+
+  /* Hide the text. */
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.delete {
+   background-image: url('../img/trash.png');
+  
+}
+
+.duplicate {
+   background-image: url('../img/duplicate.png');
+  
+}
+
+.copy {
+   background-image: url('../img/copy.png');
+  
+}
+
+.paste {
+   background-image: url('../img/paste.png');
+  
+}
+
+.move_up {
+   background-image: url('../img/up.png');
+  
+}
+
+.move_down {
+   background-image: url('../img/down.png');
+  
+}
+
+.edit {
+   background-image: url('../img/edit.png');
+  
+}
+
+
+.ok {
+   background-image: url('../img/ok.png');
+  
+}
+
+
+.cancel {
+   background-image: url('../img/cancel.png');
+  
+}
+.open {
+   background-image: url('../img/plus.png');  
+}
+
+.expand {
+   background-image: url('../img/expand.png');
+  
+}
+
+.collapse {
+   background-image: url('../img/collapse.png');
+  
+}
+
+.filter {
+   background-image: url('../img/filter.png');
+  
+}
+
+.close {
+  background-image: url('../img/minus.png');
+    }
+
+.list {
+  margin-top: 5px;
+}
+
+.item {
+  margin-left: 10px;
+  margin-top: 3px;
+  margin-bottom: 5px;
+}
+
+.field {
+ margin-left: 10px; 
+   margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+
+input[type='button'], button   {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.item.POST {
+  background-color: #e7f6ec;
+border: 1px solid black;
+border-color: #c3e8d1;
+  }
+
+  .item.PUT {
+  background-color: #f9f2e9;
+border: 1px solid black;
+border-color: #f0e0ca;
+  }
+
+  .item.DELETE {
+  background-color: #f5e8e8;
+border: 1px solid black;
+border-color: #e8c6c7;
+  }
+
+  .item.GET {
+  background-color: #e7f0f7;
+border: 1px solid black;
+border-color: #c3d9ec;
+  }
+
+
+.method > span[data-id='value']{
+  text-transform: uppercase;
+  display: inline-block;
+  width: 50px;
+  font-size: 0.7em;
+  text-align: center;
+  padding: 7px 0 4px 0;
+  border-radius: 2px;
+  border: 1px solid black;
+  color: white;
+  }
+
+.POST > span[data-id='value']{
+  background-color: #10a54a;
+  border-color: #c3e8d1;
+}
+
+.PUT > span[data-id='value']{
+  background-color: #c5862b;
+  border-color: #f0e0ca;
+}
+
+.DELETE > span[data-id='value']{
+  background-color: #a41e22;
+  border-color: #e8c6c7;
+}
+
+.GET > span[data-id='value']{
+  background-color: #0f6ab4;
+  border-color: #c3d9ec;
+}
+
+table {
+  border-spacing: 0px;
+}
+
+
+td.field {
+  font-weight: bold;
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.POST td.field {
+  border-bottom: 1px solid #9ddab1;
+}
+
+.GET td.field {
+  border-bottom: 1px solid #9ac0de;
+}
+
+.PUT td.field {
+  border-bottom: 1px solid #e3c399;
+}
+
+.DELETE td.field {
+  border-bottom: 1px solid #d6a1a1;
+}
+
+.table {
+  display: table;
+  width: 100%;
+}
+
+.table-row {
+  display: table-row;
+}
+
+.table-cell {
+  display: table-cell;
+}
+
+.cell2 {
+  padding-left: 100px;
+}
+.cell {
+  padding-left: 80px;
+}
+
+.parameters {
+  width: 100%;
+}
+
+.result {
+  margin: 10px;
+}
+.result pre {
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.result h4 {
+  margin-top: 10px;
+}
+
+.more {
+  margin: 10px;
+}
+
+.no_events {
+  pointer-events: none;
+  cursor: default;
+}

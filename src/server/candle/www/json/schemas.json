@@ -1,0 +1,182 @@
+
+{
+ "api": {
+  "name": {
+   "key": true,
+   "show": false,
+   "filter": false,
+   "expand": false,
+   "details": false,
+   "canCopy": false,
+   "showPastedItems": false,
+   "inline": true
+  },
+  "version": {
+    "type": "list",
+    "schema": "api_version"
+  } 
+ }, 
+ "api_version":
+ {
+  "name": {
+   "key": true,
+   "show": false
+  },
+  "description": {
+    "view": "textarea"
+  },
+  "protocol": {
+   "type": "string",
+   "view": "select",
+   "values": "http, https"
+  },
+  "host": {
+   "type": "string",
+   "view": "input",
+   "default": "localhost"
+  },
+  "port": {},
+  "path": {
+   "type": "string",
+   "view": "input"
+  },
+  "endpoint": {
+    "type": "list",
+    "schema": "endpoint"
+  }
+ },
+ "endpoint":
+ {
+  "name": {
+   "key": true,
+   "show": false
+  },
+  "path": {},
+  "description": {
+    "view": "textarea"
+    },
+  "method": {
+    "type": "list",
+    "schema": "method"
+  },
+  "param": {
+    "type": "list",
+    "view": "table",
+    "schema": "param"
+  }
+ }, 
+ "method":
+ {
+  "name": {
+   "key": true,
+   "show": false,
+   "filter": false,
+   "unfilter": true,
+   "expand": false,
+   "link": false,
+   "more": "ui.try.js,ui.code.js"
+  },
+  "method" : {
+    "inline": true,
+    "pre": true,
+    "value_as_css": true,
+    "default": "GET",
+    "view": "select",
+    "values": "GET, POST, PUT, DELETE"
+  },
+  "path" : {
+    "inline": true
+  },
+  "type": {
+    "inline" : true,
+    "view": "select",
+    "values": "text, json",
+    "default": "text"
+    },
+  "content-type": {
+    "inline" : false,
+    "view": "select",
+    "values": "application/x-www-form-urlencoded,application/json,text/plain,text/html",
+    "default": "application/x-www-form-urlencoded"
+    },
+    "response content-type": {
+    "inline" : false,
+    "view": "select",
+    "values": "application/x-www-form-urlencoded,application/json,text/plain,text/html",
+    "default": "application/x-www-form-urlencoded"
+    },
+  "description": {
+    "show_title": false,
+    "inline" : true,
+    "view": "textarea"
+    },
+  "java return type": {
+    "inline" : false,
+    "default": "Response"
+    },
+  "param": {
+    "type": "list",
+    "view": "table",
+    "schema": "param"
+  },
+  "http codes": {
+    "type": "list",
+    "view": "table",
+    "schema": "http code"
+  }
+ },
+ "http code": {
+    "number": {
+      "key": true,
+      "show": false,
+      "link": false,
+      "inline": true,
+      "filter": false,
+      "expand": false,
+      "details": false,
+      "default": 200
+    },
+    "description": {
+      "inline": true,
+      "view": "textarea",
+      "default": "All OK"
+    }
+  },
+ "param": {
+  "name": {
+   "key": true,
+   "show": false,
+   "link": false,
+   "inline": true,
+   "filter": false,
+   "expand": false,
+   "details": true
+  },
+  "value": {
+    "inline" : true,
+    "autoedit": true
+    },
+  "location": {
+    "inline" : true,
+    "view": "select",
+    "default": "body",
+    "values": "query, body, path, header"
+    },
+  "isList": {
+    "inline" : false,
+    "view": "checkbox",
+    "default": "false"
+    },
+  "javaType": {
+    "inline" : false
+  },
+  "isJavaPojo": {
+    "inline" : false,
+    "view": "checkbox",
+    "default": "false"
+    },
+  "description": {
+    "inline" : true
+  }
+ }
+}
