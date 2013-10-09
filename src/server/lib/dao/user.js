@@ -1,13 +1,12 @@
 var MongoClient = require('mongodb').MongoClient,
-logger = require('../logger')(__filename);
-
-const DB_CONN = 'mongodb://127.0.0.1:27017/igzgeoshare';
+    logger = require('../logger')(__filename),
+    config = require('../config').DB;
 
 
 function User () { }
 
 User.prototype.save = function(googleProfile, accessToken, refreshToken, callback) {
-  MongoClient.connect(DB_CONN, function(err, db) {
+  MongoClient.connect(config.CONN, function(err, db) {
     if(err) throw err;
 
     var user = {
@@ -30,7 +29,7 @@ User.prototype.save = function(googleProfile, accessToken, refreshToken, callbac
 };
 
 User.prototype.get = function(id, callback) {
-  MongoClient.connect(DB_CONN, function(err, db) {
+  MongoClient.connect(config.CONN, function(err, db) {
     if(err) throw err;
 
     var user = {
@@ -50,7 +49,7 @@ User.prototype.get = function(id, callback) {
 };
 
 User.prototype.saveLocation = function(id, email, location, callback) {
-  MongoClient.connect(DB_CONN, function(err, db) {
+  MongoClient.connect(config.CONN, function(err, db) {
     if(err) throw err;
 
     var geolocation = {

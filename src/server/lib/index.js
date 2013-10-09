@@ -4,14 +4,9 @@ var express = require('express'),
     logger = require('./logger')(__filename);
 
 var app = express();
-
 app.use(express.static(__dirname + '/../public'));
-app.use(express.cookieParser());
 app.use(express.bodyParser());
-app.use(express.session({ secret: 'IGZ Google Contacts' }));
-
 auth.init(app);
-
 app.use(app.router);
 
 app.get('/',

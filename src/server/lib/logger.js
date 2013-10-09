@@ -1,12 +1,6 @@
 
-var winston = require('winston');
-
-
-const LOGGER_SOCKET_ADDRESS = 'tcp://ec2-54-217-125-174.eu-west-1.compute.amazonaws.com:9700',
-      LOGGER_METADATA = {
-        project: 'igz-enterprise-geolocation'
-      };
-
+var winston = require('winston'),
+    config = require('./config').LOGGER;
 
 //
 // Requiring `winston-zeromq-elasticsearch` will expose 
@@ -14,14 +8,19 @@ const LOGGER_SOCKET_ADDRESS = 'tcp://ec2-54-217-125-174.eu-west-1.compute.amazon
 //
 require('winston-zeromq-elasticsearch').ZeroMQElasticSearch;
 
+var transports = [
+  new winston.transports.ZeroMQElasticSearch({
+    socketAddress: config.SOCKET,
+    level: config.LEVEL
+  })
+];
+
+if ( config.CONSOLE_TRANSPORT ) {
+  transports.push( new winston.transports.Console() );
+}
+
 var logger = new winston.Logger({
-  transports : [
-    new winston.transports.Console(),
-    new winston.transports.ZeroMQElasticSearch({
-      socketAddress: LOGGER_SOCKET_ADDRESS,
-      level: 'warn'
-    })
-  ],
+  transports : transports,
   exitOnError: false
 });
 
@@ -35,13 +34,13 @@ module.exports = function (prefix) {
 
   return {
     info : function (msg) {
-      logger.info(prefix + msg, LOGGER_METADATA);
+      logger.info(prefix + msg, config.METADATA);
     },
     warn : function (msg) {
-      logger.warn(prefix + msg, LOGGER_METADATA);
+      logger.warn(prefix + msg, config.METADATA);
     },
     error : function (msg) {
-      logger.error(prefix + msg, LOGGER_METADATA);
+      logger.error(prefix + msg, config.METADATA);
     }
   };
 };
