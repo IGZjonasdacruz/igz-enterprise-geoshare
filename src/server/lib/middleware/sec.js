@@ -1,5 +1,6 @@
 
-var request = require('request');
+var request = require('request'),
+    logger = require('../util/logger')(__filename);
 
 const GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
 
@@ -28,21 +29,21 @@ function ensureAuthenticated (req, res, next) {
     headers : headers,
     url : GOOGLE_USER_INFO_URL,
     qs: params,
-    method: "GET",
+    method: "POST",
     jar: false //  Set to true if you want cookies to be remembered for future use, or define your custom cookie jar (see examples section)
   },
-  function (err, res, body) {
+  function (err, response, body) {
 
     if ( err ) {
-      logger.error(err); // TODO Improve error sending stack trace and util information
-      res.send(500);
-      return;
+      logger.error(err);
+      return res.send(500);
     }
 
-    if ( res.statusCode !== 200 ) {
-      logger.error('The request to ' + GOOGLE_USER_INFO_URL + ' returns statusCode=' + res.statusCode + ', body=' + body);
-      res.send(500);
-      return;
+    if ( response.statusCode === 401 ) {
+      return res.send(401);
+    } else if ( response.statusCode !== 200 ) {
+      logger.warn('The request to ' + GOOGLE_USER_INFO_URL + ' returns statusCode=' + response.statusCode + ', body=' + body);
+      return res.send(response.statusCode);
     }
 
     var resJson = JSON.parse(body);
@@ -53,8 +54,7 @@ function ensureAuthenticated (req, res, next) {
 
     if ( !resJson.hasOwnProperty('email') || !resJson.hasOwnProperty('sub') ) {
       logger.error('The request to ' + GOOGLE_USER_INFO_URL + ' doesn\'t returns email or sub field. body=' + body);
-      res.send(500);
-      return;
+      return res.send(500);
     }
 
     // Expose user for next middelwares

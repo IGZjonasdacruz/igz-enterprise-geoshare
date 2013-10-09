@@ -11,7 +11,7 @@
 						"method": [
 							{
 								"name": "Send location",
-								"method": "GET",
+								"method": "POST",
 								"type": "text",
 								"content-type": "application/x-www-form-urlencoded",
 								"response content-type": "application/x-www-form-urlencoded",
@@ -40,12 +40,12 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZQhLebA3i1-OQoK8s10dAigMM_EUswe8vuB-EvALc-A",
+										"value": "Bearer ya29.AHES6ZSFbeIQAVFRzyLyb9hyutMRi1xVXzxAUKAghEhDoNA0pQ",
 										"javaType": "",
 										"description": ""
 									}
 								],
-								"path": "/my_location",
+								"path": "/user/me/location",
 								"description": ""
 							}
 						],

@@ -1,10 +1,10 @@
-var userDao = require('../dao/user'),
-    logger = require('../util/logger')(__filename),
-    ensureAuth = require('../middleware/sec');
+var logger = require('../util/logger')(__filename),
+    ensureAuth = require('../middleware/sec'),
+    userWorker = require('../worker/user');
 
 function addRoutes (app) {
 
-  app.get('/my_location', ensureAuth, myLocation);
+  app.post('/user/me/location', ensureAuth, myLocation);
 
   logger.info('Geo routes added');
 
@@ -21,10 +21,7 @@ function myLocation (req, res) {
     return;
   }
 
-  // Save
-  var user = req.user;
-  userDao.saveLocation(user.id, user.email, [lat, lon]
-  , function(err, result) {
+  userWorker.saveLocation(req.user, lat, lon, function(err) {
 
     if ( err ) {
       logger.error(err);
