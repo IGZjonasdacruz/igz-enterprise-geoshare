@@ -1,11 +1,11 @@
 var MongoClient = require('mongodb').MongoClient,
-    logger = require('../logger')(__filename),
-    config = require('../config').DB;
+    logger = require('../util/logger')(__filename),
+    config = require('../util/config').DB;
 
 
 function User () { }
 
-User.prototype.save = function(googleProfile, accessToken, refreshToken, callback) {
+/*User.prototype.save = function(googleProfile, accessToken, refreshToken, callback) {
   MongoClient.connect(config.CONN, function(err, db) {
     if(err) throw err;
 
@@ -46,7 +46,7 @@ User.prototype.get = function(id, callback) {
       callback(null, doc);
     });
   })
-};
+};*/
 
 User.prototype.saveLocation = function(id, email, location, callback) {
   MongoClient.connect(config.CONN, function(err, db) {
@@ -80,4 +80,4 @@ User.prototype.saveLocation = function(id, email, location, callback) {
   });
 };
 
-module.exports = new User();
+module.exports = new User(); // This module returns the same user instance (Singleton)
