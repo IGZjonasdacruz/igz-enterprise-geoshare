@@ -33,7 +33,7 @@ iris.resource(
     var endpoint = method.parent;
     var version = endpoint.parent;
     var api = version.parent;
-    var json = method.type == "json";
+    var json = method.type === "json";
     var options = {
       type: method.method,
       url: version.protocol + "://" + version.host + ":" + (version.port || 80) + version.path + endpoint.path + method.path,
@@ -79,13 +79,13 @@ iris.resource(
       }
     });
 
-  }
+  };
 
   self.clientTry = function(method, p_cbk) {
     var endpoint = method.parent;
     var version = endpoint.parent;
     var api = version.parent;
-    var json = method.type == "json";
+    var json = method.type === "json";
     var options = {
       type: method.method,
       url: version.protocol + "://" + version.host + ":" + (version.port || 80) + version.path + endpoint.path + method.path,
@@ -98,16 +98,16 @@ iris.resource(
     for (var i = 0; i < params.length; i++) {
       var param = params[i];
       if (param.value !== "") {
-        if (param.location == "body" && json) {
+        if (param.location === "body" && json) {
           options.data[param.name] = JSON.parse(param.value);  
-        } else if (param.location == "body" || param.location == "query") {
+        } else if (param.location === "body" || param.location === "query") {
           options.data[param.name] = param.value;  
-        }  else if (param.location == "path") {
+        }  else if (param.location === "path") {
           var regx = new RegExp('(:' + param.name + ")($|/)", "g");
           options.url = options.url.replace(regx, function(match, p1, p2, offset, string) {
             return param.value + p2;
           });
-        } else if (param.location == "header") {
+        } else if (param.location === "header") {
           options.headers[param.name] = param.value;  
         }
       }
@@ -125,7 +125,7 @@ iris.resource(
       }
     });
 
-  }
+  };
 		
  },
  iris.path.resource.try);

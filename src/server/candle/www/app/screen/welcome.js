@@ -24,16 +24,16 @@ iris.screen(function(self) {
 
 		
 		
-	}
+	};
 
 	self.awake = function() {
-		if (!location.hash || location.hash == "#") {
+		if (!location.hash || location.hash === "#") {
 			iris.navigate('#/apis');	
 		}
-	}
+	};
 
 	function updateBreadcrumb() {
-		const START = "#/details?"
+		var START = "#/details?";
 		var pos = location.hash.indexOf(START);
 		var html = "";
 		var href = START;

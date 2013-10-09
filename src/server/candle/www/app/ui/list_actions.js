@@ -24,7 +24,7 @@ iris.ui(function(self) {
 
 
 		render();
-	}
+	};
 
 
 	function render() {

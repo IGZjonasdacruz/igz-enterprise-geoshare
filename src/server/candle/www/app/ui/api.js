@@ -16,7 +16,7 @@ iris.ui(function(self) {
 
 		self.ui('actions', iris.path.ui.apiActions.js, {values: self.get('values'), items: items});
 
-	}
+	};
 
 	function render() {
 		self.get('values').hide();

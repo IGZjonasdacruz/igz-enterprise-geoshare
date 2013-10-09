@@ -4,7 +4,7 @@
   "description": "Intelygenz open-source NodeJS locate nearest domain contacts.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ENV=test vows test/*-test.js"
   },
   "repository": {
     "type": "git",
@@ -33,5 +33,9 @@
     "winston-zeromq-elasticsearch": "~0.1.1",
     "winston": "~0.7.2",
     "request": "*"
+  },
+  "devDependencies": {
+    "vows": "~0.7.0",
+    "api-easy": "~0.3.8"
   }
 }

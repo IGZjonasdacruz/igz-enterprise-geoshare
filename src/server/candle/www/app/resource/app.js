@@ -16,14 +16,14 @@ iris.resource(
     clip = {
       item: clone(item),
       schema: schema
-    } 
+    };
 
     iris.notify(iris.evts.copy);
-  }
+  };
 
   self.getClip = function() {
     return clip;
-  }
+  };
   
 
   self.init = function(f_ok) {
@@ -85,13 +85,13 @@ iris.resource(
    self.init(function() {
     f_ok(apis);
    });
-  }
+  };
 
   self.getSchemas = function(f_ok) {
    self.init(function() {
     f_ok(schemas);
    });
-  }
+  };
   
   self.getApi = function(apiKey, f_ok) {
    var api = null;
@@ -104,7 +104,7 @@ iris.resource(
      }
      f_ok(api);
    });
-  }
+  };
 
   function getJSON(file, f_ok) {
    self.get(file, function(data) {
@@ -135,7 +135,7 @@ iris.resource(
     while (changed) {
       changed = false;
       for (var fieldName in schema) {
-        if (schema[fieldName].type == "list") {
+        if (schema[fieldName].type === "list") {
           var elem = {};
           elem[fieldName] = schema[fieldName].schema;
           order.push(elem);
@@ -161,16 +161,16 @@ iris.resource(
         }
     });
 
-    if (typeof result == "undefined") {
+    if (typeof result === "undefined") {
         if (Object.prototype.toString.call( item ) === "[object Array]") {
             result = [];
             item.forEach(function(child, index, array) { 
                 result[index] = clone( child, removeParents );
             });
 
-        } else if (typeof item == "object") {
+        } else if (typeof item === "object") {
             // testing that this is DOM
-            if (item.nodeType && typeof item.cloneNode == "function") {
+            if (item.nodeType && typeof item.cloneNode === "function") {
                 var result = item.cloneNode( true );    
             } else if (!item.prototype) { // check that this is a literal
                 if (item instanceof Date) {

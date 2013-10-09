@@ -18,7 +18,7 @@ iris.ui(function(self) {
 			});	
 		}
 		
-	}
+	};
 
 	self.val = function(val) {
 		if (val) {
@@ -27,6 +27,6 @@ iris.ui(function(self) {
 			return self.get('field').val();	
 		}
 		
-	}
+	};
 
 }, iris.path.ui.select_field.js);

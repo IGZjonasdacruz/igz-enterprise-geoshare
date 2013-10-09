@@ -50,7 +50,7 @@ iris.ui(function(self) {
 		self.get("curl").trigger("click");
 
 
-	}
+	};
 
 	function showCode(method, showAll) {
 		var html = code[language + ( showAll ? "All": "" )](method);

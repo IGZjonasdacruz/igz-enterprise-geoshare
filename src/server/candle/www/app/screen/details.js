@@ -6,7 +6,7 @@ iris.screen(function(self) {
 
 	self.create = function() {
 		self.tmpl(iris.path.screens.details.html);	
-	}
+	};
  
  self.awake = function(params) {
 	  if (ui) {
@@ -60,7 +60,7 @@ iris.screen(function(self) {
 	  	ui = self.ui("values", iris.path.ui.list.js, {"list": {'type': nextType, "name": params[type], "hideName": true, "items": items, "itemParent": itemParent, "schema": schema}, "link_schema": location.hash.replace(/^.*\?/,"") + "&" + nextType});
 	  });
   	});
- }
+ };
 
 
 }, iris.path.screens.details.js);

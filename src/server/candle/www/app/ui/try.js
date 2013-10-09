@@ -54,8 +54,6 @@ iris.ui(function(self) {
 			hljs.highlightBlock(self.get("response-body").get(0), null, false);
 			hljs.highlightBlock(self.get("response-headers").get(0), null, false);;
 		}
-	}
-
-
+	};
 
 }, iris.path.ui.try.js);

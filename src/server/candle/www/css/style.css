@@ -7,6 +7,8 @@ th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgr
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+  font: 1em sans-serif;
+  color: #c8c8c8;
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
@@ -28,8 +30,7 @@ select {
 }
 
 body {
-  font: 13px/1.231 sans-serif;
-  *font-size: small;
+  background-color: #272b30;
 }
 
 select,
@@ -196,14 +197,14 @@ li {
 
 
 a {
-  color: black;
-  text-decoration: none;
+  color: #fff;
   font-weight: bold;
+  text-decoration: underline; 
 }
 
 a:hover {
-  color: black;
-  text-decoration: underline; 
+  color: #fff;
+  text-decoration: none;
 }
 
 .inline {
@@ -325,15 +326,29 @@ label {
 }
 
 .item {
-  margin-left: 10px;
-  margin-top: 3px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  box-shadow: inset 0 0 10px #666;
+}
+
+.item .name {
+  font-weight: bold;
+}
+
+.item * {
+  color: #666;
+}
+
+.item .values {
+  margin: 20px 0;
+}
+
+.field .name {
+  font-weight: bold;
 }
 
 .field {
- margin-left: 10px; 
-   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 
@@ -344,26 +359,18 @@ input[type='button'], button   {
 
 .item.POST {
   background-color: #e7f6ec;
-border: 1px solid black;
-border-color: #c3e8d1;
   }
 
   .item.PUT {
   background-color: #f9f2e9;
-border: 1px solid black;
-border-color: #f0e0ca;
   }
 
   .item.DELETE {
   background-color: #f5e8e8;
-border: 1px solid black;
-border-color: #e8c6c7;
   }
 
   .item.GET {
   background-color: #e7f0f7;
-border: 1px solid black;
-border-color: #c3d9ec;
   }
 
 
@@ -371,13 +378,14 @@ border-color: #c3d9ec;
   text-transform: uppercase;
   display: inline-block;
   width: 50px;
-  font-size: 0.7em;
   text-align: center;
   padding: 7px 0 4px 0;
   border-radius: 2px;
   border: 1px solid black;
   color: white;
-  }
+  font-weight: bold;
+  font-size: 0.9em;
+}
 
 .POST > span[data-id='value']{
   background-color: #10a54a;

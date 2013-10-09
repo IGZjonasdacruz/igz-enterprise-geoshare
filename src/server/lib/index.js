@@ -1,7 +1,7 @@
 var express = require('express'),
     passport = require('passport'),
     auth = require('./routes/auth'),
-    geo = require('./routes/geo'),
+    geo = require('./routes/user'),
     logger = require('./util/logger')(__filename),
     fs = require('fs');
 
@@ -33,5 +33,5 @@ if ( !port ) {
 }
 
 app.listen(port, function () {
-  logger.info('Application listening on http://localhost:' + port)
+  logger.info('Application listening on http://localhost:' + port);
 });

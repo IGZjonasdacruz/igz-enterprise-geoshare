@@ -2,18 +2,23 @@
 var winston = require('winston'),
     config = require('./config').LOGGER;
 
-//
-// Requiring `winston-zeromq-elasticsearch` will expose 
-// `winston.transports.ZeroMQElasticSearch`
-//
-require('winston-zeromq-elasticsearch').ZeroMQElasticSearch;
+var transports = [];
 
-var transports = [
-  new winston.transports.ZeroMQElasticSearch({
-    socketAddress: config.SOCKET,
-    level: config.LEVEL
-  })
-];
+if ( config.SOCKET ) {
+  //
+  // Requiring `winston-zeromq-elasticsearch` will expose 
+  // `winston.transports.ZeroMQElasticSearch`
+  //
+  require('winston-zeromq-elasticsearch').ZeroMQElasticSearch;
+
+  transports.push(
+    new winston.transports.ZeroMQElasticSearch({
+      socketAddress: config.SOCKET,
+      level: config.LEVEL || 'warn'
+    })
+  );
+
+}
 
 if ( config.CONSOLE_TRANSPORT ) {
   transports.push( new winston.transports.Console() );

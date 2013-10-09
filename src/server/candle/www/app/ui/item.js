@@ -93,7 +93,7 @@ iris.ui(function(self) {
         changeLink(); 
       }
       var container = 'values';
-      if (view == "table") {
+      if (view === "table") {
         if (schema[fieldName].inline  === false) {
           container = 'values2';  
         } else {
@@ -119,7 +119,7 @@ iris.ui(function(self) {
           },
           item: item,
           parent: self,
-          "table": view == "table"
+          "table": view === "table"
          }));
 
       } else {
@@ -137,7 +137,7 @@ iris.ui(function(self) {
         self.on(iris.evts.copy, function() {
           app.getSchemas(function(schemas) {
             listSchema = schemas[nameSchema];
-            if (app.getClip().schema && listSchema == app.getClip().schema) {
+            if (app.getClip().schema && listSchema === app.getClip().schema) {
               actions.showPaste(true);
             } else {
               actions.showPaste(false);
@@ -162,7 +162,7 @@ iris.ui(function(self) {
     for (var fieldName in schema) {
       
       var container = 'values';
-      if (view == "table") {
+      if (view === "table") {
         if (schema[fieldName].inline  === false) {
           container = 'values2';  
         } else {
@@ -179,7 +179,7 @@ iris.ui(function(self) {
       }
       
 
-      if (schema[fieldName].type == "list") {
+      if (schema[fieldName].type === "list") {
         var nameSchema = schema[fieldName].schema;
         app.getSchemas(function(schemas) {
           var listSchema = schemas[nameSchema];
@@ -279,7 +279,7 @@ iris.ui(function(self) {
   }
   //console.log("match "+match  +" retain " +  retain)
   var container = "item";
-  if (view == "table") {
+  if (view === "table") {
     container = "values";
   }
   self.get(container).toggle(match === true || retain === true);
@@ -334,7 +334,7 @@ iris.ui(function(self) {
   }
   for (var i = 0; i < lists.length; i++) {
    var list = lists[i];
-   if (list.setting("list").schema == app.getClip().schema ) {
+   if (list.setting("list").schema === app.getClip().schema ) {
     list.add(app.getClip().item, self.showPastedItems);
    }
   }

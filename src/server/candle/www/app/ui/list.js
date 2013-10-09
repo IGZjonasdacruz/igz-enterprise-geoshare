@@ -23,14 +23,14 @@ iris.ui(function(self) {
 		self.get('list').addClass("list " + list.type);
 		self.get('list').toggle(false);
 		self.get('list').attr('href',"#").text(list.name);
-		if (window.location.href.indexOf("#/details") != -1 || list.type == "api") {
+		if (window.location.href.indexOf("#/details") !== -1 || list.type === "api") {
 			self.ui('actions', iris.path.ui.list_actions.js, {'add': newItem, 'list': list});	
 			createUIs();
 		}
 
 		self.add = newItem;
 		
-	}
+	};
 
 	function createTableHeader() {
 		var html = "<tr data-id='header'><td class='field'></td><td class='field'>" + list.type + "</td>";

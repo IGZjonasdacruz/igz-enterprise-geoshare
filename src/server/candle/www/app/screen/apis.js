@@ -10,6 +10,6 @@ iris.screen(function(self) {
 			});
 		});
 		
-	}
+	};
 
 }, iris.path.screens.apis.js);
