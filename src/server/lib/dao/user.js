@@ -48,12 +48,12 @@ User.prototype.get = function(id, callback) {
   })
 };*/
 
-User.prototype.saveLocation = function(id, email, location, callback) {
+User.prototype.saveLocation = function(userId, email, location, callback) {
   MongoClient.connect(config.CONN, function(err, db) {
     if(err) throw err;
 
     var geolocation = {
-      _id: id,
+      _id: userId,
       email: email,
       location: location,
       status: new Date()
@@ -62,7 +62,7 @@ User.prototype.saveLocation = function(id, email, location, callback) {
     collection.ensureIndex( { "status": 1 }, {w: 1, expireAfterSeconds: 100 }, function(err, result) {
       collection.findAndModify(
       {
-        _id: id
+        _id: userId
       },
       {},
       geolocation,
