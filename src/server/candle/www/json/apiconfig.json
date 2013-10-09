@@ -47,6 +47,16 @@
 								],
 								"path": "/user/me/location",
 								"description": ""
+							},
+							{
+								"name": "new_method",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"path": "",
+								"description": ""
 							}
 						],
 						"path": "",
