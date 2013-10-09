@@ -1,5 +1,5 @@
 var user = require('./dao/user'),
-    logger = require('./logger')('dao.user');
+    logger = require('./logger')(__filename);
 
 var request = require('request');
 module.exports.init = function (app) {

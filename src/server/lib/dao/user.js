@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient,
-logger = require('../logger')('dao.user');
+logger = require('../logger')(__filename);
 
 const DB_CONN = 'mongodb://127.0.0.1:27017/igzgeoshare';
 

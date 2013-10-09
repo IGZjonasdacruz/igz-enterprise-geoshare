@@ -1,7 +1,7 @@
 var express = require('express'),
     auth = require('./auth'),
     geo = require('./geo'),
-    logger = require('./logger')('index');
+    logger = require('./logger')(__filename);
 
 var app = express();
 

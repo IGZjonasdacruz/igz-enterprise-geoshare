@@ -28,7 +28,7 @@ var logger = new winston.Logger({
 module.exports = function (prefix) {
   
   if ( prefix !== undefined ) {
-    prefix = '[' + prefix + '] ';
+    prefix = '[' + prefix.replace(process.cwd(), '') + '] ';
   } else {
     prefix = '';
   }

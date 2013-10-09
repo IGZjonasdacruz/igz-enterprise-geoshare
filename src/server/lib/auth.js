@@ -1,7 +1,7 @@
 var passport = require('passport'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     userDao = require('./dao/user'),
-    logger = require('./logger')('auth');
+    logger = require('./logger')(__filename);
 
 const GOOGLE_CLIENT_ID = '218360285517-d0428585nriahlh6gvrobtjop814ltna.apps.googleusercontent.com',
       GOOGLE_CLIENT_SECRET = 'fWHheHq5SH-A2ve2pBp1OxZw',
