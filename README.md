@@ -1,4 +1,4 @@
-igz-enterprise-geoshare
-=======================
+Enterpise GeoShare
+==================
 
-Intelygenz open source system for Google Apps to share temporaly geolocation between people of the same corporation.
+Intelygenz open source system to share temporaly geolocation between people of the same Google Apps domain.
