@@ -40,12 +40,33 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZSFbeIQAVFRzyLyb9hyutMRi1xVXzxAUKAghEhDoNA0pQ",
+										"value": "Bearer ya29.AHES6ZRVOzA9kco5fr9pylLcJzUaqEygptGvriKxNZR5DONP",
 										"javaType": "",
 										"description": ""
 									}
 								],
 								"path": "/user/me/location",
+								"description": ""
+							},
+							{
+								"name": "Get nearest contacts",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZRVOzA9kco5fr9pylLcJzUaqEygptGvriKxNZR5DONP",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/user/contacts/location",
 								"description": ""
 							}
 						],

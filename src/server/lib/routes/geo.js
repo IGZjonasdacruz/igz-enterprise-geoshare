@@ -5,6 +5,7 @@ var logger = require('../util/logger')(__filename),
 function addRoutes (app) {
 
   app.post('/user/me/location', ensureAuth, myLocation);
+  app.get('/user/contacts/location', ensureAuth, myNearestContacts);
 
   logger.info('Geo routes added');
 
@@ -21,7 +22,7 @@ function myLocation (req, res) {
     return;
   }
 
-  userWorker.saveLocation(req.user, lat, lon, function(err) {
+  userWorker.saveLocation(req.user, lon, lat, function(err) {
 
     if ( err ) {
       logger.error(err);
@@ -33,5 +34,17 @@ function myLocation (req, res) {
   });
 }
 
+function myNearestContacts (req, res) {
+  userWorker.myNearestContacts(req.user, function(err, result) {
+
+    if ( err ) {
+      logger.error(err);
+      res.send(500);
+      return;
+    }
+
+    res.send(200, result);
+  });
+}
 
 module = module.exports = addRoutes;
