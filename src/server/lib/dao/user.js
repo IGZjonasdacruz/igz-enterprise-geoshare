@@ -59,8 +59,8 @@ User.prototype.saveLocation = function(id, email, location, callback) {
       status: new Date()
     };
     var collection = db.collection('location');
-
-    collection.findAndModify(
+    collection.ensureIndex( { "status": 1 }, {w: 1, expireAfterSeconds: 100 }, function(err, result) {
+      collection.findAndModify(
       {
         _id: id
       },
@@ -77,6 +77,7 @@ User.prototype.saveLocation = function(id, email, location, callback) {
         callback(null, result);
       }
     );
+    });
   });
 };
 
