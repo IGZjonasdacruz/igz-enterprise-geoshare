@@ -8,7 +8,7 @@ function addRoutes (app) {
   app.post('/user/me/location', ensureAuth, myLocation);
   app.get('/user/contacts/location', ensureAuth, myNearestContacts);
 
-  logger.info('Geo routes added');
+  logger.info('User routes added');
 
 }
 

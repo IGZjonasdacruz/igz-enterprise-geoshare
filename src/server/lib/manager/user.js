@@ -4,8 +4,8 @@ var userDao = require('../dao/user'),
 
 function UserManager () {}
 
-UserManager.prototype.saveLocation = function (user, lat, lon, callback) {
-  userDao.saveLocation(user, lat, lon, callback);
+UserManager.prototype.saveLocation = function (user, lat, lng, callback) {
+  userDao.saveLocation(user, lat, lng, callback);
 };
 
 UserManager.prototype.myNearestContacts = function (user, callback) {

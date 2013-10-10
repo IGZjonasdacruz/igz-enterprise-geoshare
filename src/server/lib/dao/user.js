@@ -1,40 +1,44 @@
-var MongoClient = require('mongodb').MongoClient,
-    logger = require('../util/logger')(__filename),
-    config = require('../util/config').DB,
+var logger = require('../util/logger')(__filename),
+    DaoBase = require('./dao_base.js').DaoBase,
     check = require('validator').check,
-    sanitize = require('validator').sanitize;
+    util = require('util');
 
 
-function User () { }
+function User () {
+  DaoBase.call(this, { collectionName: 'user' });
+}
+util.inherits(User, DaoBase);
 
-User.prototype.saveLocation = function(user, lat, lon, callback) {
+
+User.prototype.saveLocation = function (user, lat, lng, callback) {
 
   try {
     check(user.id).notNull();
     check(user.email).isEmail();
     check(user.domain).notEmpty();
     check(lat).isFloat();
-    check(lon).isFloat();
+    check(lng).isFloat();
 
-  } catch (e) {
-    return callback(e);
+  } catch (err) {
+    return callback(err, null);
   }
 
 
-  MongoClient.connect(config.CONN, function(err, db) {
-    if(err) throw err;
+  this.collection(function (err, db, collection) {
+    if(err) return callback(err, null);
 
+  
     var userUpdated = {
       _id: user.id,
       email: user.email,
       domain: user.domain,
       location: {
           type : "Point" ,
-          coordinates : [lat, lon]
+          coordinates : [ lng, lat ]
       },
       status: new Date()
     };
-    var collection = db.collection('location');
+
     collection.ensureIndex( { "status": 1, "location": "2dsphere"}, {w: 1, expireAfterSeconds: 3600 }, function(err, result) {
       collection.findAndModify(
       {
@@ -47,9 +51,9 @@ User.prototype.saveLocation = function(user, lat, lon, callback) {
       "upsert": true
       },
       function (err, result) {
-        if(err) throw err;
+        if(err) return callback(err, null);
         db.close();
-        logger.info('Last location(lat,lon)=[' + lat + ', ' + lon + '] of ' + user.email + ' saved');
+        logger.info('Last location lat=' + lat + ', lng=' + lng + ' of ' + user.email + ' saved');
         callback(null, userUpdated);
       }
     );
@@ -62,14 +66,14 @@ User.prototype.myNearestContacts = function (user, callback) {
   try {
     check(user.id).notNull();
     check(user.domain).notEmpty();
-    
+
   } catch (e) {
-    return callback(e);
+    return callback(e, null);
   }
 
-  MongoClient.connect(config.CONN, function(err, db) {
+  this.collection(function (err, db, collection) {
 
-    if(err) throw err;
+    if(err) return callback(err, null);
   
     var search = {
       _id: user.id
@@ -79,14 +83,14 @@ User.prototype.myNearestContacts = function (user, callback) {
       location: 1
     };
 
-    var collection = db.collection('location');
-      collection.findOne(
-        search,
+    collection.findOne(
+      search,
       {
         fields: fields
       },
       function (err, result) {
-        if(err) throw err;
+        if(err) return callback(err, null);
+
         if(!result) {
           db.close();
           logger.warn('No user found with id ' + user.id);
@@ -112,7 +116,8 @@ User.prototype.myNearestContacts = function (user, callback) {
 
           collection.find(search, {fields: fields}).toArray(
             function (err, result) {
-              if(err) throw err;
+              if(err) return callback(err, null);
+
               logger.info('Retrieved nearest contacts of ' + user.id + ' user');
               callback(null, result);
             }
