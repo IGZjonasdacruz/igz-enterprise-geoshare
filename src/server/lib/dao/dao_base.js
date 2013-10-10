@@ -1,43 +1,64 @@
 
 var MongoClient = require('mongodb').MongoClient,
-    config = require('../util/config').DB,
-    check = require('validator').check,
-    logger = require('../util/logger')(__filename);
+        config = require('../util/config').DB,
+        check = require('validator').check,
+        logger = require('../util/logger')(__filename);
 
-function DaoBase (options) {
-  this.collectionName = options.collectionName;
+function DaoBase(options) {
+ this.collectionName = options.collectionName;
 }
 
-DaoBase.prototype.collection = function (callback) {
-  var self = this;
+DaoBase.prototype.init = function(setUp) {
+ this.setUp = setUp;
+};
 
-  MongoClient.connect(config.CONN, function (err, db) {
-    if (err) return callback(err, null);
+DaoBase.prototype.collection = function(callback) {
+ var self = this;
 
-    var collection = db.collection(self.collectionName);
-    logger.info(self.collectionName + ' collection is open.')
+ MongoClient.connect(config.CONN, function(err, db) {
+  if (err)
+   return callback(err, null);
 
+  var collection = db.collection(self.collectionName);
+
+  if (self.setUp) {
+   
+   self.setUp.call(collection, function(err, result) {
+    if (err)
+     return callback(err, null);
+    logger.info(self.collectionName + ' collection is open.');
+    delete self.setUp;
     callback(null, db, collection);
-  });
-}
+   });
 
-DaoBase.prototype.get = function (id, callback) {
-  try {
-    check(id).notNull();
-  } catch (err) {
-    return callback(err);
+  } else {
+
+   logger.info(self.collectionName + ' collection is open.');
+   callback(null, db, collection);
+
   }
+ });
+};
 
-  this.collection(function (err, db, collection) {
-    if (err) return callback(err, null);
+DaoBase.prototype.get = function(id, callback) {
+ try {
+  check(id).notNull();
+ } catch (err) {
+  return callback(err);
+ }
 
-    collection.findOne({_id: id}, function (err, doc) {
-      if (err) return callback(err, null);
+ this.collection(function(err, db, collection) {
+  if (err)
+   return callback(err, null);
 
-      logger.info('Found id="' + id + '" in "' + self.collectionName + '" collection.')
-      callback(null, doc);
-    })
+  collection.findOne({_id: id}, function(err, doc) {
+   if (err)
+    return callback(err, null);
+
+   logger.info('Found id="' + id + '" in "' + self.collectionName + '" collection.');
+   callback(null, doc);
   });
+ });
 };
 
 exports.DaoBase = DaoBase;
