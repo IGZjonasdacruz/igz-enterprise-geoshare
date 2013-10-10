@@ -14,6 +14,14 @@ app.use(express.bodyParser());
 app.use(passport.initialize());
 app.use(app.router);
 
+/*
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+app.configure('production', function(){
+  app.use(express.errorHandler());
+});
+*/
 
 //
 // Routes

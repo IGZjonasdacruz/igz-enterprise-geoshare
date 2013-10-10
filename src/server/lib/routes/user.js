@@ -1,6 +1,7 @@
 var logger = require('../util/logger')(__filename),
     ensureAuth = require('../middleware/sec'),
-    userWorker = require('../worker/user');
+    userManager = require('../manager/user'),
+    sanitize = require('validator').sanitize;
 
 function addRoutes (app) {
 
@@ -14,33 +15,26 @@ function addRoutes (app) {
 function myLocation (req, res) {
 
   // Check parameters
-  var lat = parseFloat(req.body.latitude);
-  var lon = parseFloat(req.body.longitude);
+  var lat = sanitize(req.body.latitude).toFloat();
+  var lon = sanitize(req.body.longitude).toFloat();
 
-  if ( !lat || !lon ) {
-    res.send(400, 'latitude and longitude parameters are required');
-    return;
-  }
-
-  userWorker.saveLocation(req.user, lon, lat, function(err) {
+  userManager.saveLocation(req.user, lat, lon, function(err, user) {
 
     if ( err ) {
       logger.error(err);
-      res.send(500);
-      return;
+      return res.send(500);
     }
 
-    res.send(200);
+    res.json(user);
   });
 }
 
 function myNearestContacts (req, res) {
-  userWorker.myNearestContacts(req.user, function(err, result) {
+  userManager.myNearestContacts(req.user, function(err, result) {
 
     if ( err ) {
       logger.error(err);
-      res.send(500);
-      return;
+      return res.send(500);
     }
 
     res.send(200, result);

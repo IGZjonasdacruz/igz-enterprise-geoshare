@@ -33,7 +33,8 @@
     "winston-zeromq-elasticsearch": "~0.1.3",
     "winston": "~0.7.2",
     "request": "*",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "validator": "~1.5.1"
   },
   "devDependencies": {
     "vows": "~0.7.0",

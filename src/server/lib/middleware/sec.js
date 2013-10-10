@@ -52,13 +52,15 @@ function ensureAuthenticated (req, res, next) {
     // emails at different points in time, but this value is never changed. You should use this within your application as
     // the unique-identifier key for the user.
 
-    if ( !resJson.hasOwnProperty('email') || !resJson.hasOwnProperty('sub') ) {
-      logger.error('The request to ' + GOOGLE_USER_INFO_URL + ' doesn\'t returns email or sub field. body=' + body);
+    // hd = The hosted domain e.g. example.com if the user is Google apps user.
+
+    if ( !resJson.hasOwnProperty('email') || !resJson.hasOwnProperty('sub') || !resJson.hasOwnProperty('hd') ) {
+      logger.error('The request to ' + GOOGLE_USER_INFO_URL + ' doesn\'t returns email, hd or sub field. body=' + body);
       return res.send(500);
     }
 
     // Expose user for next middelwares
-    req.user = { id: resJson.sub, email: resJson.email };
+    req.user = { id: resJson.sub, email: resJson.email, domain: resJson.hd };
     next(null);
 
   });

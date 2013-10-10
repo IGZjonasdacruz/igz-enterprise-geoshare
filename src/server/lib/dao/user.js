@@ -1,63 +1,36 @@
 var MongoClient = require('mongodb').MongoClient,
     logger = require('../util/logger')(__filename),
-    config = require('../util/config').DB;
+    config = require('../util/config').DB,
+    check = require('validator').check,
+    sanitize = require('validator').sanitize;
 
 
 function User () { }
-/*User.prototype.save = function(googleProfile, accessToken, refreshToken, callback) {
+
+User.prototype.saveLocation = function(user, lat, lon, callback) {
+
+  try {
+    check(user.id).notNull();
+    check(user.email).isEmail();
+    check(user.domain).notEmpty();
+    check(lat).isFloat();
+    check(lon).isFloat();
+
+  } catch (e) {
+    return callback(e);
+  }
+
+
   MongoClient.connect(config.CONN, function(err, db) {
     if(err) throw err;
 
-    var user = {
-      _id: googleProfile.id,
-      name: googleProfile.displayName,
-      accessToken: accessToken,
-      refreshToken: refreshToken
-    };
-
-    var collection = db.collection('user');
-    collection.save(user, {safe: true}, function(err, result) {
-      if(err) throw err;
-
-      db.close();
-      logger.info('User ' + user._id + ' saved')
-
-      callback(null, user);
-    });
-  });
-};
-
-User.prototype.get = function(id, callback) {
-  MongoClient.connect(config.CONN, function(err, db) {
-    if(err) throw err;
-
-    var user = {
-      _id: id
-    };
-
-    var collection = db.collection('user');
-    collection.findOne(user, function(err, doc) {
-      if(err) throw err;
-
-      db.close();
-      logger.info('Get user ' + user._id + ' completed')
-
-      callback(null, doc);
-    });
-  })
-};*/
-
-User.prototype.saveLocation = function(userId, email, domain, location, callback) {
-  MongoClient.connect(config.CONN, function(err, db) {
-    if(err) throw err;
-
-    var geolocation = {
-      _id: userId,
-      email: email,
-      domain: domain,
+    var userUpdated = {
+      _id: user.id,
+      email: user.email,
+      domain: user.domain,
       location: {
           type : "Point" ,
-          coordinates : location
+          coordinates : [lat, lon]
       },
       status: new Date()
     };
@@ -65,10 +38,10 @@ User.prototype.saveLocation = function(userId, email, domain, location, callback
     collection.ensureIndex( { "status": 1, "location": "2dsphere"}, {w: 1, expireAfterSeconds: 3600 }, function(err, result) {
       collection.findAndModify(
       {
-        _id: userId
+        _id: user.id
       },
       {},
-      geolocation,
+      userUpdated,
       {
       "new": true, 
       "upsert": true
@@ -76,21 +49,30 @@ User.prototype.saveLocation = function(userId, email, domain, location, callback
       function (err, result) {
         if(err) throw err;
         db.close();
-        logger.info('Last location ' + JSON.stringify(location) + ' of ' + email + ' saved');
-        callback(null, result);
+        logger.info('Last location(lat,lon)=[' + lat + ', ' + lon + '] of ' + user.email + ' saved');
+        callback(null, userUpdated);
       }
     );
     });
   });
 };
 
-User.prototype.myNearestContacts = function (userId, domain, callback) {
+User.prototype.myNearestContacts = function (user, callback) {
+
+  try {
+    check(user.id).notNull();
+    check(user.domain).notEmpty();
+    
+  } catch (e) {
+    return callback(e);
+  }
+
   MongoClient.connect(config.CONN, function(err, db) {
 
     if(err) throw err;
   
     var search = {
-      _id: userId
+      _id: user.id
     };
 
     var fields = {
@@ -107,13 +89,13 @@ User.prototype.myNearestContacts = function (userId, domain, callback) {
         if(err) throw err;
         if(!result) {
           db.close();
-          logger.warn('No user found with id ' + userId);
-          callback('No user found with id ' + userId, null);
+          logger.warn('No user found with id ' + user.id);
+          callback('No user found with id ' + user.id, null);
         } else {
-          logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + userId + ' user retrieved');
+          logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user.id + ' user retrieved');
           search = {
-            _id: {$ne: userId},
-            domain: domain,
+            _id: {$ne: user.id},
+            domain: user.domain,
             location: {
               $near:{
                 $geometry: result.location
@@ -131,7 +113,7 @@ User.prototype.myNearestContacts = function (userId, domain, callback) {
           collection.find(search, {fields: fields}).toArray(
             function (err, result) {
               if(err) throw err;
-              logger.info('Retrieved nearest contacts of ' + userId + ' user');
+              logger.info('Retrieved nearest contacts of ' + user.id + ' user');
               callback(null, result);
             }
           );
