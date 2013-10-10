@@ -23,7 +23,7 @@ DaoBase.prototype.collection = function(callback) {
 
   if (self.setUp) {
    
-   self.setUp.call(collection, function(err, result) {
+   self.setUp(collection, function(err, result) {
     if (err)
      return callback(err, null);
     logger.info(self.collectionName + ' collection is open.');

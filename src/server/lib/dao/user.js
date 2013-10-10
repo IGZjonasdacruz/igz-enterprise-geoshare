@@ -5,8 +5,8 @@ var logger = require('../util/logger')(__filename),
 
 function User() {
  DaoBase.call(this, {collectionName: 'user'});
- this.init(function(callback) {
-  this.ensureIndex({"status": 1, "location": "2dsphere"}, {w: 1, expireAfterSeconds: 3600}, callback);
+ this.init(function(collection, callback) {
+  collection.ensureIndex({"status": 1, "location": "2dsphere"}, {w: 1, expireAfterSeconds: 3600}, callback);
  });
 }
 
