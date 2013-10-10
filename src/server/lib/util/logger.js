@@ -1,10 +1,12 @@
 
 var winston = require('winston'),
-    config = require('./config').LOGGER;
+    config = require('./config').LOGGER,
+    _ = require('underscore');
 
 var transports = [];
 
 if ( config.SOCKET ) {
+
   //
   // Requiring `winston-zeromq-elasticsearch` will expose 
   // `winston.transports.ZeroMQElasticSearch`
@@ -14,7 +16,8 @@ if ( config.SOCKET ) {
   transports.push(
     new winston.transports.ZeroMQElasticSearch({
       socketAddress: config.SOCKET,
-      level: config.LEVEL || 'warn'
+      level: config.LEVEL || 'warn',
+      metadata: config.METADATA
     })
   );
 
@@ -30,23 +33,22 @@ var logger = new winston.Logger({
 });
 
 
-function createLogger ( prefix ) {
-  
-  if ( prefix !== undefined ) {
-    prefix = '[' + prefix.replace(process.cwd(), '') + '] ';
-  } else {
-    prefix = '';
+function createLogger ( filename ) {
+  var defaultMeta = {};
+
+  if ( filename ) {
+    defaultMeta.file = filename.replace(process.cwd(), '');
   }
 
   return {
-    info : function (msg) {
-      logger.info(prefix + msg, config.METADATA);
+    info : function (msg, meta) {
+      logger.info(msg, _.extend({}, defaultMeta, meta));
     },
-    warn : function (msg) {
-      logger.warn(prefix + msg, config.METADATA);
+    warn : function (msg, meta) {
+      logger.warn(msg, _.extend({}, defaultMeta, meta));
     },
-    error : function (msg) {
-      logger.error(prefix + msg, config.METADATA);
+    error : function (msg, meta) {
+      logger.error(msg, _.extend({}, defaultMeta, meta));
     }
   };
 };
