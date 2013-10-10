@@ -47,9 +47,10 @@ vows.describe('manager/user.js').addBatch({
       
       assert.equal(userDB.location.coordinates[0], lng, 'Saved user lng position should be the same.');
       assert.equal(userDB.location.coordinates[1], lat, 'Saved user lat position should be the same.');
+      
     },
     'User saved correctly.' : {
-      topic: function (err, userDB) {
+      topic: function (userDB) {
         userDao.get(VALID_USER.id, this.callback);
       },
       'Checking user saved.' : function (err, userDB) {

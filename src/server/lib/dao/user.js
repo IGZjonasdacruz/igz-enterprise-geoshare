@@ -4,16 +4,17 @@ var logger = require('../util/logger')(__filename),
     util = require('util');
 
 function User() {
- DaoBase.call(this, {collectionName: 'user'});
- this.init(function(collection, callback) {
-  collection.ensureIndex({"status": 1, "location": "2dsphere"}, {w: 1, expireAfterSeconds: 3600}, callback);
+ DaoBase.call(this, {
+  collectionName: 'user',
+  init: function(collection, callback) {
+   collection.ensureIndex({"status": 1, "location": "2dsphere"}, {w: 1, expireAfterSeconds: 3600}, callback);
+  }
  });
 }
 
 util.inherits(User, DaoBase);
 
 User.prototype.saveLocation = function(user, lat, lng, callback) {
-
  try {
   check(user.id).notNull();
   check(user.email).isEmail();
@@ -24,7 +25,6 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
  } catch (err) {
   return callback(err, null);
  }
-
  this.collection(function(err, db, collection) {
   if (err)
    return callback(err, null);
