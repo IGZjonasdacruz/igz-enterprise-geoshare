@@ -1,7 +1,8 @@
 
 var MongoClient = require('mongodb').MongoClient,
     config = require('../util/config').DB,
-    check = require('validator').check;
+    check = require('validator').check,
+    logger = require('../util/logger')(__filename);
 
 function DaoBase (options) {
   this.collectionName = options.collectionName;
@@ -14,6 +15,8 @@ DaoBase.prototype.collection = function (callback) {
     if (err) return callback(err, null);
 
     var collection = db.collection(self.collectionName);
+    logger.info(self.collectionName + ' collection is open.')
+
     callback(null, db, collection);
   });
 }
@@ -30,6 +33,8 @@ DaoBase.prototype.get = function (id, callback) {
 
     collection.findOne({_id: id}, function (err, doc) {
       if (err) return callback(err, null);
+
+      logger.info('Found id="' + id + '" in "' + self.collectionName + '" collection.')
       callback(null, doc);
     })
   });
