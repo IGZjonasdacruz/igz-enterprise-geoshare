@@ -1,33 +1,36 @@
 var vows = require('vows'),
     assert = require('assert');
 
-
+var VALID_USER = {id:1,email:'test@test.com', domain: 'test.com'};
 
 vows.describe('User Resource').addBatch({
     'saveLocation': {
-        topic: require('../lib/worker/user'),
+        topic: require('../lib/manager/user'),
 
-        'invalid params 1': function (userDao) {
+        'invalid params 1': function (userManager) {
           assert.throws(
             function() {
-              userDao.saveLocation();
+              userManager.saveLocation();
             }
           );
         },
-        'invalid postion param': function (userDao) {
+        'invalid postion param': function (userManager) {
           assert.throws(
             function() {
-              userDao.saveLocation({id:1,email:'test@test.com'}, 1);
+              userManager.saveLocation(VALID_USER, 1);
             }
           );
         },
-        'valid params': function (userDao) {
-          userDao.saveLocation({id:1,email:'test@test.com'}, 1, 1, function () {
-            // TODO Check if exists in DB
+        'valid params': function (userManager) {
+          userManager.saveLocation(VALID_USER, 1, 1, function () {
+            userManager.get(VALID_USER.id, function (err, userDB) {
+              assert.deepEqual(userDB, VALID_USER, 'saved user has the same fields')
+            })
           });
         }
     }
 }).export(module);
+
 
 /*
 var APIeasy = require('api-easy'),

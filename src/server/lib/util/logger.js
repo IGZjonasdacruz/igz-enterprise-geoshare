@@ -49,7 +49,8 @@ function createLogger ( filename ) {
     },
     error : function (msg, meta) {
       logger.error(msg, _.extend({}, defaultMeta, meta));
-    }
+    },
+    transports : transports
   };
 };
 

@@ -13,8 +13,6 @@ function addRoutes (app) {
 }
 
 function myLocation (req, res) {
-
-  // Check parameters
   var lat = sanitize(req.body.latitude).toFloat();
   var lon = sanitize(req.body.longitude).toFloat();
 

@@ -3,7 +3,9 @@ var express = require('express'),
     auth = require('./routes/auth'),
     geo = require('./routes/user'),
     logger = require('./util/logger')(__filename),
-    fs = require('fs');
+    fs = require('fs'),
+    expressWinston = require('express-winston'),
+    config = require('./util/config');
 
 //
 // Configure app
@@ -12,7 +14,15 @@ var app = express();
 app.use(express.static(__dirname + '/../public'));
 app.use(express.bodyParser());
 app.use(passport.initialize());
+
+// express-winston logger makes sense BEFORE the router.
+app.use(expressWinston.logger({transports: logger.transports}));
+
 app.use(app.router);
+
+// express-winston errorLogger makes sense AFTER the router.
+app.use(expressWinston.errorLogger({transports: logger.transports}));
+
 
 /*
 app.configure('development', function(){
