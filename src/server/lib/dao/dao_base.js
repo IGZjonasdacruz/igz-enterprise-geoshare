@@ -26,11 +26,9 @@ DaoBase.prototype.collection = function(callback) {
     init = void 0;
     callback(null, db, collection);
    });
-
   } else {
    logger.info(self.collectionName + ' collection is open.');
-   callback(null, db, collection);
-
+   callback(err, db, collection);
   }
  });
 };

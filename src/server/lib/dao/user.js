@@ -7,7 +7,11 @@ function User() {
  DaoBase.call(this, {
   collectionName: 'user',
   init: function(collection, callback) {
-   collection.ensureIndex({"status": 1, "location": "2dsphere"}, {w: 1, expireAfterSeconds: 3600}, callback);
+   collection.ensureIndex({"status": 1}, {w: 1, expireAfterSeconds: 3600}, function (err, result) {
+    if (err)
+     return callback(err);
+    collection.ensureIndex({"location": "2dsphere"}, callback);
+   });
   }
  });
 }
