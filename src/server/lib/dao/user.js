@@ -1,7 +1,7 @@
 var logger = require('../util/logger')(__filename),
-    DaoBase = require('./dao_base.js').DaoBase,
-    check = require('validator').check,
-    util = require('util');
+        DaoBase = require('./dao_base.js').DaoBase,
+        check = require('validator').check,
+        util = require('util');
 
 function User() {
  DaoBase.call(this, {
@@ -67,7 +67,7 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 };
 
 User.prototype.myNearestContacts = function(user, callback) {
-
+ 
  try {
   check(user.id).notNull();
   check(user.domain).notEmpty();
@@ -75,64 +75,70 @@ User.prototype.myNearestContacts = function(user, callback) {
  } catch (e) {
   return callback(e, null);
  }
-
- this.collection(function(err, db, collection) {
-
+ 
+ this.collection(function(err, db, collection, query) {
   if (err)
    return callback(err, null);
+  
+  var first = query(function(collection, ok, ko) {
+   var search = {
+    _id: user.id
+   };
 
-  var search = {
-   _id: user.id
-  };
+   var fields = {
+    location: 1
+   };
 
-  var fields = {
-   location: 1
-  };
+   collection.findOne(
+           search,
+           {
+            fields: fields
+           },
+   function(err, result) {
+    if (err) 
+     return ko(err);
 
-  collection.findOne(
-          search,
-          {
-           fields: fields
-          },
-  function(err, result) {
-   if (err)
-    return callback(err, null);
+    if (!result) {
+     db.close();
+     logger.warn('No user found with id ' + user.id);
+     ko('No user found with id ' + user.id);
+    } else {
+     logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user.id + ' user retrieved');
+     ok(result.location, true);
+    }
+   });
+  }, callback);
+     
+  var second = first.query(function(collection, ok, ko, location) {
+     search = {
+      _id: {$ne: user.id},
+      domain: user.domain,
+      location: {
+       $near: {
+        $geometry: location
+       },
+       $maxDistance: 50
+      }
+     };
 
-   if (!result) {
-    db.close();
-    logger.warn('No user found with id ' + user.id);
-    callback('No user found with id ' + user.id, null);
-   } else {
-    logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user.id + ' user retrieved');
-    search = {
-     _id: {$ne: user.id},
-     domain: user.domain,
-     location: {
-      $near: {
-       $geometry: result.location
-      },
-      $maxDistance: 50
-     }
-    };
+     fields = {
+      email: 1,
+      location: 1,
+      _id: 0
+     };
 
-    fields = {
-     email: 1,
-     location: 1,
-     _id: 0
-    };
+     collection.find(search, {fields: fields}).toArray(
+             function(err, result) {
+      
+              if (err)
+               return ko(err);
 
-    collection.find(search, {fields: fields}).toArray(
-            function(err, result) {
-             if (err)
-              return callback(err, null);
-
-             logger.info('Retrieved nearest contacts of ' + user.id + ' user');
-             callback(null, result);
-            }
-    );
-   }
-  }
-  );
+              logger.info('Retrieved nearest contacts of ' + user.id + ' user');
+              
+              ok(result);
+             }
+     );
+    }, callback);
  });
 };
 
