@@ -4,11 +4,9 @@ var MongoClient = require('mongodb').MongoClient,
         check = require('validator').check,
         logger = require('../util/logger')(__filename);
 
-var init;
-
 function DaoBase(options) {
  this.collectionName = options.collectionName;
- init = options.init;
+ this.init = options.init;
 }
 
 DaoBase.prototype.collection = function(callback) {
@@ -18,12 +16,12 @@ DaoBase.prototype.collection = function(callback) {
   if (err)
    return callback(err, null);
   var collection = db.collection(self.collectionName);
-  if (init) {
-   init(collection, function(err, result) {
+  if (self.init) {
+   self.init(collection, function(err, result) {
     if (err)
      return callback(err, null);
     logger.info(self.collectionName + ' collection is open.');
-    init = void 0;
+    delete self.init;
     callback(null, db, collection);
    });
 
