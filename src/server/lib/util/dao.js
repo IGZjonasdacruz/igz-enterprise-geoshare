@@ -6,13 +6,21 @@ var MongoClient = require('mongodb').MongoClient,
 /**
  * MongoDB database
  */
-var db;
+var db, pending = [], opening = false;
 
 
 function getMongoDB (callback) {
   if ( db ) {
     return callback(null, db);
   }
+
+  pending.push(callback);
+  
+  if ( opening ) {
+    return;
+  }
+
+  opening = true;
 
   // The primary committer to node-mongodb-native says:
   //  "You open do MongoClient.connect once when your app boots up and reuse the db object.
@@ -26,7 +34,9 @@ function getMongoDB (callback) {
 
     logger.info('Mongodb connection established');
 
-    callback(null, db);
+    for ( var f = 0, F = pending.length; f < F; f++ ) {
+      pending[f](null, db);
+    }
   });
 
 }
