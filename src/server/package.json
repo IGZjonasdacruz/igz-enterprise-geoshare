@@ -35,7 +35,8 @@
     "request": "*",
     "underscore": "~1.5.2",
     "validator": "~1.5.1",
-    "express-winston": "~0.2.1"
+    "express-winston": "~0.2.1",
+    "async": "~0.2.9"
   },
   "devDependencies": {
     "vows": "~0.7.0",
