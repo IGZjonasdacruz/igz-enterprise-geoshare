@@ -29,7 +29,7 @@ function statusIndex(next) {
         next();
       }
     );
-  })
+  });
 
 }
 
@@ -54,11 +54,25 @@ function locationIndex(next) {
 }
 
 async.parallel([statusIndex, locationIndex], function() {
-  logger.info("All user indexes have been ensured")
+  logger.info("All user indexes have been ensured");
 });
 
 
 function User() {}
+
+User.prototype.reset = function(callback) {
+  dao.mongodb(function(err, db) {
+    if (err)
+      return callback(err, null);
+
+    db.collection('user').remove({}, function(err, result) {
+      if (err)
+        return callback(err, null);
+      callback(null, result);
+    });
+  });
+}
+
 
 User.prototype.get = function(id, callback) {
   try {
