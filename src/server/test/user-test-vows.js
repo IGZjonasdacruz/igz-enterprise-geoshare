@@ -138,7 +138,7 @@ vows.describe('manager/user.js').addBatch({
         domain: 'test2.com'
       };
       var VALID_USER4 = {
-        id: '09477529074261',
+        id: '09477529074262',
         email: 'testuser4@test.com',
         domain: 'test.com'
       };
@@ -160,7 +160,7 @@ vows.describe('manager/user.js').addBatch({
         that.callback(err, results);
       });
     },
-    'Retrieved nearest contacts': function(err, results) {
+    'Retrieved the nearest contacts': function(err, results) {
       assert.equal(err, null);
       assert.equal(results.length, 4);
       var contacts = results[3];
