@@ -33,24 +33,23 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        console.log('*** console ready')
+        console.log('*** device ready')
 
         listenGCMNotifications();
     }
 };
 
 function listenGCMNotifications () {
-    var pushNotification;
-    pushNotification = window.plugins.pushNotification;
-    console.log('*** pushNotification created')
+    var pushNotification = window.plugins.pushNotification;
 
     pushNotification.register(
     successHandler,
     errorHandler, {
-        "senderID":"client1",
+        "senderID":"193156067209",
         "ecb":"onNotificationGCM"
     });
-    console.log('*** pushNotification register')
+
+    console.log('*** Listening to pushNotifications...')
 }
 function successHandler (result) {
     console.log('*** result = ' + result);
@@ -59,9 +58,9 @@ function errorHandler (error) {
     console.log('*** error = ' + error);
 }
 function onNotificationGCM(e) {
-    console.log('*** onNotificationGCM :) ' + e.event);
+    console.log('*** onNotificationGCM = ' + e.event);
 
-    $("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
+    /*$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
 
     switch( e.event ) {
     case 'registered':
@@ -108,6 +107,6 @@ function onNotificationGCM(e) {
     default:
         $("#app-status-ul").append('<li>EVENT -> Unknown, an event was received and we do not know what it is</li>');
     break;
-  }
+  }*/
 
 }

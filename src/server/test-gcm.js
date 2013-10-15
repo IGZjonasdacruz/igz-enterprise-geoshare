@@ -18,7 +18,7 @@ var sender = new gcm.Sender('AIzaSyAMeLUEGnoNKTOd7dazquZW4IAQ9UMx8QM');
 var registrationIds = [];
 
 // At least one required
-registrationIds.push('client1');
+registrationIds.push('193156067209');
 
 /**
  * Parameters: message-literal, registrationIds-array, No. of retries, callback-function
