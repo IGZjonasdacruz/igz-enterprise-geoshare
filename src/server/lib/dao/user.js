@@ -1,7 +1,7 @@
 var logger = require('../util/logger')(__filename),
   check = require('validator').check,
   util = require('util'),
-  dao = require('../util/dao'),
+  mongodb = require('../util/mongodb'),
   async = require('async');
 
 
@@ -10,7 +10,7 @@ var logger = require('../util/logger')(__filename),
 //
 
 function statusIndex(next) {
-  dao.mongodb(function(err, db) {
+  mongodb(function(err, db) {
     if (err) {
       throw err;
     }
@@ -34,7 +34,7 @@ function statusIndex(next) {
 }
 
 function locationIndex(next) {
-  dao.mongodb(function(err, db) {
+  mongodb(function(err, db) {
     if (err) {
       throw err;
     }
@@ -61,7 +61,7 @@ async.parallel([statusIndex, locationIndex], function() {
 function User() {}
 
 User.prototype.reset = function(callback) {
-  dao.mongodb(function(err, db) {
+  mongodb(function(err, db) {
     if (err)
       return callback(err, null);
 
@@ -81,7 +81,7 @@ User.prototype.get = function(id, callback) {
     return callback(err);
   }
 
-  dao.mongodb(function(err, db) {
+  mongodb(function(err, db) {
     if (err)
       return callback(err, null);
 
@@ -109,7 +109,7 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
     return callback(err, null);
   }
 
-  dao.mongodb(function(err, db) {
+  mongodb(function(err, db) {
     if (err)
       return callback(err, null);
 
@@ -152,7 +152,7 @@ User.prototype.myNearestContacts = function(user, callback) {
     return callback(e, null);
   }
 
-  dao.mongodb(function(err, db) {
+  mongodb(function(err, db) {
 
     if (err)
       return callback(err, null);

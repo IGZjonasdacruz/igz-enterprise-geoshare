@@ -4,7 +4,7 @@
   "description": "Intelygenz open-source NodeJS locate nearest domain contacts.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "ENV=test vows --spec test/*-test.js"
+    "test": "ENV=test make test"
   },
   "repository": {
     "type": "git",
@@ -36,12 +36,12 @@
     "underscore": "~1.5.2",
     "validator": "~1.5.1",
     "express-winston": "~0.2.1",
-    "async": "~0.2.9",
-    "should": "~2.0.1"
-
+    "async": "~0.2.9"
   },
   "devDependencies": {
     "vows": "~0.7.0",
-    "api-easy": "~0.3.8"
+    "api-easy": "~0.3.8",
+    "should": "~2.0.1",
+    "mocha": "~1.13.0"
   }
 }

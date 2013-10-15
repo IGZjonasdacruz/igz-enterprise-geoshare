@@ -9,6 +9,14 @@ var MongoClient = require('mongodb').MongoClient,
 var db, pending = [], opening = false;
 
 
+function flushPending (err, db) {
+  for ( f = 0, F = pending.length; f < F; f++ ) {
+    pending[f](err, db);
+  }
+  
+  pending = [];
+}
+
 function getMongoDB (callback) {
   if ( db ) {
     return callback(null, db);
@@ -26,21 +34,23 @@ function getMongoDB (callback) {
   //  "You open do MongoClient.connect once when your app boots up and reuse the db object.
   //   It's not a singleton connection pool each .connect creates a new connection pool."
   MongoClient.connect(config.CONN, function(err, database) {
+    var f, F;
+
+    opening = false;
+
     if (err) {
-      return callback(err, null);
+      logger.error("MongoClient.connect: " + err);
+
+      flushPending(err, null);
+      return;
     }
 
     db = database;
-
     logger.info('Mongodb connection established');
 
-    for ( var f = 0, F = pending.length; f < F; f++ ) {
-      pending[f](null, db);
-    }
+    flushPending(null, db);
   });
 
 }
 
-module.exports = {
-  mongodb : getMongoDB
-}
+module = module.exports = getMongoDB;

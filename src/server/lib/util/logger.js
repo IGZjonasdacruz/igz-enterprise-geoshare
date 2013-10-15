@@ -24,7 +24,7 @@ if ( config.SOCKET ) {
 }
 
 if ( config.CONSOLE_TRANSPORT ) {
-  transports.push( new winston.transports.Console() );
+  transports.push( new winston.transports.Console({colorize:true}) );
 }
 
 var logger = new winston.Logger({
