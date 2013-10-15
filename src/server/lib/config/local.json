@@ -9,11 +9,15 @@
     "CONSOLE_TRANSPORT" : true
   },
   "OAUTH2" : {
-    "CLIENT_ID" : "218360285517-d0428585nriahlh6gvrobtjop814ltna.apps.googleusercontent.com",
-    "CLIENT_SECRET" : "fWHheHq5SH-A2ve2pBp1OxZw",
+    "CLIENT_ID" : "193156067209.apps.googleusercontent.com",
+    "CLIENT_SECRET" : "Xxqjm96DfyWa3wjCKoPpCKop",
     "CALLBACK_URL" : "http://127.0.0.1:3000/oauth2callback"
   },
   "DB" : {
     "CONN" : "mongodb://127.0.0.1:27017/igzgeoshare"
+  },
+  "GCM" : {
+    "SENDER_ID" : "193156067209",
+    "API_KEY" : "AIzaSyAMeLUEGnoNKTOd7dazquZW4IAQ9UMx8QM"
   }
 }
