@@ -1,8 +1,8 @@
 var logger = require('../util/logger')(__filename),
-  check = require('validator').check,
-  util = require('util'),
-  mongodb = require('../util/mongodb'),
-  async = require('async');
+        check = require('validator').check,
+        util = require('util'),
+        mongodb = require('../util/mongodb'),
+        async = require('async');
 
 
 //
@@ -16,18 +16,18 @@ function statusIndex(next) {
     }
 
     db.collection('user').ensureIndex({
-        "status": 1
-      }, {
-        w: 1,
-        expireAfterSeconds: 3600
-      },
-      function(err, result) {
-        if (err) {
-          throw err;
-        }
-
-        next();
+      "status": 1
+    }, {
+      w: 1,
+      expireAfterSeconds: 3600
+    },
+    function(err, result) {
+      if (err) {
+        throw err;
       }
+
+      next();
+    }
     );
   });
 
@@ -40,15 +40,15 @@ function locationIndex(next) {
     }
 
     db.collection('user').ensureIndex({
-        "location": "2dsphere"
-      },
-      function(err, result) {
-        if (err) {
-          throw err;
-        }
-
-        next();
+      "location": "2dsphere"
+    },
+    function(err, result) {
+      if (err) {
+        throw err;
       }
+
+      next();
+    }
     );
   });
 }
@@ -58,20 +58,24 @@ async.parallel([statusIndex, locationIndex], function() {
 });
 
 
-function User() {}
+function User() {
+}
 
 User.prototype.reset = function(callback) {
   mongodb(function(err, db) {
     if (err)
       return callback(err, null);
 
-    db.collection('user').remove({}, function(err, result) {
+    db.dropCollection('user', function(err, result) {
       if (err)
         return callback(err, null);
-      callback(null, result);
+      async.parallel([statusIndex, locationIndex], function(err, result) {
+        callback(err, result);
+      });
+      
     });
   });
-}
+};
 
 
 User.prototype.get = function(id, callback) {
@@ -124,19 +128,19 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
       status: new Date()
     };
     db.collection('user').findAndModify({
-        _id: user.id
-      }, {},
-      userUpdated, {
-        "new": true,
-        "upsert": true
-      },
-      function(err, result) {
-        if (err)
-          return callback(err, null);
+      _id: user.id
+    }, {},
+            userUpdated, {
+      "new": true,
+      "upsert": true
+    },
+    function(err, result) {
+      if (err)
+        return callback(err, null);
 
-        logger.info('Last location lat=' + lat + ', lng=' + lng + ' of ' + user.email + ' saved');
-        callback(null, userUpdated);
-      }
+      logger.info('Last location lat=' + lat + ', lng=' + lng + ' of ' + user.email + ' saved');
+      callback(null, userUpdated);
+    }
     );
 
   });
@@ -166,50 +170,50 @@ User.prototype.myNearestContacts = function(user, callback) {
     };
 
     db.collection('user').findOne(
-      search, {
-        fields: fields
-      },
-      function(err, result) {
-        if (err)
-          return callback(err, null);
+            search, {
+      fields: fields
+    },
+    function(err, result) {
+      if (err)
+        return callback(err, null);
 
-        if (!result) {
-          logger.warn('No user found with id ' + user.id);
-          callback('No user found with id ' + user.id, null);
-        } else {
-          logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user.id + ' user retrieved');
-          search = {
-            _id: {
-              $ne: user.id
+      if (!result) {
+        logger.warn('No user found with id ' + user.id);
+        callback('No user found with id ' + user.id, null);
+      } else {
+        logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user.id + ' user retrieved');
+        search = {
+          _id: {
+            $ne: user.id
+          },
+          domain: user.domain,
+          location: {
+            $near: {
+              $geometry: result.location
             },
-            domain: user.domain,
-            location: {
-              $near: {
-                $geometry: result.location
-              },
-              $maxDistance: 50
-            }
-          };
+            $maxDistance: 50
+          }
+        };
 
-          fields = {
-            email: 1,
-            location: 1,
-            _id: 0
-          };
+        fields = {
+          email: 1,
+          location: 1,
+          _id: 0
+        };
 
-          db.collection('user').find(search, {
-            fields: fields
-          }).toArray(
-            function(err, result) {
-              if (err)
-                return callback(err, null);
+        db.collection('user').find(search, {
+          fields: fields
+        }).toArray(
+                function(err, result) {
+                  if (err)
+                    return callback(err, null);
 
-              logger.info('Retrieved nearest contacts of ' + user.id + ' user');
-              callback(null, result);
-            }
-          );
-        }
+                  logger.info('Retrieved nearest contacts of ' + user.id + ' user');
+                  callback(null, result);
+                }
+        );
       }
+    }
     );
   });
 };
