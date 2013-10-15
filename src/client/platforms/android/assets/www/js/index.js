@@ -43,70 +43,52 @@ function listenGCMNotifications () {
     var pushNotification = window.plugins.pushNotification;
 
     pushNotification.register(
-    successHandler,
-    errorHandler, {
-        "senderID":"193156067209",
-        "ecb":"onNotificationGCM"
-    });
+        successHandler,
+        errorHandler, {
+            "senderID":"193156067209", // This is the Google project ID you need to obtain by registering your application for GCM
+            "ecb":"onNotificationGCM"
+        }
+    );
 
-    console.log('*** Listening to pushNotifications...')
+    console.log('*** Listening to pushNotifications ...')
 }
 function successHandler (result) {
-    console.log('*** result = ' + result);
+    console.log('*** successHandler = ' + result);
+
+    // Exposes onNotificationGCM callback
+    window.onNotificationGCM = onNotificationGCM;
 }
 function errorHandler (error) {
-    console.log('*** error = ' + error);
+    console.log('*** errorHandler = ' + error);
 }
-function onNotificationGCM(e) {
+
+function onNotificationGCM (e) {
     console.log('*** onNotificationGCM = ' + e.event);
 
-    /*$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
+    var $status = $("#app-status");
+    var $entry = $('<div></div>');
 
-    switch( e.event ) {
-    case 'registered':
-        if ( e.regid.length > 0 )
-        {
-            $("#app-status-ul").append('<li>REGISTERED -> REGID:' + e.regid + "</li>");
-            // Your GCM push server needs to know the regID before it can push to this device
-            // here is where you might want to send it the regID for later use.
-            console.log("regID = " + e.regID);
-        }
-    break;
-
-    case 'message':
-        // if this flag is set, this notification happened while we were in the foreground.
-        // you might want to play a sound to get the user's attention, throw up a dialog, etc.
-        if ( e.foreground )
-        {
-            $("#app-status-ul").append('<li>--INLINE NOTIFICATION--' + '</li>');
-
-            // if the notification contains a soundname, play it.
-            var my_media = new Media("/android_asset/www/"+e.soundname);
-            my_media.play();
-        }
-        else
-        {  // otherwise we were launched because the user touched a notification in the notification tray.
-            if ( e.coldstart )
-            {
-                $("#app-status-ul").append('<li>--COLDSTART NOTIFICATION--' + '</li>');
+    switch (e.event) {
+        case 'registered':
+            if (e.regid.length > 0) {
+                //your GCM push server needs to know the regID before it can push to this device
+                //you can store the regID for later use here
+                $entry.text('regID received = ' + e.regid);
             }
-            else
-            {
-                $("#app-status-ul").append('<li>--BACKGROUND NOTIFICATION--' + '</li>');
-            }
-        }
+            break;
+        case 'message':
 
-        $("#app-status-ul").append('<li>MESSAGE -> MSG: ' + e.payload.message + '</li>');
-        $("#app-status-ul").append('<li>MESSAGE -> MSGCNT: ' + e.payload.msgcnt + '</li>');
-    break;
+            $entry.text( 'message = ' + JSON.stringify(e, null, 2) );
 
-    case 'error':
-        $("#app-status-ul").append('<li>ERROR -> MSG:' + e.msg + '</li>');
-    break;
+            break;
+        case 'error':
+            $entry.text('error = ' + e.msg);
+            break;
+        default:
+            $entry.text('An unknown GCM event has occurred.' + JSON.stringify(e, null, 2));
+            break;
+    }
 
-    default:
-        $("#app-status-ul").append('<li>EVENT -> Unknown, an event was received and we do not know what it is</li>');
-    break;
-  }*/
+    $status.append($entry)
 
 }
