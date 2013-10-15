@@ -16,11 +16,8 @@ var userDao = require('../lib/dao/user');
 
 describe('manager/user.js', function() {
 
-  describe('(reset) Remove all users.', function() {
-    it('There is no error', function(done) {
-      userDao.reset(done);
-    });
-    it('Test user do not exists.', function(done) {
+  beforeEach(function(done){
+    userDao.reset(function () {
       userDao.get(VALID_USER.id, function(err, userDB) {
         should.not.exist(err);
         should.not.exist(userDB);
@@ -63,6 +60,7 @@ describe('manager/user.js', function() {
   });
 
   describe('myNearestContacts', function() {
+
     describe('Invalid parameters', function() {
       it('Invalid user', function(done) {
         userManager.myNearestContacts(undefined, function(err, result) {
@@ -79,14 +77,30 @@ describe('manager/user.js', function() {
         });
       });
       it('Invalid user domain', function(done) {
-        userManager.myNearestContacts({id: 09477529074259}, function(err, result) {
+        userManager.myNearestContacts({id: VALID_USER.id}, function(err, result) {
           should.exist(err);
           should.not.exist(result);
           done();
         });
       });
     });
+
     describe('Valid parameters', function() {
+
+      beforeEach(function (done) {
+        // Create user
+        userManager.saveLocation(VALID_USER, lat, lng, function(err, userDB) {
+          should.not.exist(err);
+          should.exist(userDB);
+          userDB._id.should.equal(VALID_USER.id);
+          userDB.domain.should.equal(VALID_USER.domain);
+          userDB.email.should.equal(VALID_USER.email);
+          userDB.location.coordinates[0].should.equal(lng);
+          userDB.location.coordinates[1].should.equal(lat);
+          done();
+        });
+      });
+
       it('valid user, no contacts', function(done) {
         userManager.myNearestContacts(VALID_USER, function(err, result) {
           should.not.exist(err);
