@@ -166,29 +166,33 @@ User.prototype.myNearestContacts = function(user, callback) {
 
 	mongodb(function(err, db) {
 
-		if (err)
+		if (err) {
 			return callback(err, null);
+		}
 
 		var search = {
 			_id: user._id
 		};
 
-		var fields = {
-			location: 1
+		var cfg = {
+			fields : {
+				location: 1
+			}
 		};
 
 		db.collection('user').findOne(
-						search, {
-			fields: fields
-		},
-		function(err, result) {
-			if (err)
-				return callback(err, null);
+			search,
+			cfg,
+			function(err, result) {
+				if (err) {
+					return callback(err, null);
+				}
 
-			if (!result) {
-				logger.warn('No user found with id ' + user._id);
-				callback('No user found with id ' + user._id, null);
-			} else {
+				if ( !result ) {
+					logger.warn('No user found with id ' + user._id);
+					return callback('No user found with id ' + user._id, null);
+				}
+				
 				logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user._id + ' user retrieved');
 				search = {
 					_id: {
@@ -203,25 +207,23 @@ User.prototype.myNearestContacts = function(user, callback) {
 					}
 				};
 
-				fields = {
+				cfg = {
 					email: 1,
 					location: 1,
 					_id: 0
 				};
 
-				db.collection('user').find(search, {
-					fields: fields
-				}).toArray(
-								function(err, result) {
-									if (err)
-										return callback(err, null);
+				db.collection('user').find(search, cfg).toArray(
+					function(err, result) {
+						if (err) {
+							return callback(err, null);
+						}
 
-									logger.info('Retrieved nearest contacts of ' + user._id + ' user');
-									callback(null, result);
-								}
+						logger.info('Retrieved ' + result.lentgh + ' nearest contacts of ' + user._id + ' user');
+						callback(null, result);
+					}
 				);
 			}
-		}
 		);
 	});
 };

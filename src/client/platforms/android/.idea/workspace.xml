@@ -85,7 +85,7 @@
       <file leaf-file-name="IGZEnterpriseGeoshare.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/igz/geoshare/IGZEnterpriseGeoshare.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="1" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.627907" vertical-offset="63" max-vertical-offset="450">
+            <state line="28" column="5" selection-start="1077" selection-end="1077" vertical-scroll-proportion="0.42154565" vertical-offset="0" max-vertical-offset="450">
               <folding />
             </state>
           </provider>
@@ -106,10 +106,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="155" />
-    <option name="y" value="95" />
-    <option name="width" value="1734" />
-    <option name="height" value="977" />
+    <option name="x" value="-1" />
+    <option name="y" value="27" />
+    <option name="width" value="1922" />
+    <option name="height" value="1054" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -137,6 +137,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -201,7 +202,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -352,8 +352,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="155" y="95" width="1734" height="977" extended-state="0" />
-    <editor active="false" />
+    <frame x="-1" y="27" width="1922" height="1054" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -364,13 +364,13 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4945322" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.49333334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31257415" sideWeight="0.5054678" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31216648" sideWeight="0.50666666" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -442,37 +442,43 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/plugin/gcm/GCMIntentService.java">
+    <entry file="file://$PROJECT_DIR$/src/com/igz/geoshare/IGZEnterpriseGeoshare.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="50" selection-start="3748" selection-end="3748" vertical-scroll-proportion="0.41860464" vertical-offset="1782" max-vertical-offset="2250">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plugin/gcm/PushPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="13" selection-start="427" selection-end="427" vertical-scroll-proportion="-3.015504" vertical-offset="1311" max-vertical-offset="4086">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plugin/gcm/PushHandlerActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="192" selection-end="192" vertical-scroll-proportion="-1.9767442" vertical-offset="837" max-vertical-offset="1224">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plugin/gcm/CordovaGCMBroadcastReceiver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="13" selection-start="378" selection-end="378" vertical-scroll-proportion="0.37209302" vertical-offset="0" max-vertical-offset="387">
+        <state line="32" column="44" selection-start="1249" selection-end="1249" vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="450">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/igz/geoshare/IGZEnterpriseGeoshare.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="1" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.627907" vertical-offset="63" max-vertical-offset="450">
+        <state line="35" column="1" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.0" vertical-offset="288" max-vertical-offset="450">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plugin/gcm/GCMIntentService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="124" column="50" selection-start="3748" selection-end="3748" vertical-scroll-proportion="0.41860464" vertical-offset="1782" max-vertical-offset="2250" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plugin/gcm/PushPlugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="13" selection-start="427" selection-end="427" vertical-scroll-proportion="-3.015504" vertical-offset="1311" max-vertical-offset="4086" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plugin/gcm/PushHandlerActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="13" selection-start="192" selection-end="192" vertical-scroll-proportion="-1.9767442" vertical-offset="837" max-vertical-offset="1224" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plugin/gcm/CordovaGCMBroadcastReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="13" selection-start="378" selection-end="378" vertical-scroll-proportion="0.37209302" vertical-offset="0" max-vertical-offset="387" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/igz/geoshare/IGZEnterpriseGeoshare.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="5" selection-start="1077" selection-end="1077" vertical-scroll-proportion="0.42154565" vertical-offset="0" max-vertical-offset="450">
           <folding />
         </state>
       </provider>
