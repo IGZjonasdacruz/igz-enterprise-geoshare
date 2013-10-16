@@ -218,4 +218,8 @@ User.prototype.myNearestContacts = function(user, callback) {
   });
 };
 
+User.prototype.changeGcmId = function (user, gcmId, callback) {
+
+}
+
 module.exports = new User(); // This module returns the same user instance (Singleton)

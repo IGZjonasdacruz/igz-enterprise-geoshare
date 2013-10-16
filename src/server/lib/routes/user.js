@@ -6,6 +6,7 @@ var logger = require('../util/logger')(__filename),
 function addRoutes (app) {
 
   app.post('/user/me/location', ensureAuth, myLocation);
+  app.put('/user/me/gcm-id', ensureAuth, changeGcmId);
   app.get('/user/contacts/location', ensureAuth, myNearestContacts);
 
   logger.info('User routes added');
@@ -29,6 +30,20 @@ function myLocation (req, res) {
 
 function myNearestContacts (req, res) {
   userManager.myNearestContacts(req.user, function(err, result) {
+
+    if ( err ) {
+      logger.error(err);
+      return res.send(500);
+    }
+
+    res.send(200, result);
+  });
+}
+
+function changeGcmId (req, res) {
+  var gcmId = req.body.gcmId;
+
+  userManager.changeGcmId(req.user, gcmId, function(err, result) {
 
     if ( err ) {
       logger.error(err);
