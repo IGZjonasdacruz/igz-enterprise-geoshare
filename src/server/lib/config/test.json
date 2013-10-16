@@ -8,9 +8,9 @@
 		"CONSOLE_TRANSPORT" : true
 	},
 	"OAUTH2" : {
-		"CLIENT_ID" : "218360285517-d0428585nriahlh6gvrobtjop814ltna.apps.googleusercontent.com",
-		"CLIENT_SECRET" : "fWHheHq5SH-A2ve2pBp1OxZw",
-		"CALLBACK_URL" : "http://127.0.0.1:3000/oauth2callback"
+		"CLIENT_ID" : "193156067209-im1qtm9vo8jo24jah924rbqri97i64o7.apps.googleusercontent.com",
+		"CLIENT_SECRET" : "ji1M90H-lZ0s7LWaw2ZExXPh",
+		"CALLBACK_URL" : "http://geoshare.enterprise.igz.com:3000/oauth2callback"
 	},
 	"DB" : {
 		"CONN" : "mongodb://127.0.0.1:27017/igzgeoshare-test?w=1" 
