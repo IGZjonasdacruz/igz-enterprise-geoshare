@@ -30,9 +30,15 @@ function getMongoDB (callback) {
 
 	opening = true;
 
+	// 
 	// The primary committer to node-mongodb-native says:
 	//  "You open do MongoClient.connect once when your app boots up and reuse the db object.
 	//   It's not a singleton connection pool each .connect creates a new connection pool."
+	//
+	// The connection string looks like 'mongodb://127.0.0.1:27017/igzgeoshare-test?w=1'
+	//   - safe=true is deprecated (http://stackoverflow.com/questions/14995602/how-can-i-know-if-connection-is-safe-true)
+	//   - use w=1 instead of (https://github.com/mongodb/node-mongodb-native/blob/master/docs/articles/MongoClient.md)
+	// 
 	MongoClient.connect(config.CONN, function(err, database) {
 		var f, F;
 

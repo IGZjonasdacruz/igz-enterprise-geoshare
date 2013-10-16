@@ -13,6 +13,6 @@
 		"CALLBACK_URL" : "http://127.0.0.1:3000/oauth2callback"
 	},
 	"DB" : {
-		"CONN" : "mongodb://127.0.0.1:27017/igzgeoshare-test"
+		"CONN" : "mongodb://127.0.0.1:27017/igzgeoshare-test?w=1" 
 	}
 }

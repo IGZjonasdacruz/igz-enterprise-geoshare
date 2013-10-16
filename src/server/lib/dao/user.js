@@ -53,9 +53,18 @@ function locationIndex(next) {
 	});
 }
 
-async.parallel([statusIndex, locationIndex], function() {
-	logger.info("All user indexes have been ensured");
-});
+function userIndexes (callback) {
+	async.parallel([statusIndex, locationIndex], function() {
+		
+		logger.info("All user indexes have been ensured");
+		
+		if ( callback ) {
+			callback();
+		}
+	});
+}
+
+userIndexes();
 
 
 function User() {
@@ -69,10 +78,8 @@ User.prototype.reset = function(callback) {
 		db.dropCollection('user', function(err, result) {
 			if (err)
 				return callback(err, null);
-			/*async.parallel([statusIndex, locationIndex], function(err, result) {
-				callback(err, result);
-			});*/
-			callback(err, result);
+			
+			userIndexes(callback);
 			
 		});
 	});
@@ -105,11 +112,11 @@ User.prototype.get = function(id, callback) {
 
 User.prototype.saveLocation = function(user, lat, lng, callback) {
 	try {
-		check(user.id).notNull();
-		check(user.email).isEmail();
-		check(user.domain).notEmpty();
-		check(lat).isFloat();
-		check(lng).isFloat();
+		check(user._id, 'user._id').notNull();
+		check(user.email, 'user.email').isEmail();
+		check(user.domain, 'user.domain').notEmpty();
+		check(lat, 'lat').isFloat();
+		check(lng, 'lng').isFloat();
 	} catch (err) {
 		return callback(err, null);
 	}
@@ -119,7 +126,7 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 			return callback(err, null);
 
 		var userUpdated = {
-			_id: user.id,
+			_id: user._id,
 			email: user.email,
 			domain: user.domain,
 			location: {
@@ -129,7 +136,7 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 			status: new Date()
 		};
 		db.collection('user').findAndModify({
-			_id: user.id
+			_id: user._id
 		}, {},
 						userUpdated, {
 			"new": true,
@@ -150,7 +157,7 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 User.prototype.myNearestContacts = function(user, callback) {
 
 	try {
-		check(user.id).notNull();
+		check(user._id).notNull();
 		check(user.domain).notEmpty();
 
 	} catch (e) {
@@ -163,7 +170,7 @@ User.prototype.myNearestContacts = function(user, callback) {
 			return callback(err, null);
 
 		var search = {
-			_id: user.id
+			_id: user._id
 		};
 
 		var fields = {
@@ -179,13 +186,13 @@ User.prototype.myNearestContacts = function(user, callback) {
 				return callback(err, null);
 
 			if (!result) {
-				logger.warn('No user found with id ' + user.id);
-				callback('No user found with id ' + user.id, null);
+				logger.warn('No user found with id ' + user._id);
+				callback('No user found with id ' + user._id, null);
 			} else {
-				logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user.id + ' user retrieved');
+				logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user._id + ' user retrieved');
 				search = {
 					_id: {
-						$ne: user.id
+						$ne: user._id
 					},
 					domain: user.domain,
 					location: {
@@ -209,7 +216,7 @@ User.prototype.myNearestContacts = function(user, callback) {
 									if (err)
 										return callback(err, null);
 
-									logger.info('Retrieved nearest contacts of ' + user.id + ' user');
+									logger.info('Retrieved nearest contacts of ' + user._id + ' user');
 									callback(null, result);
 								}
 				);
@@ -220,7 +227,21 @@ User.prototype.myNearestContacts = function(user, callback) {
 };
 
 User.prototype.changeGcmId = function (user, gcmId, callback) {
+	try {
+		check(user._id).notNull();
+		check(gcmId).notEmpty();
+	} catch (err) {
+		return callback(err, null);
+	}
 
+
+	mongodb(function(err, db) {
+		if ( err ) {
+			return callback(err, null);
+		}
+
+		db.collection('user').update({ _id : user._id }, { $set: {gcmId:gcmId} }, callback);
+	});
 }
 
 module.exports = new User(); // This module returns the same user instance (Singleton)

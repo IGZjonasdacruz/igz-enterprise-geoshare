@@ -60,7 +60,7 @@ function ensureAuthenticated (req, res, next) {
 		}
 
 		// Expose user for next middelwares
-		req.user = { id: resJson.sub, email: resJson.email, domain: resJson.hd };
+		req.user = { _id: resJson.sub, email: resJson.email, domain: resJson.hd };
 		next(null);
 
 	});
