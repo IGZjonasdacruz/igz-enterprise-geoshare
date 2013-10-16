@@ -1,23 +1,23 @@
 {
-  "LOGGER" : {
-    "SOCKET" : "tcp://ec2-54-217-125-174.eu-west-1.compute.amazonaws.com:9700",
-    "METADATA" : {
-      "project": "igzgeoshare",
-      "env" : "dev"
-    },
-    "LEVEL" : "info",
-    "CONSOLE_TRANSPORT" : true
-  },
-  "OAUTH2" : {
-    "CLIENT_ID" : "193156067209.apps.googleusercontent.com",
-    "CLIENT_SECRET" : "Xxqjm96DfyWa3wjCKoPpCKop",
-    "CALLBACK_URL" : "http://127.0.0.1:3000/oauth2callback"
-  },
-  "DB" : {
-    "CONN" : "mongodb://127.0.0.1:27017/igzgeoshare"
-  },
-  "GCM" : {
-    "SENDER_ID" : "193156067209",
-    "API_KEY" : "AIzaSyAMeLUEGnoNKTOd7dazquZW4IAQ9UMx8QM"
-  }
+	"LOGGER" : {
+		"SOCKET" : "tcp://ec2-54-217-125-174.eu-west-1.compute.amazonaws.com:9700",
+		"METADATA" : {
+			"project": "igzgeoshare",
+			"env" : "dev"
+		},
+		"LEVEL" : "info",
+		"CONSOLE_TRANSPORT" : true
+	},
+	"OAUTH2" : {
+		"CLIENT_ID" : "193156067209.apps.googleusercontent.com",
+		"CLIENT_SECRET" : "Xxqjm96DfyWa3wjCKoPpCKop",
+		"CALLBACK_URL" : "http://127.0.0.1:3000/oauth2callback"
+	},
+	"DB" : {
+		"CONN" : "mongodb://127.0.0.1:27017/igzgeoshare"
+	},
+	"GCM" : {
+		"SENDER_ID" : "193156067209",
+		"API_KEY" : "AIzaSyAMeLUEGnoNKTOd7dazquZW4IAQ9UMx8QM"
+	}
 }

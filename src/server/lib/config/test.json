@@ -1,18 +1,18 @@
 {
-  "LOGGER" : {
-    "METADATA" : {
-      "project": "igzgeoshare",
-      "env" : "dev"
-    },
-    "LEVEL" : "info",
-    "CONSOLE_TRANSPORT" : true
-  },
-  "OAUTH2" : {
-    "CLIENT_ID" : "218360285517-d0428585nriahlh6gvrobtjop814ltna.apps.googleusercontent.com",
-    "CLIENT_SECRET" : "fWHheHq5SH-A2ve2pBp1OxZw",
-    "CALLBACK_URL" : "http://127.0.0.1:3000/oauth2callback"
-  },
-  "DB" : {
-    "CONN" : "mongodb://127.0.0.1:27017/igzgeoshare-test"
-  }
+	"LOGGER" : {
+		"METADATA" : {
+			"project": "igzgeoshare",
+			"env" : "dev"
+		},
+		"LEVEL" : "info",
+		"CONSOLE_TRANSPORT" : true
+	},
+	"OAUTH2" : {
+		"CLIENT_ID" : "218360285517-d0428585nriahlh6gvrobtjop814ltna.apps.googleusercontent.com",
+		"CLIENT_SECRET" : "fWHheHq5SH-A2ve2pBp1OxZw",
+		"CALLBACK_URL" : "http://127.0.0.1:3000/oauth2callback"
+	},
+	"DB" : {
+		"CONN" : "mongodb://127.0.0.1:27017/igzgeoshare-test"
+	}
 }

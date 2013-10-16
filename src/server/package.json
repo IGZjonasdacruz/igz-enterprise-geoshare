@@ -1,48 +1,48 @@
 {
-  "name": "igz-enterprise-geoshare",
-  "version": "0.0.1",
-  "description": "Intelygenz open-source NodeJS locate nearest domain contacts.",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "ENV=test mocha test/*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:IGZjonasdacruz/igz-enterprise-geoshare.git"
-  },
-  "keywords": [
-    "google",
-    "geolocation",
-    "nodejs",
-    "igz",
-    "intelygenz",
-    "passport",
-    "iris",
-    "phonegap"
-  ],
-  "author": "Intelygenz",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/IGZjonasdacruz/igz-enterprise-geoshare/issues"
-  },
-  "dependencies": {
-    "express": "~3.4.0",
-    "passport": "~0.1.17",
-    "passport-google-oauth": "~0.1.5",
-    "mongodb": "~1.3.19",
-    "winston-zeromq-elasticsearch": "~0.1.3",
-    "winston": "~0.7.2",
-    "request": "*",
-    "underscore": "~1.5.2",
-    "validator": "~1.5.1",
-    "express-winston": "~0.2.1",
-    "async": "~0.2.9",
-    "node-gcm": "~0.9.6"
-  },
-  "devDependencies": {
-    "vows": "~0.7.0",
-    "api-easy": "~0.3.8",
-    "should": "~2.0.1",
-    "mocha": "~1.13.0"
-  }
+	"name": "igz-enterprise-geoshare",
+	"version": "0.0.1",
+	"description": "Intelygenz open-source NodeJS locate nearest domain contacts.",
+	"main": "lib/index.js",
+	"scripts": {
+		"test": "ENV=test mocha test/*"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:IGZjonasdacruz/igz-enterprise-geoshare.git"
+	},
+	"keywords": [
+		"google",
+		"geolocation",
+		"nodejs",
+		"igz",
+		"intelygenz",
+		"passport",
+		"iris",
+		"phonegap"
+	],
+	"author": "Intelygenz",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/IGZjonasdacruz/igz-enterprise-geoshare/issues"
+	},
+	"dependencies": {
+		"express": "~3.4.0",
+		"passport": "~0.1.17",
+		"passport-google-oauth": "~0.1.5",
+		"mongodb": "~1.3.19",
+		"winston-zeromq-elasticsearch": "~0.1.3",
+		"winston": "~0.7.2",
+		"request": "*",
+		"underscore": "~1.5.2",
+		"validator": "~1.5.1",
+		"express-winston": "~0.2.1",
+		"async": "~0.2.9",
+		"node-gcm": "~0.9.6"
+	},
+	"devDependencies": {
+		"vows": "~0.7.0",
+		"api-easy": "~0.3.8",
+		"should": "~2.0.1",
+		"mocha": "~1.13.0"
+	}
 }

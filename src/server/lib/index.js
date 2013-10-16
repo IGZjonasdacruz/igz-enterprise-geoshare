@@ -1,11 +1,11 @@
 var express = require('express'),
-    passport = require('passport'),
-    auth = require('./routes/auth'),
-    geo = require('./routes/user'),
-    logger = require('./util/logger')(__filename),
-    fs = require('fs'),
-    expressWinston = require('express-winston'),
-    config = require('./util/config');
+		passport = require('passport'),
+		auth = require('./routes/auth'),
+		geo = require('./routes/user'),
+		logger = require('./util/logger')(__filename),
+		fs = require('fs'),
+		expressWinston = require('express-winston'),
+		config = require('./util/config');
 
 //
 // Configure app
@@ -26,10 +26,10 @@ app.use(expressWinston.errorLogger({transports: logger.transports}));
 
 /*
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 app.configure('production', function(){
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 });
 */
 
@@ -38,7 +38,7 @@ app.configure('production', function(){
 //
 var basePath = __dirname + '/routes/';
 fs.readdirSync(basePath).forEach(function(filename) {
-  require(basePath + filename)(app);
+	require(basePath + filename)(app);
 });
 
 //
@@ -46,10 +46,10 @@ fs.readdirSync(basePath).forEach(function(filename) {
 //
 var port = process.env.PORT;
 if ( !port ) {
-  console.error('***ERROR*** you have to define the environment variable PORT "PORT=3000 node app"');
-  return process.exit(1);
+	console.error('***ERROR*** you have to define the environment variable PORT "PORT=3000 node app"');
+	return process.exit(1);
 }
 
 app.listen(port, function () {
-  logger.info('Application listening on http://localhost:' + port);
+	logger.info('Application listening on http://localhost:' + port);
 });
