@@ -3,6 +3,7 @@ var passport = require('passport'),
 		user = require('../dao/user'),
 		logger = require('../util/logger')(__filename),
 		config = require('../util/config').OAUTH2;
+		fs = require('fs');
 
 
 const GOOGLE_SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
@@ -22,12 +23,24 @@ function passportLogin () {
 }
 
 function passportCallback () {
-	return passport.authenticate('google', { session: false, failureRedirect: '/login' })
+	return passport.authenticate('google', { session: false,  failureRedirect: '/login' })
 }
 
 function oauth2Callback (req, res) {
 	logger.info('Received oauth2callback');
-	res.json(req.user);
+	/*
+	res.setHeader("Authorization", "Bearer " + req.user.accessToken);
+	res.setHeader("Content-Type", "text/html; charset=utf-8");
+	fs.readFile(__dirname + '/../../public/logged.html', 'utf-8', function(err, html) {
+		if (err) {
+			res.send(500, "Internal error");
+		} else {
+			res.send(200, html);
+		}
+	});
+	*/
+	res.redirect('/logged.html?accessToken=' + req.user.accessToken);
+	//res.json(req.user);
 }
 
 
@@ -40,13 +53,18 @@ passport.use(new GoogleStrategy({
 		callbackURL: config.CALLBACK_URL
 	},
 	function(accessToken, refreshToken, profile, done) {
+		logger.info('passport use');
 		logger.info('New accessToken: ' + accessToken + ', refreshToken: ' + refreshToken + ', user: ' + profile.id);
-
+		done(null, {accessToken: accessToken});
+		//fs.readFile(__dirname + '/../../html/loged.html', 'utf-8', done);
+		/*
+		 
 		return done(null, {
-			/*id: profile.id,
-			email: profile._json.email,*/
+			id: profile.id,
+			email: profile._json.email,
 			accessToken: accessToken
 		});
+		*/
 	}
 ));
 
