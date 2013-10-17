@@ -7,11 +7,11 @@ var express = require('express'),
 		expressWinston = require('express-winston'),
 		config = require('./util/config');
 
+
 //
 // Configure app
 //
 var app = express();
-app.use(express.static(__dirname + '/../public'));
 app.use(express.bodyParser());
 app.use(passport.initialize());
 
@@ -20,18 +20,11 @@ app.use(expressWinston.logger({transports: logger.transports}));
 
 app.use(app.router);
 
+app.use(express.static(__dirname + '/../public'));
+
 // express-winston errorLogger makes sense AFTER the router.
 app.use(expressWinston.errorLogger({transports: logger.transports}));
 
-
-/*
-app.configure('development', function(){
-	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-app.configure('production', function(){
-	app.use(express.errorHandler());
-});
-*/
 
 //
 // Routes

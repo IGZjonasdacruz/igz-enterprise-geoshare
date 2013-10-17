@@ -51,8 +51,7 @@ local.properties
 
 
 # Cordova
-android/local.properties
-android/bin/
-android/gen/
-android/assets/
-
+src/client/platforms/android/local.properties
+src/client/platforms/android/assets/
+src/client/platforms/android/gen/
+src/client/platforms/android/bin/

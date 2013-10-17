@@ -1,7 +1,7 @@
 
 var winston = require('winston'),
-		config = require('./config').LOGGER,
-		_ = require('underscore');
+	config = require('./config').LOGGER,
+	_ = require('underscore');
 
 var transports = [];
 

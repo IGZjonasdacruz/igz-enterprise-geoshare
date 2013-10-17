@@ -1,7 +1,7 @@
-var userManager = require('./user.js'),
-		gcm = require('node-gcm'),
-		config = require('../util/config').GCM,
-		logger = require('../util/logger')(__filename);
+var userDao = require('../dao/user.js'),
+	gcm = require('node-gcm'),
+	config = require('../util/config').GCM,
+	logger = require('../util/logger')(__filename);
 
 const SEND_MAX_RETRIES = 4;
 
@@ -10,7 +10,10 @@ var sender = new gcm.Sender( config.API_KEY );
 
 function sendToNearestContacts (user, callback) {
 	
-	userManager.myNearestContacts(user, function (err, users) {
+	userDao.myNearestContacts(user, function (err, users) {
+		if ( err ) {
+			callback(err);
+		}
 
 		if ( users.length == 0 ) {
 			logger.info('There are not near contacts');
@@ -27,18 +30,18 @@ function sendToNearestContacts (user, callback) {
 			}
 		}
 
-		logger.info('Sending notifications to ' + registrationIds.length + ' contacts...');
+		logger.info('Sending GCM PUSH notifications to ' + registrationIds.length + ' contacts...');
 
 		var message = new gcm.Message({
-				collapseKey: 'near_contact',
-				delayWhileIdle: true,
-				timeToLive: 3,
-				data: {
-					user : {
-						email: user.email,
-						position: user.position
-					}
+			collapseKey: 'near_contact',
+			delayWhileIdle: true,
+			timeToLive: 3,
+			data: {
+				user : {
+					email: user.email,
+					position: user.position
 				}
+			}
 		});
 		
 		// Parameters: message-literal, registrationIds-array, retries-number, callback-function

@@ -6,10 +6,21 @@ var userDao = require('../dao/user'),
 function UserManager () {}
 
 UserManager.prototype.saveLocation = function (user, lat, lng, callback) {
-	userDao.saveLocation(user, lat, lng, callback);
+	userDao.saveLocation(user, lat, lng, function (err, userDb) {
+		if ( err ) {
+			callback(err);
+		}
+		
+		// Find the nearest contacts and send a notification to them
+		notification.sendToNearestContacts(user, function (err, numUsers) {
+			if ( err ) {
+				callback(err);
+			}
+			
+			callback(null, userDb);
+		});
+	});
 
-	// Find the nearest contacts and send a notification to them
-	notification.sendToNearestContacts(user);
 };
 
 UserManager.prototype.myNearestContacts = function (user, callback) {
