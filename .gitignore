@@ -49,3 +49,7 @@ local.properties
 *~
 *.swp
 
+
+
+platforms/android/local.properties
+
