@@ -50,6 +50,9 @@ local.properties
 *.swp
 
 
-
-platforms/android/local.properties
+# Cordova
+android/local.properties
+android/bin/
+android/gen/
+android/assets/
 
