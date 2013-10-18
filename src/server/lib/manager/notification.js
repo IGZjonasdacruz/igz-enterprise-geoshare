@@ -9,7 +9,6 @@ var sender = new gcm.Sender( config.API_KEY );
 
 
 function sendToNearestContacts (user, callback) {
-	
 	userDao.myNearestContacts(user, function (err, users) {
 		if ( err ) {
 			callback(err);

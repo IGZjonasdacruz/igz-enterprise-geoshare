@@ -11,13 +11,15 @@ UserManager.prototype.saveLocation = function (user, lat, lng, callback) {
 			callback(err);
 		}
 		
+		callback(null, userDb);
+		
 		// Find the nearest contacts and send a notification to them
 		notification.sendToNearestContacts(user, function (err, numUsers) {
 			if ( err ) {
-				callback(err);
+				//callback(err);
 			}
 			
-			callback(null, userDb);
+			//callback(null, userDb);
 		});
 	});
 

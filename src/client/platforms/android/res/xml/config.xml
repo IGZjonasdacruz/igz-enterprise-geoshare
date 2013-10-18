@@ -18,6 +18,8 @@
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
     <access origin="*" />
+    <access origin="*.google.com" />
+    <access origin="*.googleapis.com" />
     <preference name="useBrowserHistory" value="true" />
     <preference name="exit-on-suspend" value="false" />
     <preference name="fullscreen" value="true" />

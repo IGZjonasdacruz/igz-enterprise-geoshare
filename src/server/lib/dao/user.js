@@ -203,17 +203,21 @@ User.prototype.myNearestContacts = function(user, callback) {
 						$near: {
 							$geometry: result.location
 						},
-						$maxDistance: 50
+						$maxDistance: 5000
 					}
 				};
 
-				cfg = {
+				fields = {
 					email: 1,
 					location: 1,
 					_id: 0
 				};
+				
+				limit = {
+					limit: 20
+				};
 
-				db.collection('user').find(search, cfg).toArray(
+				db.collection('user').find(search, {fields: fields, limit: limit}).toArray(
 					function(err, result) {
 						if (err) {
 							return callback(err, null);
