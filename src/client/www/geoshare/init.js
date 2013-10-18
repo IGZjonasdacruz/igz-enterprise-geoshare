@@ -16,7 +16,7 @@ $(document).on('deviceready', function() {
 	iris.welcome(iris.path.welcome.js);
 });
 
-var BASE_URI = 'http://192.168.1.131:3000/';
+var BASE_URI = 'http://192.168.160.127:3000/';
 
 iris.Resource.prototype.ajax = function(method, path, params) {
 

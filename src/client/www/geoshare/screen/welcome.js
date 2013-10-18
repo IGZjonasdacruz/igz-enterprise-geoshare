@@ -5,7 +5,16 @@ iris.screen(function(self) {
 	self.create = function() {
 		self.tmpl(iris.path.welcome.html);
 		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
+
+		self.get('logout_btn').on('click', logout)
 	};
+
+	function logout (e) {
+		self.ui("map").get().hide();
+		self.get('status').text('Logout');
+		googleapi.logout();
+		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
+	}
 
 	function onGetToken(data) {
 		iris.log("ACCESS TOKEN = " + data.access_token);
@@ -34,7 +43,7 @@ iris.screen(function(self) {
 				return userRes.getNearestContacts();
 			}).done(function(contacts) {
 				self.get('status').text(self.get('status').text() + '\nNearest contacts received.\n\n' + JSON.stringify(contacts, null, 2));
-				self.ui("map", iris.path.ui.map.js, {me: position.coords, contacts: contacts});
+				self.ui("map", iris.path.ui.map.js, {me: position.coords, contacts: contacts}).get().show();
 			}).fail(function(e) {
 				self.get('status').text(self.get('status').text() + '\nERROR -> Location send =' + e);
 			});

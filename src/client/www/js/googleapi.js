@@ -115,5 +115,10 @@ var googleapi = {
 		}
 
 		return deferred.promise();
+	},
+	logout : function () {
+		localStorage.removeItem('expires_at');
+		localStorage.removeItem('access_token');
+		localStorage.removeItem('refresh_token');
 	}
 };

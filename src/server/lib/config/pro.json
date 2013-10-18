@@ -2,8 +2,8 @@
 	"LOGGER" : {
 		"SOCKET" : "tcp://ec2-54-217-125-174.eu-west-1.compute.amazonaws.com:9700",
 		"METADATA" : {
-			"project": "geoshare",
-			"env" : "dev"
+			"project": "igzgeoshare",
+			"env" : "pro"
 		},
 		"LEVEL" : "info",
 		"CONSOLE_TRANSPORT" : true

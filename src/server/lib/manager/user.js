@@ -1,7 +1,8 @@
 
 var userDao = require('../dao/user'),
 		notification = require('./notification.js'),
-		assert = require('assert');
+		assert = require('assert'),
+		logger = require('../util/logger')(__filename);
 
 function UserManager () {}
 
@@ -16,10 +17,8 @@ UserManager.prototype.saveLocation = function (user, lat, lng, callback) {
 		// Find the nearest contacts and send a notification to them
 		notification.sendToNearestContacts(user, function (err, numUsers) {
 			if ( err ) {
-				//callback(err);
+				logger.error(err);
 			}
-			
-			//callback(null, userDb);
 		});
 	});
 
