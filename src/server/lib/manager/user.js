@@ -8,7 +8,7 @@ function UserManager () {}
 UserManager.prototype.saveLocation = function (user, lat, lng, callback) {
 	userDao.saveLocation(user, lat, lng, function (err, userDb) {
 		if ( err ) {
-			callback(err);
+			return callback(err);
 		}
 		
 		callback(null, userDb);
