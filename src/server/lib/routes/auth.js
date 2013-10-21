@@ -39,7 +39,7 @@ function oauth2Callback (req, res) {
 		}
 	});
 	*/
-	res.redirect('/logged.html?accessToken=' + req.user.accessToken);
+	res.redirect('http://localhost:4400/logged.html?accessToken=' + req.user.accessToken);
 	//res.json(req.user);
 }
 

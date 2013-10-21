@@ -45,9 +45,11 @@ function ensureAuthenticated (req, res, next) {
 		if ( response.statusCode === 401 ) {
 			logger.info('Request google user info: status=401');
 			return res.send(401);
+
 		} else if ( response.statusCode !== 200 ) {
+			// Unexpected response status code
 			logger.warn('The request to ' + GOOGLE_USER_INFO_URL + ' returns statusCode=' + response.statusCode + ', body=' + body);
-			return res.send(response.statusCode);
+			return res.send(500);
 		}
 
 		var resJson = JSON.parse(body);

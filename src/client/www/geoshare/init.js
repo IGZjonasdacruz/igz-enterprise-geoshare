@@ -9,13 +9,6 @@ iris.path = {
 	}
 };
 
-$(document).on('deviceready', function() {
-	iris.noCache('file://');
-	iris.enableLog('file://');
-	iris.baseUri('geoshare/');
-	iris.welcome(iris.path.welcome.js);
-});
-
 iris.Resource.prototype.ajax = function(method, path, params) {
 
 	var deferred = $.Deferred();
@@ -55,3 +48,53 @@ iris.Resource.prototype.ajax = function(method, path, params) {
 
 	return deferred.promise();
 };
+
+function getURLParameter(name) {
+	var value = RegExp(name + '=' + '(.+?)(&|$)').exec(location.search);
+	if ( value ) {
+		return decodeURIComponent(value[1]);
+	} else {
+		return null;
+	}
+};
+
+function onReady () {
+	// var env = geoshare.isBrowser ? 'browser' : 'production';
+
+	// iris.include(['/config/' + env + '.js'], function () {
+		iris.noCache('file://', 'localhost');
+		iris.enableLog('file://', 'localhost');
+		iris.baseUri('geoshare/');
+
+		if ( geoshare.isBrowser ) {
+			var accessToken = getURLParameter('at');
+			if ( accessToken ) {
+				localStorage.access_token = accessToken;
+			} else {
+				googleapi.reset();
+				return document.location.href = 'http://localhost:3000/login';
+			}
+		}
+
+		iris.welcome(iris.path.welcome.js);
+	// });
+}
+
+//
+// Exposes global geoshare object
+//
+window.geoshare = {
+	// config : {},
+	isBrowser : location.href.indexOf('http://') === 0
+};
+
+//
+// Load dependencies
+//
+if ( geoshare.isBrowser ) {
+	$(document).on('ready', onReady);
+} else {
+	// iris.include(['cordova.js', '/js/PushNotification.js'], function () {
+		$(document).on('deviceready', onReady);		
+	// });
+}

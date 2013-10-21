@@ -4,55 +4,90 @@ iris.screen(function(self) {
 
 	self.create = function() {
 		self.tmpl(iris.path.welcome.html);
+
+		showStatus('Initializing...');
 		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
 
-		self.get('logout_btn').on('click', logout)
+		self.get('logout_btn').on('click', logout);
+
+		self.ui('map', iris.path.ui.map.js);
+
+		$(document).on('resize', resize);
+		resize();
 	};
 
+	function resize () {
+		iris.log('On resize');
+
+		var $doc = $(document);
+		self.ui('map').get()
+			.width( $doc.width() )
+			.height( $doc.height() - self.get('navbar').height() );
+	}
+
+	function showStatus (msg) {
+		self.get('loader').show();
+		self.get('status').text(msg);
+	}
+
+	function hideStatus () {
+		self.get('loader').hide();
+		self.get('status').text('');
+	}
+
 	function logout (e) {
-		self.ui("map").get().hide();
-		self.get('status').text('Logout');
+		self.get('logout_btn').hide();
+		self.ui('map').reset();
 		googleapi.logout();
+
+		showStatus('Logging...');
 		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
 	}
 
 	function onGetToken(data) {
-		iris.log("ACCESS TOKEN = " + data.access_token);
+		iris.log('ACCESS TOKEN = ' + data.access_token);
+		self.get('logout_btn').show();
 
-		self.get('status').text('Welcome user!\n\nSending location...\n\n');
+		showStatus('Sending location...');
 		sendLocation();
 	}
 
 	function onGetTokenFail(e) {
-		iris.log("GET ACCESS TOKEN ERROR " + e);
-		self.get('status').text('Logging...');
+		iris.log('GET ACCESS TOKEN ERROR ' + e);
+		showStatus('Logging...');
 
-		googleapi.authorize().done(onGetToken)
-				.fail(function(data) {
+		googleapi.authorize().done(onGetToken).fail(function(data) {
 			self.get('login_error').html(data.error);
 		});
 	}
 
 	function sendLocation() {
-		iris.log('Sending user location...');
+		navigator.geolocation.getCurrentPosition(onGetPosition, onGetPositionError, {enableHighAccuracy: true});
+	}
 
-		navigator.geolocation.getCurrentPosition(function(position) {
-			self.get('status').text(self.get('status').text() + 'lat = ' + position.coords.latitude + ', lng=' + position.coords.longitude + '\n');
-			userRes.sendLocation(position.coords.latitude, position.coords.longitude).then(function(user) {
-				self.get('status').text(self.get('status').text() + '\nLocation sended.\n\n' + JSON.stringify(user, null, 2));
-				return userRes.getNearestContacts();
-			}).done(function(contacts) {
-				self.get('status').text(self.get('status').text() + '\nNearest contacts received.\n\n' + JSON.stringify(contacts, null, 2));
-				self.ui("map", iris.path.ui.map.js, {me: position.coords, contacts: contacts}).get().show();
-			}).fail(function(e) {
-				self.get('status').text(self.get('status').text() + '\nERROR -> Location send =' + e);
-			});
+	function onGetPosition (position) {
+		var pos = position.coords;
+		iris.log('lat = ' + pos.latitude + ', lng=' + pos.longitude);
 
-		}, function onError(error) {
-			iris.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+		userRes.sendLocation(pos.latitude, pos.longitude).then(function(user) {
+			showStatus('Finding nearest users...')
+			// TODO show user information, image and name
+			return userRes.getNearestContacts();
+		}).done(function(contacts) {
+			hideStatus();
 
-		}, {enableHighAccuracy: true});
+			iris.log('All neareat user found =' + contacts.length);
+			self.ui('map').render(pos, contacts);
+		}).fail(function(e) {
+			// TODO show error?
+			iris.log('ERROR sendLocation code: ' + e.code + '\n' + 'message: ' + e.message + '\n');
+		});
 
+	}
+
+	function onGetPositionError (error) {
+		// TODO show error?
+		iris.log('ERROR sendLocation code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 	}
 
 }, iris.path.welcome.js);

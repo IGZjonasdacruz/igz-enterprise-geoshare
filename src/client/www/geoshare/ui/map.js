@@ -1,35 +1,24 @@
 iris.ui(function(self) {
 
-	self.settings({
-		me: {
-			latitude: 40.421603,
-			longitude: -3.705488
-		},
-		contacts: []
-	});
+	var map;
 
 	self.create = function() {
 		self.tmpl(iris.path.ui.map.html);
-		self.get('map').width($(document).width());
-		self.get('map').height($(document).height());
-		map = new GMaps({
-			div: '#map',
-			lat: self.setting('me').latitude,
-			lng: self.setting('me').longitude,
-			zoom: 12,
-			zoomControl: true,
-			zoomControlOpt: {
-				style: 'SMALL',
-				position: 'TOP_RIGHT'
-			},
-			panControl: true,
-			streetViewControl: true,
-			mapTypeControl: false
-		});
+	};
 
+	self.render = function (userPosition, contacts) {
+
+		if ( !map ) {
+			createMap(userPosition);
+		}
+		
+		iris.log('[map] Set map center')
+		map.setCenter(userPosition.latitude, userPosition.longitude);
+
+		iris.log('[map] Draw user, lat=' + userPosition.latitude + ', lng=' + userPosition.longitude)
 		map.addMarker({
-			lat: self.setting('me').latitude,
-			lng: self.setting('me').longitude,
+			lat: userPosition.latitude,
+			lng: userPosition.longitude,
 			title: 'Me',
 			icon: 'img/me_marker.png',
 			infoWindow: {
@@ -37,7 +26,8 @@ iris.ui(function(self) {
 			}
 		});
 
-		self.setting('contacts').forEach(function(contact) {
+		iris.log('[map] Draw user contacts')
+		contacts.forEach(function(contact) {
 			map.addMarker({
 				lat: contact.location.coordinates[1],
 				lng: contact.location.coordinates[0],
@@ -48,5 +38,28 @@ iris.ui(function(self) {
 				}
 			});
 		});
+
+	}
+
+	self.reset = function () {
+		map.removeMarkers();
 	};
+
+	function createMap (userPosition) {
+		map = new GMaps({
+			div: '#map',
+			lat: userPosition.latitude,
+			lng: userPosition.longitude,
+			zoom: 14,
+			zoomControl: true,
+			zoomControlOpt: {
+				style: 'SMALL',
+				position: 'TOP_RIGHT'
+			},
+			panControl: true,
+			streetViewControl: true,
+			mapTypeControl: false
+		});
+	}
+
 }, iris.path.ui.map.js);

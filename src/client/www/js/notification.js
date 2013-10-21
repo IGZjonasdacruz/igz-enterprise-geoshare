@@ -13,7 +13,7 @@
         pushNotification.register(
             successHandler,
             errorHandler, {
-                "senderID":"193156067209", // This is the Google project ID you need to obtain by registering your application for GCM
+                "senderID": geosharecfg.gcm.senderID, // This is the Google project ID you need to obtain by registering your application for GCM
                 "ecb":"onNotificationGCM"
             }
         );

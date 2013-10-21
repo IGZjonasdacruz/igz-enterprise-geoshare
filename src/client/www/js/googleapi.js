@@ -71,18 +71,15 @@ var googleapi = {
 		localStorage.expires_at = expiresAt;
 	},
 	getToken: function() {
-
-		if ( !localStorage.access_token ) {
-			console.log('No previous access token');
-			return googleapi.authorize();
-		}
-
-		
 		var options = googleapi.config;
 		var deferred = $.Deferred();
 		var now = new Date().getTime();
 
-		if ( now < localStorage.expires_at ) {
+		if ( !localStorage.access_token ) {
+			return googleapi.authorize();
+		}
+
+		if ( geoshare.isBrowser || now < localStorage.expires_at ) {
 			console.log('Found a valid access token[' + localStorage.access_token + ']');
 
 			//The token is still valid, so immediately return it from the cache
@@ -112,6 +109,11 @@ var googleapi = {
 		return deferred.promise();
 	},
 	logout : function () {
+		// Google Logout
+		googleapi.reset();
+	},
+	reset : function () {
+		// Only remove tokens from localStorage
 		localStorage.removeItem('expires_at');
 		localStorage.removeItem('access_token');
 		localStorage.removeItem('refresh_token');

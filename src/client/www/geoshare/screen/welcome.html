@@ -1,12 +1,22 @@
-<div class='main'>
+<div>
 
-  <h1>Enterprise GeoShare</h1>
+	<nav data-id='navbar' class="navbar navbar-default" role="navigation">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">GeoShare</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#">Map</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#" data-id='logout_btn' style='display:none;'>Logout</a></li>
+		</ul>
+	</nav>
 
-  <button data-id='logout_btn'>Logout</button>
-
-
-  <p data-id='status'></p>
-  
-  <div data-id='map'></div>
+	<div data-id='loader' class='loader'>
+		<img src='img/loader.gif' alt='loading...'>
+		<p data-id='status'></p>
+	</div>
+	
+	<div data-id='map'></div>
 
 </div>

@@ -3,7 +3,7 @@
 		"SOCKET" : "tcp://ec2-54-217-125-174.eu-west-1.compute.amazonaws.com:9700",
 		"METADATA" : {
 			"project": "geoshare",
-			"env" : "dev"
+			"env" : "local"
 		},
 		"LEVEL" : "info",
 		"CONSOLE_TRANSPORT" : true
@@ -19,5 +19,6 @@
 	"GCM" : {
 		"SENDER_ID" : "193156067209",
 		"API_KEY" : "AIzaSyAMeLUEGnoNKTOd7dazquZW4IAQ9UMx8QM"
-	}
+	},
+	"ALLOW_CORS" : true
 }
