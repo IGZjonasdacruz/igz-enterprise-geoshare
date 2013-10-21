@@ -2,10 +2,10 @@
 <widget id="com.igz.geoshare" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>IGZEnterpriseGeoshare</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Intelygenz open source system to share temporaly geolocation between people of the same Google Apps domain.
     </description>
-    <author email="dev@callback.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="intelygenz@gmail.com" href="http://www.intelygenz.com">
+        Intelygenz
     </author>
     <content src="index.html" />
     <access origin="*" />
