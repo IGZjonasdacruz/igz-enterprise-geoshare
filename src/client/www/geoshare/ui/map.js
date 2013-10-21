@@ -4,9 +4,25 @@ iris.ui(function(self) {
 
 	self.create = function() {
 		self.tmpl(iris.path.ui.map.html);
+
+		self.on('resize', resize);
 	};
 
+	function resize () {
+		var $doc = $(document);
+		self.get()
+			.width( $doc.width() - 60 )
+			.height( $doc.height() - self.get().offset().top - 60 );
+
+		if ( map ) {
+			map.refresh();
+		}		
+	}
+
 	self.render = function (userPosition, contacts) {
+
+		self.get().show();
+		resize();
 
 		if ( !map ) {
 			createMap(userPosition);
@@ -38,7 +54,6 @@ iris.ui(function(self) {
 				}
 			});
 		});
-
 	}
 
 	self.reset = function () {
