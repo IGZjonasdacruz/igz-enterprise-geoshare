@@ -9,10 +9,10 @@ iris.ui(function(self) {
 	};
 
 	function resize () {
-		var $doc = $(document);
+		var $window = $(window);
 		self.get()
-			.width( $doc.width() - 60 )
-			.height( $doc.height() - self.get().offset().top - 60 );
+			.width( $window.width() - 60 )
+			.height( $window.height() - self.get().offset().top - 60 );
 
 		if ( map ) {
 			map.refresh();
