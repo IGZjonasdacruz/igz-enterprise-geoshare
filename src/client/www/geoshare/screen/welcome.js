@@ -65,17 +65,19 @@ iris.screen(function(self) {
 
 	function onGetPosition (position) {
 		var pos = position.coords;
+		var me = null;
 		iris.log('lat = ' + pos.latitude + ', lng=' + pos.longitude);
 
 		userRes.sendLocation(pos.latitude, pos.longitude).then(function(user) {
-			showStatus('Finding nearest users...')
+			showStatus('Finding nearest users...');
+			me = user;
 			// TODO show user information, image and name
 			return userRes.getNearestContacts();
 		}).done(function(contacts) {
 			hideStatus();
 
 			iris.log('All neareat user found =' + contacts.length);
-			self.ui('map').render(pos, contacts);
+			self.ui('map').render(me, contacts);
 		}).fail(function(e) {
 			// TODO show error?
 			iris.log('ERROR sendLocation code: ' + e.code + '\n' + 'message: ' + e.message + '\n');

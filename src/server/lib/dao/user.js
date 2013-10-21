@@ -210,7 +210,7 @@ User.prototype.myNearestContacts = function(user, callback) {
 				fields = {
 					email: 1,
 					location: 1,
-					_id: 0
+					_id: 1
 				};
 				
 				limit = {
@@ -223,7 +223,7 @@ User.prototype.myNearestContacts = function(user, callback) {
 							return callback(err, null);
 						}
 
-						logger.info('Retrieved ' + result.lentgh + ' nearest contacts of ' + user._id + ' user');
+						logger.info('Retrieved ' + result.length + ' nearest contacts of ' + user._id + ' user');
 						callback(null, result);
 					}
 				);

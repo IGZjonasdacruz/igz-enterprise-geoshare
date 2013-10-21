@@ -1,6 +1,7 @@
 iris.ui(function(self) {
 
 	var map;
+	var userRes = iris.resource(iris.path.resource.user);
 
 	self.create = function() {
 		self.tmpl(iris.path.ui.map.html);
@@ -8,63 +9,47 @@ iris.ui(function(self) {
 		self.on('resize', resize);
 	};
 
-	function resize () {
+	function resize() {
 		var $window = $(window);
 		self.get()
-			.width( $window.width() - 60 )
-			.height( $window.height() - self.get().offset().top - 60 );
+				.width($window.width() - 60)
+				.height($window.height() - self.get().offset().top - 60);
 
-		if ( map ) {
+		if (map) {
 			map.refresh();
-		}		
+		}
 	}
 
-	self.render = function (userPosition, contacts) {
+	self.render = function(me, contacts) {
 
 		self.get().show();
 		resize();
 
-		if ( !map ) {
-			createMap(userPosition);
+		if (!map) {
+			createMap(me);
 		}
-		
-		iris.log('[map] Set map center')
-		map.setCenter(userPosition.latitude, userPosition.longitude);
 
-		iris.log('[map] Draw user, lat=' + userPosition.latitude + ', lng=' + userPosition.longitude)
-		map.addMarker({
-			lat: userPosition.latitude,
-			lng: userPosition.longitude,
-			title: 'Me',
-			icon: 'img/me_marker.png',
-			infoWindow: {
-				content: '<p>You are here</p>'
-			}
-		});
+		iris.log('[map] Set map center');
+		map.setCenter(me.location.coordinates[1], me.location.coordinates[0]);
 
-		iris.log('[map] Draw user contacts')
+		iris.log('[map] Draw user, lat=' + me.location.coordinates[1] + ', lng=' + me.location.coordinates[0]);
+		addMarker(me);
+
+		iris.log('[map] Draw user contacts');
 		contacts.forEach(function(contact) {
-			map.addMarker({
-				lat: contact.location.coordinates[1],
-				lng: contact.location.coordinates[0],
-				title: contact.email,
-				icon: 'img/contact_marker.png',
-				infoWindow: {
-					content: "<p>" + contact.email + "</p>"
-				}
-			});
+			addMarker(contact);
 		});
-	}
+	};
 
-	self.reset = function () {
+	self.reset = function() {
 		map.removeMarkers();
 	};
 
-	function createMap (userPosition) {
+	function createMap(me) {
 		map = new GMaps({
 			div: '#map',
-			lat: userPosition.latitude,
-			lng: userPosition.longitude,
+			lat: me.location.coordinates[1],
+			lng: me.location.coordinates[0],
 			zoom: 14,
 			zoomControl: true,
 			zoomControlOpt: {
@@ -74,6 +59,19 @@ iris.ui(function(self) {
 			panControl: true,
 			streetViewControl: true,
 			mapTypeControl: false
+		});
+	}
+
+	function addMarker(user) {
+		console.log("**************")
+		map.addMarker({
+			lat: user.location.coordinates[1],
+			lng: user.location.coordinates[0],
+			title: user.email,
+			icon: 'https://profiles.google.com/s2/u/0/photos/profile/' + user._id + '?sz=50',
+			infoWindow: {
+				content: user.email
+			}
 		});
 	}
 
