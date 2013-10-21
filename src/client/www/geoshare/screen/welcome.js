@@ -14,7 +14,7 @@ iris.screen(function(self) {
 
 		window.onorientationchange = function () {
 			//Need at least 800 milliseconds, TODO find a best solution...
-			setTimeout(resize, 1500);
+			setTimeout(resize, 1000);
 		}
 	};
 
