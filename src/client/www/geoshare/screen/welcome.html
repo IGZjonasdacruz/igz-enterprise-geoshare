@@ -12,8 +12,13 @@
 				<a class='navbar-brand' href='#'>GeoShare</a>
 			</div>
 			<div class='navbar-collapse collapse'>
-				<ul class='nav navbar-nav'>
-					<li class='active'>
+				<ul class='nav navbar-nav' data-id='menu'>
+					<li data-id='menu-list'>
+						<a href='#' >
+							<span class="glyphicon glyphicon-list"></span> List
+						</a>
+					</li>
+					<li data-id='menu-map'>
 						<a href='#'>
 							<span class="glyphicon glyphicon-globe"></span> Map
 						</a>
@@ -38,6 +43,7 @@
 			</button>
 		</div>
 
+		<div data-id='list'></div>
 		<div data-id='map'></div>
 
 		<div data-id='loader' class='loader' style='display:none'>

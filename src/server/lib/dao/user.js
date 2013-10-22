@@ -203,7 +203,7 @@ User.prototype.myNearestContacts = function(user, callback) {
 						$near: {
 							$geometry: result.location
 						},
-						$maxDistance: 5000
+						$maxDistance: 50000
 					}
 				};
 

@@ -1,59 +1,68 @@
 iris.screen(function(self) {
 
 	var userRes = iris.resource(iris.path.resource.user);
+	var me = null;
+	var contacts = null;
 
 	self.create = function() {
 		self.tmpl(iris.path.welcome.html);
 
 		self.get('logout_btn').on('click', logout);
 		self.get('login_btn').on('click', login);
-
+		self.get('menu-list').on('click', showList);
+		self.get('menu-map').on('click', showMap);
+		showMenu(false);
+		self.ui('list', iris.path.ui.list.js).get().hide();
 		self.ui('map', iris.path.ui.map.js).get().hide();
 		self.ui('notify', iris.path.ui.notify.js);
 
-		window.onorientationchange = function () {
+		window.onorientationchange = function() {
 			//Need at least 800 milliseconds, TODO find a best solution...
 			setTimeout(resize, 1000);
 		}
 
-		iris.on(iris.RESOURCE_ERROR, function (request, textStatus, errorThrown) {
-			iris.notify('notify', {msg : '<strong>Sorry</strong>, an unexpected error has occurred! Please, try again later...', type:'danger'});
+		iris.on(iris.RESOURCE_ERROR, function(request, textStatus, errorThrown) {
+			iris.notify('notify', {msg: '<strong>Sorry</strong>, an unexpected error has occurred! Please, try again later...', type: 'danger'});
 			iris.log("resource error", request, textStatus, errorThrown);
 		});
 
 	};
 
-	function resize () {
+	function resize() {
 		iris.log('On resize');
 		iris.notify('resize');
 	}
 
-	function showStatus (msg) {
+	function showStatus(msg) {
 		self.get('loader').show();
 		self.get('status').text(msg);
 	}
 
-	function hideStatus () {
+	function hideStatus() {
 		self.get('loader').hide();
 		self.get('status').text('');
 	}
 
-	function login () {
+	function login() {
 		self.get('login_box').hide();
 		showStatus('Getting access...');
 		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
 	}
 
-	function logout (e) {
-		userRes.logout().done(function () {
+	function logout(e) {
+		userRes.logout().done(function() {
 			googleapi.reset();
 
-			if ( geoshare.isBrowser ) {
+			if (geoshare.isBrowser) {
 				return document.location.href = 'http://localhost:3000/login';
 			} else {
 				self.get('logout_btn').hide();
 				self.get('login_box').show();
+				showMenu(false);
+				me = null;
+				contacts = null;
 				self.ui('map').reset().get().hide();
+				self.ui('list').reset().get().hide();
 			}
 
 		});
@@ -80,20 +89,21 @@ iris.screen(function(self) {
 		navigator.geolocation.getCurrentPosition(onGetPosition, onGetPositionError, {enableHighAccuracy: true});
 	}
 
-	function onGetPosition (position) {
+	function onGetPosition(position) {
 		var pos = position.coords;
-		var me = null;
 		iris.log('lat = ' + pos.latitude + ', lng=' + pos.longitude);
 		userRes.sendLocation(pos.latitude, pos.longitude).then(function(user) {
 			showStatus('Finding nearest users...');
 			me = user;
 			// TODO show user information, image and name
 			return userRes.getNearestContacts();
-		}).done(function(contacts) {
+		}).done(function(users) {
+			contacts = users;
 			hideStatus();
-
 			iris.log('All neareat user found =' + contacts.length);
-			self.ui('map').render(me, contacts);
+			showMenu(true);
+			self.ui('list').render(me, contacts);
+			showList();
 		}).fail(function(e) {
 			// TODO show error?
 			iris.log('ERROR sendLocation code: ' + e.code + '\n' + 'message: ' + e.message + '\n');
@@ -101,9 +111,30 @@ iris.screen(function(self) {
 
 	}
 
-	function onGetPositionError (error) {
+	function onGetPositionError(error) {
 		// TODO show error?
 		iris.log('ERROR sendLocation code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+	}
+
+	function showMenu(state) {
+		self.get('menu').toggle(state);
+		self.get('menu-list').addClass('active');
+		self.get('menu-map').removeClass('active');
+	}
+
+	function showList() {
+		self.get('menu-list').addClass('active');
+		self.get('menu-map').removeClass('active');
+		self.ui('map').hide();
+		self.ui('list').show();
+	}
+	
+	function showMap() {
+		self.ui('map').render(me, contacts);
+		self.get('menu-map').addClass('active');
+		self.get('menu-list').removeClass('active');
+		self.ui('list').hide();
+		self.ui('map').show();
 	}
 
 }, iris.path.welcome.js);
