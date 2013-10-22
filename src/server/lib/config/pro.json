@@ -19,6 +19,5 @@
 	"GCM" : {
 		"SENDER_ID" : "193156067209",
 		"API_KEY" : "AIzaSyAMeLUEGnoNKTOd7dazquZW4IAQ9UMx8QM"
-	},
-	"ALLOW_CORS" : false
+	}
 }
