@@ -12,7 +12,6 @@ iris.ui(function(self) {
 	function resize() {
 		var $window = $(window);
 		self.get()
-				.width($window.width() - 60)
 				.height($window.height() - self.get().offset().top - 60);
 
 		if (map) {
@@ -43,6 +42,7 @@ iris.ui(function(self) {
 
 	self.reset = function() {
 		map.removeMarkers();
+		return self;
 	};
 
 	function createMap(me) {

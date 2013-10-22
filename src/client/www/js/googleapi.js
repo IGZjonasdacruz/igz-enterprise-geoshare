@@ -108,10 +108,6 @@ var googleapi = {
 
 		return deferred.promise();
 	},
-	logout : function () {
-		// Google Logout
-		googleapi.reset();
-	},
 	reset : function () {
 		// Only remove tokens from localStorage
 		localStorage.removeItem('expires_at');

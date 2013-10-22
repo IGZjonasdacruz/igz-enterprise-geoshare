@@ -12,5 +12,9 @@ iris.resource(function (self) {
 		return self.get("contacts/location");
 	};
 
+	self.logout = function() {
+		return self.get("logout");
+	};
+
 
 }, iris.path.resource.user);

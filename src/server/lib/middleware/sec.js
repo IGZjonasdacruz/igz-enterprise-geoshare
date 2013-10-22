@@ -19,6 +19,9 @@ function ensureAuthenticated (req, res, next) {
 		return;
 	}
 
+	var accessToken = reqAuth.replace('Bearer ', '');
+	logger.info('Acess token = ' + accessToken);
+
 	var headers = {
 		authorization : reqAuth
 	};
@@ -67,7 +70,7 @@ function ensureAuthenticated (req, res, next) {
 
 		// Expose user for next middelwares
 		logger.info('Loaded user info of ' + resJson.email);
-		req.user = { _id: resJson.sub, email: resJson.email, domain: resJson.hd };
+		req.user = { _id: resJson.sub, email: resJson.email, domain: resJson.hd, accessToken: accessToken };
 		next(null);
 
 	});

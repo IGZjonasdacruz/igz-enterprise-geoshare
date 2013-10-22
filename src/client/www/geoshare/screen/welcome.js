@@ -5,10 +5,8 @@ iris.screen(function(self) {
 	self.create = function() {
 		self.tmpl(iris.path.welcome.html);
 
-		showStatus('Initializing...');
-		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
-
 		self.get('logout_btn').on('click', logout);
+		self.get('login_btn').on('click', login);
 
 		self.ui('map', iris.path.ui.map.js).get().hide();
 
@@ -16,6 +14,7 @@ iris.screen(function(self) {
 			//Need at least 800 milliseconds, TODO find a best solution...
 			setTimeout(resize, 1000);
 		}
+
 	};
 
 	function resize () {
@@ -33,13 +32,25 @@ iris.screen(function(self) {
 		self.get('status').text('');
 	}
 
-	function logout (e) {
-		self.get('logout_btn').hide();
-		self.ui('map').reset();
-		googleapi.logout();
-
-		showStatus('Logging...');
+	function login () {
+		self.get('login_box').hide();
+		showStatus('Getting access...');
 		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
+	}
+
+	function logout (e) {
+		userRes.logout().done(function () {
+			googleapi.reset();
+
+			if ( geoshare.isBrowser ) {
+				return document.location.href = 'http://localhost:3000/login';
+			} else {
+				self.get('logout_btn').hide();
+				self.get('login_box').show();
+				self.ui('map').reset().get().hide();
+			}
+
+		});
 	}
 
 	function onGetToken(data) {
