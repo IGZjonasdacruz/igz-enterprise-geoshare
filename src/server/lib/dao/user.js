@@ -251,4 +251,26 @@ User.prototype.changeGcmId = function (user, gcmId, callback) {
 	});
 }
 
+User.prototype.remove = function (userId, callback) {
+	try {
+		check(userId).notNull();
+	} catch (err) {
+		return callback(err, null);
+	}
+
+	mongodb(function(err, db) {
+		if ( err ) {
+			return callback(err, null);
+		}
+
+		db.collection('user').remove({ _id : userId }, function (err, result) {
+			if ( err ) {
+				return callback(err, null);
+			}
+
+			callback(null, result);
+		});
+	});
+};
+
 module.exports = new User(); // This module returns the same user instance (Singleton)
