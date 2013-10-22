@@ -2,7 +2,7 @@
 iris.path = {
 	welcome : { js: 'screen/welcome.js', html: 'screen/welcome.html' },
 	ui : {
-		map : { js: 'ui/map.js', html: 'ui/map.html' },
+		map : { js: 'ui/map.js', html: 'ui/map.html' }
 	},
 	resource : {
 		user : 'resource/user.js'
@@ -62,18 +62,22 @@ function onReady () {
 	iris.noCache('file://', 'localhost');
 	iris.enableLog('file://', 'localhost');
 	iris.baseUri('geoshare/');
-
+	
 	if ( geoshare.isBrowser ) {
 		var accessToken = getURLParameter('at');
 		if ( accessToken ) {
 			localStorage.access_token = accessToken;
+			iris.welcome(iris.path.welcome.js);
 		} else {
 			googleapi.reset();
 			return document.location.href = 'http://localhost:3000/login';
 		}
+	} else {
+		geosharecfg.gcm.listenGCMNotifications(function() {
+			iris.welcome(iris.path.welcome.js);
+		});
 	}
-
-	iris.welcome(iris.path.welcome.js);
+	
 }
 
 

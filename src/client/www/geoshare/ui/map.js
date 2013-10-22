@@ -63,7 +63,6 @@ iris.ui(function(self) {
 	}
 
 	function addMarker(user) {
-		console.log("**************")
 		map.addMarker({
 			lat: user.location.coordinates[1],
 			lng: user.location.coordinates[0],

@@ -67,7 +67,6 @@ iris.screen(function(self) {
 		var pos = position.coords;
 		var me = null;
 		iris.log('lat = ' + pos.latitude + ', lng=' + pos.longitude);
-
 		userRes.sendLocation(pos.latitude, pos.longitude).then(function(user) {
 			showStatus('Finding nearest users...');
 			me = user;

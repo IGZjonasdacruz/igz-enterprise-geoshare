@@ -40,7 +40,16 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRVOzA9kco5fr9pylLcJzUaqEygptGvriKxNZR5DONP",
+										"value": "Bearer ya29.AHES6ZROS7RkRsfOgK8DTqkyG8cziUZ5pyEQvQ4lpXLD2GFuse7AhQwBWA",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "regid",
+										"location": "body",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "test",
 										"javaType": "",
 										"description": ""
 									}

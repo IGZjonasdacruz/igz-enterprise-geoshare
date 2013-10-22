@@ -127,6 +127,7 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 
 		var userUpdated = {
 			_id: user._id,
+			regid: user.regid,
 			email: user.email,
 			domain: user.domain,
 			location: {
