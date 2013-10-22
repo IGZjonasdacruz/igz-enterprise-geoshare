@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="gcm">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/cordova/plugins/com.phonegap.plugins.PushPlugin/src/android/libs/gcm.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

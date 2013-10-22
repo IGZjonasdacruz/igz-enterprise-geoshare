@@ -8,7 +8,7 @@ iris.screen(function(self) {
 		showStatus('Initializing...');
 		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
 
-		// self.get('logout_btn').on('click', logout);
+		self.get('logout_btn').on('click', logout);
 
 		self.ui('map', iris.path.ui.map.js).get().hide();
 
@@ -33,18 +33,18 @@ iris.screen(function(self) {
 		self.get('status').text('');
 	}
 
-	// function logout (e) {
-	// 	self.get('logout_btn').hide();
-	// 	self.ui('map').reset();
-	// 	googleapi.logout();
+	function logout (e) {
+		self.get('logout_btn').hide();
+		self.ui('map').reset();
+		googleapi.logout();
 
-	// 	showStatus('Logging...');
-	// 	googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
-	// }
+		showStatus('Logging...');
+		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
+	}
 
 	function onGetToken(data) {
 		iris.log('ACCESS TOKEN = ' + data.access_token);
-		// self.get('logout_btn').show();
+		self.get('logout_btn').show();
 
 		showStatus('Sending location...');
 		sendLocation();
