@@ -7,7 +7,7 @@
 				"host": "localhost",
 				"endpoint": [
 					{
-						"name": "all",
+						"name": "user",
 						"method": [
 							{
 								"name": "Send location",
@@ -54,7 +54,7 @@
 										"description": ""
 									}
 								],
-								"path": "/user/me/location",
+								"path": "/me/location",
 								"description": ""
 							},
 							{
@@ -75,11 +75,32 @@
 										"description": ""
 									}
 								],
-								"path": "/user/contacts/location",
+								"path": "/contacts/location",
+								"description": ""
+							},
+							{
+								"name": "Log out",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZRVOzA9kco5fr9pylLcJzUaqEygptGvriKxNZR5DONP",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/logout",
 								"description": ""
 							}
 						],
-						"path": "",
+						"path": "/user",
 						"description": ""
 					}
 				],
