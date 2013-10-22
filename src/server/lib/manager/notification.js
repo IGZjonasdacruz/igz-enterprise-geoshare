@@ -14,7 +14,7 @@ function sendToNearestContacts (user, callback) {
 			callback(err);
 		}
 
-		if ( users.length == 0 ) {
+		if ( !users || users.length == 0 ) {
 			logger.info('There are not near contacts');
 			return callback(null, 0);
 		}
@@ -23,10 +23,20 @@ function sendToNearestContacts (user, callback) {
 
 		var registrationIds = [], gcmId;
 		for ( var f = 0, F = users.length; f < F; f++ ) {
+console.log('****************************')
+console.log('****************************')
+console.log('users[f]->', users[f])
+console.log('****************************')
+console.log('****************************')
+console.log('****************************')
 			gcmId = users[f].gcmId;
 			if ( gcmId ) {
 				registrationIds.push(gcmId);
 			}
+		}
+
+		if ( registrationIds.length === 0 ) {
+			return logger.info('There are not contacts with GCM id, PUSH notifications will be not sended');
 		}
 
 		logger.info('Sending GCM PUSH notifications to ' + registrationIds.length + ' contacts...');

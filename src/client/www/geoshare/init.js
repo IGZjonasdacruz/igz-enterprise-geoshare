@@ -69,17 +69,16 @@ function onReady () {
 		var accessToken = getURLParameter('at');
 		if ( accessToken ) {
 			localStorage.access_token = accessToken;
-			iris.welcome(iris.path.welcome.js);
 		} else {
 			googleapi.reset();
 			return document.location.href = 'http://localhost:3000/login';
 		}
 	} else {
-		geosharecfg.gcm.listenGCMNotifications(function() {
-			iris.welcome(iris.path.welcome.js);
-		});
+		// TODO support notification on browsers
+		gnotification.listen();
 	}
-	
+
+	iris.welcome(iris.path.welcome.js);
 }
 
 

@@ -16,7 +16,7 @@ UserManager.prototype.saveLocation = function (user, lat, lng, callback) {
 		callback(null, userDb);
 		
 		// Find the nearest contacts and send a notification to them
-		notification.sendToNearestContacts(user, function (err, numUsers) {
+		notification.sendToNearestContacts(userDb, function (err, numUsers) {
 			if ( err ) {
 				logger.error(err);
 			}

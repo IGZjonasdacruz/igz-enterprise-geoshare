@@ -7,6 +7,10 @@ iris.resource(function (self) {
 	self.sendLocation = function(lat, lng) {
 		return self.post("me/location", {latitude: lat, longitude: lng, regid: geosharecfg.gcm.regid});
 	};
+
+	self.sendGcmId = function(gcmId) {
+		return self.put("me/gcm-id", {gcmId: gcmId});
+	};
 	
 	self.getNearestContacts = function() {
 		return self.get("contacts/location");

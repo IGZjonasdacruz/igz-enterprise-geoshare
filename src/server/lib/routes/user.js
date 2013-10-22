@@ -18,9 +18,6 @@ function addRoutes (app) {
 function myLocation (req, res) {
 	var lat = sanitize(req.body.latitude).toFloat();
 	var lon = sanitize(req.body.longitude).toFloat();
-	var regid = sanitize(req.body.regid).xss();
-	
-	req.user.regid = regid;
 
 	userManager.saveLocation(req.user, lat, lon, function(err, user) {
 
