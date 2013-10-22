@@ -247,7 +247,19 @@ User.prototype.changeGcmId = function (user, gcmId, callback) {
 			return callback(err, null);
 		}
 
-		db.collection('user').update({ _id : user._id }, { $set: {gcmId:gcmId} }, callback);
+		logger.info('Changing gcm-id=' + gcmId + ' for ' + user.email);
+
+		db.collection('user').update({ _id : user._id }, { $set: {gcmId:gcmId} }, function (err, result) {
+			if ( err ) {
+				return callback(err, null);
+			}
+
+			if ( result == 1 ) {
+				callback(null);
+			} else {
+				callback("Error: user cannot be updated");
+			}
+		});
 	});
 }
 

@@ -26,7 +26,7 @@ UserManager.prototype.saveLocation = function (user, lat, lng, callback) {
 };
 
 UserManager.prototype.myNearestContacts = function (user, callback) {
-	userDao.myNearestContacts(user, callback);  
+	userDao.myNearestContacts(user, callback);
 };
 
 UserManager.prototype.changeGcmId = function (user, gcmId, callback) {

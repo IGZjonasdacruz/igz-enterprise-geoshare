@@ -55,7 +55,7 @@ function changeGcmId (req, res) {
 			return res.send(500);
 		}
 
-		res.send(200, result);
+		res.json({status:200});
 	});
 }
 
@@ -66,7 +66,7 @@ function logout (req, res) {
 			return res.send(500);
 		}
 
-		res.send(200, {status: 200});
+		res.json({status: 200});
 	});	
 }
 
