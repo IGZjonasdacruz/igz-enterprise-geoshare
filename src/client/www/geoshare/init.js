@@ -2,7 +2,9 @@
 iris.path = {
 	welcome : { js: 'screen/welcome.js', html: 'screen/welcome.html' },
 	ui : {
-		map : { js: 'ui/map.js', html: 'ui/map.html' }
+		map : { js: 'ui/map.js', html: 'ui/map.html' },
+		notify : { js: 'ui/notify.js', html: 'ui/notify.html' },
+		notify_item : { js: 'ui/notify_item.js', html: 'ui/notify_item.html' }
 	},
 	resource : {
 		user : 'resource/user.js'

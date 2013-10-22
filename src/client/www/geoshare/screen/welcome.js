@@ -9,11 +9,17 @@ iris.screen(function(self) {
 		self.get('login_btn').on('click', login);
 
 		self.ui('map', iris.path.ui.map.js).get().hide();
+		self.ui('notify', iris.path.ui.notify.js);
 
 		window.onorientationchange = function () {
 			//Need at least 800 milliseconds, TODO find a best solution...
 			setTimeout(resize, 1000);
 		}
+
+		iris.on(iris.RESOURCE_ERROR, function (request, textStatus, errorThrown) {
+			iris.notify('notify', {msg : '<strong>Sorry</strong>, an unexpected error has occurred! Please, try again later...', type:'danger'});
+			iris.log("resource error", request, textStatus, errorThrown);
+		});
 
 	};
 
