@@ -17,12 +17,16 @@ iris.screen(function(self) {
 
 		self.ui('notify', iris.path.ui.notify.js);
 
+		showLogin();
+	};
+
+	function showLogin () {
 		self.inflate({
 			showMenu: false,
 			showUserBox: false,
 			showLogin: true
 		});
-	};
+	}
 
 	function onBeforeNavigation () {
 		var hash = document.location.hash;
@@ -56,10 +60,7 @@ iris.screen(function(self) {
 			if (geoshare.isBrowser) {
 				return document.location.href = 'http://localhost:3000/login';
 			} else {
-				self.get('menu').hide();
-				self.get('login_box').show();
-				self.ui('map').reset().get().hide();
-				self.ui('list').reset().get().hide();
+				showLogin();
 			}
 		});
 	}
@@ -107,10 +108,6 @@ iris.screen(function(self) {
 
 	function onGetPositionError(error) {
 		iris.notify('notify', { msg : 'Error: cannot get location...' });
-	}
-
-	function showMenu(state) {
-		self.get('menu').toggle(state);
 	}
 
 }, iris.path.screen.welcome.js);
