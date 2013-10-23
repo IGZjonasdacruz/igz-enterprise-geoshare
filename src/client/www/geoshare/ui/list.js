@@ -5,22 +5,19 @@ iris.ui(function(self) {
 	};
 
 	self.render = function(me, contacts) {
-		self.get('num-contacts').html(contacts.length + " near contact" + (contacts.length !== 1 ? 's' : ''));
+		var countText = contacts.length + " near contact" + (contacts.length !== 1 ? 's' : '');
+		self.inflate({ countText: countText, hasContacts: contacts.length > 0 });
+
 		contacts.forEach(function(contact) {
-			addContact(me, contact);
+			self.ui("contacts", iris.path.ui.item.js).render(me, contact);
 		});
+		
 		self.get().show();
 	};
 
 	self.reset = function() {
-		self.ui("contacts").forEach(function(ui) {
-			ui.reset();
-		});
+		self.destroyUIs('contacts');
 		return self;
 	};
-	
-	function addContact(me, contact) {
-		self.ui("contacts", iris.path.ui.item.js).render(me, contact);
-	}
 
 }, iris.path.ui.list.js);

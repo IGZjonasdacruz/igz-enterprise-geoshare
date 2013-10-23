@@ -9,6 +9,7 @@ iris.ui(function(self) {
 	self.render = function(me, contact) {
 		self.inflate({
 			email: contact.email,
+			emailto: 'mailto:' + contact.email,
 			photo: 'https://profiles.google.com/s2/u/0/photos/profile/' + contact._id + '?sz=50',
 			distance: getDistanceFromLatLonInKm(me, contact)
 		});

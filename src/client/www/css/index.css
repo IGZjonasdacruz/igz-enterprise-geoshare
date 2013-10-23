@@ -16,3 +16,8 @@
 .loader p {
     margin-top: 10px;
 }
+
+.table-contacts tbody tr td {
+	line-height: 50px;
+	height: 50px;
+}
