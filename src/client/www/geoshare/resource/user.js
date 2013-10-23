@@ -29,34 +29,37 @@ iris.resource(function (self) {
 	};
 
 	self.logout = function() {
-		return self.get("logout");
+		return self.get("logout").done(function () {
+			self.reset();
+		});
 	};
 
 	self.addNearContact = function (data) {
-
+		var contact = data.user;
 		for ( var f = 0, F = nearestContacts.length; f < F; f++ ) {
-			if ( nearestContacts[f].email === data.user.email ) {
+			if ( nearestContacts[f].email === contact.email ) {
 				break;
 			}
 		}
-		nearestContacts[f] = processContact(data.user);
+		processContact(contact)
+		nearestContacts[f] = contact;
 
-		iris.notify('notify', { msg: 'The user ' + data.user.email + ' has been discovered!' });
+		iris.notify('notify', { msg: 'The user ' + contact.email + ' has been discovered!' });
 		iris.notify('refresh-nearest-contacts');
 	};
 
 	self.me = function () {
 		return me;
-	}
+	};
 
 	self.nearestContacts = function () {
 		return nearestContacts;
-	}
+	};
 
 	self.reset = function () {
 		nearestContacts = null;
 		me = null;
-	}
+	};
 
 	//Distance between two points using the Haversine formula: http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points
 	function getDistanceFromLatLonInKm(me, contact) {
@@ -84,7 +87,6 @@ iris.resource(function (self) {
 
 	function processContact (contact) {
 		contact.distance = getDistanceFromLatLonInKm(me, contact);
-		return contact;
 	}
 
 }, iris.path.resource.user);

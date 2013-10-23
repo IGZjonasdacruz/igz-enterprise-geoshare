@@ -1,10 +1,12 @@
 
 iris.path = {
-	welcome : { js: 'screen/welcome.js', html: 'screen/welcome.html' },
+	screen : {
+		welcome : { js: 'screen/welcome.js', html: 'screen/welcome.html' },
+		list : { js: 'screen/list.js', html: 'screen/list.html' },
+		map : { js: 'screen/map.js', html: 'screen/map.html' }
+	},
 	ui : {
-		list : { js: 'ui/list.js', html: 'ui/list.html' },
-		item : { js: 'ui/item.js', html: 'ui/item.html' },
-		map : { js: 'ui/map.js', html: 'ui/map.html' },
+		list_item : { js: 'ui/list_item.js', html: 'ui/list_item.html' },
 		notify : { js: 'ui/notify.js', html: 'ui/notify.html' },
 		notify_item : { js: 'ui/notify_item.js', html: 'ui/notify_item.html' }
 	},
@@ -53,24 +55,30 @@ iris.Resource.prototype.ajax = function(method, path, params) {
 	return deferred.promise();
 };
 
-function getURLParameter(name) {
-	var value = RegExp(name + '=' + '(.+?)(&|$)').exec(location.search);
-	if ( value ) {
-		return decodeURIComponent(value[1]);
-	} else {
-		return null;
-	}
-};
-
 function onReady () {
 	iris.noCache('file://', 'localhost');
 	iris.enableLog('file://', 'localhost');
 	iris.baseUri('geoshare/');
+
+	iris.on(iris.RESOURCE_ERROR, function(request, textStatus, errorThrown) {
+		iris.notify('notify', {msg: '<strong>Sorry</strong>, an unexpected error has occurred! Please, try again later...', type: 'danger'});
+		iris.log("resource error", request, textStatus, errorThrown);
+	});
+
+	window.onorientationchange = function() {
+		//Need at least 800 milliseconds, TODO find a best solution...
+		setTimeout(function resize() {
+			iris.log('On resize');
+			iris.notify('resize');
+		}, 1000);
+	}
 	
 	if ( geoshare.isBrowser ) {
-		var accessToken = getURLParameter('at');
-		if ( accessToken ) {
+		var hash = document.location.hash;
+		if ( hash && hash.indexOf('#at=') == 0 ) {
+			var accessToken = hash.substr(4);
 			localStorage.access_token = accessToken;
+			document.location.hash = '#';
 		} else {
 			googleapi.reset();
 			return document.location.href = 'http://localhost:3000/login';
@@ -81,7 +89,7 @@ function onReady () {
 		});
 	}
 
-	iris.welcome(iris.path.welcome.js);
+	iris.welcome(iris.path.screen.welcome.js);
 }
 
 
@@ -90,7 +98,6 @@ function onReady () {
 // Exposes global geoshare object
 //
 var geoshare = {
-	// config : {},
 	isBrowser : location.href.indexOf('http://') === 0
 };
 

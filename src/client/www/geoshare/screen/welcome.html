@@ -12,14 +12,14 @@
 				<a class='navbar-brand' href='#'>GeoShare</a>
 			</div>
 			<div class='navbar-collapse collapse'>
-				<ul class='nav navbar-nav' data-id='menu'>
-					<li data-id='menu-list'>
-						<a href='#' >
+				<ul class='nav navbar-nav' data-id='menu' data-jq-toggle='showMenu'>
+					<li>
+						<a href='#/list' >
 							<span class="glyphicon glyphicon-list"></span> List
 						</a>
 					</li>
-					<li data-id='menu-map'>
-						<a href='#'>
+					<li>
+						<a href='#/map'>
 							<span class="glyphicon glyphicon-globe"></span> Map
 						</a>
 					</li>
@@ -35,7 +35,7 @@
 	
 	<div class="container">
 
-		<div data-id='login_box' class='jumbotron'>
+		<div data-id='login_box' class='jumbotron' data-jq-toggle='showLogin'>
 			<h1>Welcome!</h1>
 			<p class='lead'>Login now using your Google account.</p>
 			<button data-id='login_btn' class='btn btn-lg btn-success'>
@@ -43,8 +43,20 @@
 			</button>
 		</div>
 
-		<div data-id='list'></div>
-		<div data-id='map'></div>
+		<div data-id='user_box' class='jumbotron' data-jq-toggle='showUserBox'>
+			<img data-jq-attr-src='user.photo' alt='No photo found' height='100' width='100' class='img-rounded hidden-xs' />
+			<h1>Welcome <span data-jq-text='user.name'></span>!</h1>
+			<p>You will be visible to other users for one hour.<br>
+				Show the nearest workmates:</p>
+			<a href='#/list' type='button' class='btn btn-lg btn-primary'>
+				<span class="glyphicon glyphicon-user"></span> List
+			</a>
+			<a href='#/map' type='button' class='btn btn-lg btn-primary'>
+				<span class="glyphicon glyphicon-globe"></span> Map
+			</a>
+		</div>
+
+		<div data-id='screens'></div>
 
 		<div data-id='loader' class='loader' style='display:none'>
 			<img src='img/loader.gif' alt='loading...'>

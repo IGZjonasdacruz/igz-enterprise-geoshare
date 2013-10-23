@@ -2,7 +2,7 @@
 	"LOGGER" : {
 		"METADATA" : {
 			"project": "igzgeoshare",
-			"env" : "dev"
+			"env" : "test"
 		},
 		"LEVEL" : "info",
 		"CONSOLE_TRANSPORT" : true

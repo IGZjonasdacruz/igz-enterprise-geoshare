@@ -134,6 +134,8 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 			$set:{
 				email: user.email,
 				domain: user.domain,
+				photo: user.photo,
+				name: user.name,
 				location: {
 					type: "Point",
 					coordinates: [lng, lat]
@@ -223,7 +225,9 @@ User.prototype.myNearestContacts = function(user, callback) {
 					email: 1,
 					location: 1,
 					_id: 1,
-					gcmId: 1
+					gcmId: 1,
+					name: 1,
+					photo: 1
 				};
 				
 				limit = {

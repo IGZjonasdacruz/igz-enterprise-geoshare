@@ -1,18 +1,15 @@
-iris.ui(function(self) {
+iris.screen(function(self) {
 
 	var map;
 	var userRes = iris.resource(iris.path.resource.user);
 
 	self.create = function() {
-		self.tmpl(iris.path.ui.map.html);
+		self.tmpl(iris.path.screen.map.html);
 
 		self.on('resize', resize);
+		self.on('refresh-nearest-contacts', self.render);
 
-		iris.on('refresh-nearest-contacts', function() {
-			if ( map ) {
-				self.render();
-			}
-		});
+		self.render();
 	};
 
 	function resize() {
@@ -84,11 +81,11 @@ iris.ui(function(self) {
 			lat: user.location.coordinates[1],
 			lng: user.location.coordinates[0],
 			title: user.email,
-			icon: 'https://profiles.google.com/s2/u/0/photos/profile/' + user._id + '?sz=50',
+			icon: user.photo + '?sz=50',
 			infoWindow: {
 				content: user.email
 			}
 		});
 	}
 
-}, iris.path.ui.map.js);
+}, iris.path.screen.map.js);

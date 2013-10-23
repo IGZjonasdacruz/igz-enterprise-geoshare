@@ -39,7 +39,7 @@ function oauth2Callback (req, res) {
 		}
 	});
 	*/
-	res.redirect('http://localhost:4400/index_web.html?at=' + req.user.accessToken);
+	res.redirect('http://localhost:4400/index_web.html#at=' + req.user.accessToken);
 	//res.json(req.user);
 }
 

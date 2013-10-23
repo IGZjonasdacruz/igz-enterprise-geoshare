@@ -1,11 +1,12 @@
-iris.ui(function(self) {
+iris.screen(function(self) {
 
 	var userRes = iris.resource(iris.path.resource.user);
 
 	self.create = function() {
-		self.tmpl(iris.path.ui.list.html);
+		self.tmpl(iris.path.screen.list.html);
 
 		iris.on('refresh-nearest-contacts', self.render);
+		self.render();
 	};
 
 	self.render = function() {
@@ -19,7 +20,7 @@ iris.ui(function(self) {
 
 		self.destroyUIs('contacts');
 		contacts.forEach(function(contact) {
-			self.ui("contacts", iris.path.ui.item.js).render(me, contact);
+			self.ui("contacts", iris.path.ui.list_item.js).render(me, contact);
 		});
 	};
 
@@ -28,4 +29,4 @@ iris.ui(function(self) {
 		return self;
 	};
 
-}, iris.path.ui.list.js);
+}, iris.path.screen.list.js);

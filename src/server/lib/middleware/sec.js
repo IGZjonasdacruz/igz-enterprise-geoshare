@@ -70,7 +70,15 @@ function ensureAuthenticated (req, res, next) {
 
 		// Expose user for next middelwares
 		logger.info('Loaded user info of ' + resJson.email);
-		req.user = { _id: resJson.sub, email: resJson.email, domain: resJson.hd, accessToken: accessToken };
+		req.user = { _id: resJson.sub, name: resJson.name,
+			photo: resJson.picture,
+			profile: resJson.profile,
+			gender: resJson.gender,
+			locale: resJson.locale,
+			email: resJson.email,
+			domain: resJson.hd,
+			accessToken: accessToken
+		};
 		next(null);
 
 	});
