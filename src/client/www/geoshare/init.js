@@ -76,8 +76,9 @@ function onReady () {
 			return document.location.href = 'http://localhost:3000/login';
 		}
 	} else {
-		// TODO support notification on browsers
-		gnotification.listen();
+		gnotification.listen(function (data) {
+			iris.resource(iris.path.resource.user).addNearContact(data);
+		});
 	}
 
 	iris.welcome(iris.path.welcome.js);

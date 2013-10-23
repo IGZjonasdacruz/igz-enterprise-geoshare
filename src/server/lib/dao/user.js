@@ -122,34 +122,46 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 	}
 
 	mongodb(function(err, db) {
-		if (err)
+		if (err) {
 			return callback(err, null);
-
-		var userUpdated = {
-			_id: user._id,
-			email: user.email,
-			domain: user.domain,
-			location: {
-				type: "Point",
-				coordinates: [lng, lat]
-			},
-			status: new Date()
-		};
-		db.collection('user').findAndModify({
-			_id: user._id
-		}, {},
-						userUpdated, {
-			"new": true,
-			"upsert": true
-		},
-		function(err, result) {
-			if (err)
-				return callback(err, null);
-
-			logger.info('Last location lat=' + lat + ', lng=' + lng + ' of ' + user.email + ' saved');
-			callback(null, userUpdated);
 		}
-		);
+
+		var query = { _id: user._id };
+
+		var sort = null;
+
+		var update = {
+			$set:{
+				email: user.email,
+				domain: user.domain,
+				location: {
+					type: "Point",
+					coordinates: [lng, lat]
+				},
+				status: new Date()
+			}
+		};
+
+		var options = {
+			new: true, // set to true if you want to return the modified object rather than the original
+			upsert: true // Atomically inserts the document if no documents matched.
+		};
+
+		db.collection('user').findAndModify(query, sort, update, options, function(err, userSaved) {
+			if (err) {
+				return callback(err, null);
+			}
+
+			if ( userSaved ) {
+				logger.info('[saveLocation] lat=' + userSaved.location.coordinates.lat + ', lng=' + userSaved.location.coordinates.lng + ' of ' + userSaved.email + ' saved');
+				callback(null, userSaved);
+			} else {
+				var msg = '[saveLocation] No user[' + user._id + '] found!';
+				logger.warn(msg);
+				callback(new Error(msg), null);
+			}
+
+		});
 
 	});
 };
@@ -210,7 +222,8 @@ User.prototype.myNearestContacts = function(user, callback) {
 				fields = {
 					email: 1,
 					location: 1,
-					_id: 1
+					_id: 1,
+					gcmId: 1
 				};
 				
 				limit = {
@@ -233,6 +246,7 @@ User.prototype.myNearestContacts = function(user, callback) {
 };
 
 User.prototype.changeGcmId = function (user, gcmId, callback) {
+
 	try {
 		check(user._id).notNull();
 		check(gcmId).notEmpty();
@@ -240,24 +254,26 @@ User.prototype.changeGcmId = function (user, gcmId, callback) {
 		return callback(err, null);
 	}
 
-
 	mongodb(function(err, db) {
 		if ( err ) {
 			return callback(err, null);
 		}
 
-		logger.info('Changing gcm-id=' + gcmId + ' for ' + user.email);
+		var query = { _id: user._id };
+		var sort = null;
+		var update = { $set: {gcmId:gcmId} };
+		var options = {
+			new: true, // set to true if you want to return the modified object rather than the original
+			upsert: true // Atomically inserts the document if no documents matched.
+		};
 
-		db.collection('user').update({ _id : user._id }, { $set: {gcmId:gcmId} }, function (err, result) {
+		db.collection('user').findAndModify(query, sort, update, options, function(err, userSaved) {
 			if ( err ) {
 				return callback(err, null);
 			}
-
-			if ( result == 1 ) {
-				callback(null);
-			} else {
-				callback("Error: user cannot be updated");
-			}
+			
+			logger.info('Saved gcm-id=' + userSaved.gcmId + ' for ' + userSaved._id);
+			callback(null, userSaved);
 		});
 	});
 }

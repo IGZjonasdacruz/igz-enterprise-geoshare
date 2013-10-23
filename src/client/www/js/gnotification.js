@@ -2,9 +2,12 @@ var gnotification = {};
 
 (function () {
 	
-	function listen () {
+	var onNewMessage;
+	
+	function listen (onNewMessageHandler) {
 		var pushNotification = window.plugins.pushNotification;
 		
+		onNewMessage = onNewMessageHandler;
 		pushNotification.register(
 			successHandler,
 			errorHandler, {
@@ -37,6 +40,29 @@ var gnotification = {};
 			case 'message':
 
 				iris.log( 'message = ' + JSON.stringify(e, null, 2) );
+
+				onNewMessage(e.payload)
+/*
+{
+   "payload": {
+     "user": {
+       "email": "bill.woods@intelygenz.com",
+       "location": {
+        "type": "Point",
+        "coordinates": [
+           -3.750127,
+          40.2341438
+        ]
+       }
+     }
+   },
+   "from": "193156067209",
+   "collapse_key": "near_contact",
+   "foreground": false,
+   "event": "message"
+}
+*/
+
 
 				break;
 			case 'error':

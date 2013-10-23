@@ -1,8 +1,6 @@
 iris.screen(function(self) {
 
 	var userRes = iris.resource(iris.path.resource.user);
-	var me = null;
-	var contacts = null;
 
 	self.create = function() {
 		self.tmpl(iris.path.welcome.html);
@@ -11,7 +9,9 @@ iris.screen(function(self) {
 		self.get('login_btn').on('click', login);
 		self.get('menu-list').on('click', showList);
 		self.get('menu-map').on('click', showMap);
+
 		showMenu(false);
+		
 		self.ui('list', iris.path.ui.list.js).get().hide();
 		self.ui('map', iris.path.ui.map.js).get().hide();
 		self.ui('notify', iris.path.ui.notify.js);
@@ -59,8 +59,7 @@ iris.screen(function(self) {
 				self.get('logout_btn').hide();
 				self.get('login_box').show();
 				showMenu(false);
-				me = null;
-				contacts = null;
+				userRes.reset();
 				self.ui('map').reset().get().hide();
 				self.ui('list').reset().get().hide();
 			}
@@ -92,23 +91,20 @@ iris.screen(function(self) {
 	function onGetPosition(position) {
 		var pos = position.coords;
 		iris.log('lat = ' + pos.latitude + ', lng=' + pos.longitude);
-		userRes.sendLocation(pos.latitude, pos.longitude).then(function(user) {
+		
+		userRes.sendLocation(pos.latitude, pos.longitude).then(function(user) {	
 			showStatus('Finding nearest users...');
-			me = user;
-			// TODO show user information, image and name
-			return userRes.getNearestContacts();
-		}).done(function(users) {
-			contacts = users;
-			hideStatus();
-			iris.log('All neareat user found =' + contacts.length);
-			showMenu(true);
-			self.ui('list').render(me, contacts);
-			showList();
-		}).fail(function(e) {
-			// TODO show error?
-			iris.log('ERROR sendLocation code: ' + e.code + '\n' + 'message: ' + e.message + '\n');
-		});
 
+			// TODO show user information, image and name
+			userRes.getNearestContacts().done(function(users) {
+				hideStatus();
+
+				iris.log('All neareat user found =' + users.length);
+				showMenu(true);
+				self.ui('list').render();
+				showList();
+			});
+		});
 	}
 
 	function onGetPositionError(error) {
@@ -130,11 +126,10 @@ iris.screen(function(self) {
 	}
 	
 	function showMap() {
-		self.ui('map').render(me, contacts);
 		self.get('menu-map').addClass('active');
 		self.get('menu-list').removeClass('active');
 		self.ui('list').hide();
-		self.ui('map').show();
+		self.ui('map').show().render(); // important! show first
 	}
 
 }, iris.path.welcome.js);

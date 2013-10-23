@@ -7,6 +7,12 @@ iris.ui(function(self) {
 		self.tmpl(iris.path.ui.map.html);
 
 		self.on('resize', resize);
+
+		iris.on('refresh-nearest-contacts', function() {
+			if ( map ) {
+				self.render();
+			}
+		});
 	};
 
 	function resize() {
@@ -19,14 +25,20 @@ iris.ui(function(self) {
 		}
 	}
 
-	self.render = function(me, contacts) {
+	self.render = function() {
 
-		self.get().show();
+		var me = userRes.me();
+		var contacts = userRes.nearestContacts();
+
+		iris.log('[map] Remove makers');
+
 		resize();
 
 		if (!map) {
 			createMap(me);
 		}
+
+		map.removeMarkers();
 
 		iris.log('[map] Set map center');
 		map.setCenter(me.location.coordinates[1], me.location.coordinates[0]);
@@ -43,6 +55,11 @@ iris.ui(function(self) {
 	self.reset = function() {
 		map.removeMarkers();
 		return self;
+	};
+
+	self.show = function() {
+		self.get().show();
+		return this;
 	};
 
 	function createMap(me) {
