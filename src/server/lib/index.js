@@ -34,6 +34,11 @@ app.use(express.static(__dirname + '/../public'));
 // express-winston errorLogger makes sense AFTER the router.
 app.use(expressWinston.errorLogger({transports: logger.transports}));
 
+app.use(express.errorHandler({
+	dumpExceptions: true,
+	showStack: true
+}));
+
 
 //
 // Routes
