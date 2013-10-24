@@ -5,3 +5,41 @@
 .table-contacts tbody tr td {
 	line-height: 50px;
 }
+
+label.checkbox-label {
+	margin: 4px;
+}
+
+label.checkbox-label:hover {
+	cursor: pointer;
+	opacity: 0.75;
+}
+
+label.checkbox-label > input[type="checkbox"].checkbox {
+    display: none;
+}
+label.checkbox-label > input[type="checkbox"].checkbox + span {
+    display: inline;
+    position: relative;
+    background-color: #b94a48;
+
+    /*label styling*/
+    padding: 2px 4px;
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 1em;
+    color: #ffffff;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: 0 -1% 0 rgba(0, 0, 0, 0.25);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+label.checkbox-label > input[type="checkbox"].checkbox:checked + span {
+    background-color: #468847;
+}
+
+label.checkbox-label > input[type="checkbox"].checkbox:disabled + span {
+    opacity: 0.5;
+}

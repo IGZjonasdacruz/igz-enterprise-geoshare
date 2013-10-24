@@ -40,6 +40,8 @@ iris.ui(function(self) {
 
 		if (shareMode.length === self.ui('shareMode_items').length) {
 			shareMode = 'all';
+		} else if (shareMode.length === 0) {
+			shareMode = 'none';
 		}
 
 		self.get().modal('hide');

@@ -266,7 +266,7 @@ User.prototype.myNearestContacts = function(user, callback) {
 							$maxDistance: 50000
 						},
 						shareMode: {
-							$ne: []
+							$ne: 'none'
 						}
 					};
 
