@@ -3,9 +3,13 @@ var gnotification = {};
 (function () {
 	
 	var onNewMessage;
+	var pushNotification = window.plugins.pushNotification;
 	
 	function listen (onNewMessageHandler) {
-		var pushNotification = window.plugins.pushNotification;
+		if ( onNewMessage ) {
+			iris.log('gnotification was listening before')
+			return;
+		}
 		
 		onNewMessage = onNewMessageHandler;
 		pushNotification.register(

@@ -23,10 +23,20 @@ iris.screen(function(self) {
 			shareModeUI.get().modal('toggle');
 		});
 
-		showLogin();
+		// collapse nav-bar on click
+		self.get('navbar_items').find('a').on('click', function(){
+		    self.get('collapse_nav_btn').click();
+		});
+
+		if ( localStorage.access_token ) {
+			login();
+		} else {
+			showLogin();
+		}
 	};
 
 	function showLogin () {
+		self.get('collapse_nav_btn').hide();
 		self.inflate({
 			showMenu: false,
 			showUserBox: false,
@@ -54,7 +64,11 @@ iris.screen(function(self) {
 	}
 
 	function login() {
-		self.get('login_box').hide();
+		self.inflate({
+			showMenu: false,
+			showUserBox: false,
+			showLogin: false
+		});
 		showStatus('Getting access...');
 		googleapi.getToken().done(onGetToken).fail(onGetTokenFail);
 	}
@@ -75,11 +89,18 @@ iris.screen(function(self) {
 		self.get('logout_btn').show();
 		showStatus('Sending location...');
 		sendLocation();
+
+		if ( !geoshare.isBrowser ) {
+			gnotification.listen(function(data) {
+				iris.resource(iris.path.resource.user).addNearContact(data);
+			});
+		}
 	}
 
 	function onGetTokenFail(e) {
-		showStatus('Logging...');
-		googleapi.authorize().done(onGetToken);
+		iris.notify('notify', { msg: 'Please authorize this application to start', type: 'danger' });
+		hideStatus();
+		showLogin();
 	}
 
 	function sendLocation() {

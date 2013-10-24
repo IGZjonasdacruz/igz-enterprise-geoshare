@@ -106,10 +106,6 @@ function onReady() {
 			googleapi.reset();
 			return document.location.href = 'http://localhost:3000/login';
 		}
-	} else {
-		gnotification.listen(function(data) {
-			iris.resource(iris.path.resource.user).addNearContact(data);
-		});
 	}
 
 	iris.welcome(iris.path.screen.welcome.js);

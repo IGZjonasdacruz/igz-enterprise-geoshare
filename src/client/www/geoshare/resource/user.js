@@ -1,6 +1,6 @@
 iris.resource(function (self) {
 
-	var nearestContacts = null, me = null;
+	var nearestContacts = [], me = null;
 
 	self.settings({
 		path : 'user/'
@@ -49,7 +49,7 @@ iris.resource(function (self) {
 
 		if ( f === F ) {
 			// New user
-			iris.notify('notify', { msg: 'The user ' + contact.email + ' has been discovered!' });
+			iris.notify('notify', { msg: 'The user "' + contact.name + '" has been discovered!' });
 		}
 
 		iris.notify('refresh-nearest-contacts');
@@ -68,7 +68,7 @@ iris.resource(function (self) {
 	}
 
 	self.reset = function () {
-		nearestContacts = null;
+		nearestContacts = [];
 		me = null;
 	};
 
