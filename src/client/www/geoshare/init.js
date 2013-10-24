@@ -33,7 +33,7 @@ iris.locale(
         number : {
             decimal: ".",
             thousand: ",",
-            precision: 2
+            precision: 0
         }
     }
 );
