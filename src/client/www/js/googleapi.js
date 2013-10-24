@@ -9,7 +9,8 @@ var googleapi = {
 			client_id: options.client_id,
 			redirect_uri: options.redirect_uri,
 			response_type: 'code',
-			scope: options.scope
+			scope: options.scope,
+			access_type: 'offline'
 		});
 
 		//Open the OAuth consent page in the InAppBrowser
@@ -46,11 +47,15 @@ var googleapi = {
 					googleapi.setToken(data);
 					deferred.resolve(data);
 				}).fail(function(response) {
-					deferred.reject(response.responseJSON);
+					deferred.reject({
+						type: 'exchange_code',
+						error: response.responseJSON
+					});
 				});
 			} else if (error) {
 				//The user denied access to the app
 				deferred.reject({
+					type: 'user_denied_access',
 					error: error[1]
 				});
 			}
@@ -59,9 +64,11 @@ var googleapi = {
 		return deferred.promise();
 	},
 	setToken: function(data) {
-		console.log('New access token ', data);
+		console.log('New access token ' + JSON.stringify(data,null,2));
 
 		localStorage.access_token = data.access_token;
+
+		// The refresh_token only is sent once, after the user authorizes the application
 		localStorage.refresh_token = data.refresh_token || localStorage.refresh_token;
 
 		//Calculate exactly when the token will expire, then subtract
@@ -87,7 +94,7 @@ var googleapi = {
 				access_token: localStorage.access_token
 			});
 		} else if ( localStorage.refresh_token ) {
-			console.log('Found a expired access token, trying to refresh...');
+			console.log('Found a expired access token, trying to refresh... refresh_token=' + localStorage.refresh_token);
 
 			//The token is expired, but we can get a new one with a refresh token
 			$.post('https://accounts.google.com/o/oauth2/token', {
@@ -96,14 +103,18 @@ var googleapi = {
 				client_secret: options.client_secret,
 				grant_type: 'refresh_token'
 			}).done(function(data) {
+				console.log('Refresh token done.', data);
 				googleapi.setToken(data);
 				deferred.resolve(data);
 			}).fail(function(response) {
-				deferred.reject(response.responseJSON);
+				console.log('Refresh token fail.', response);
+				googleapi.reset();
+				deferred.reject({type: 'invalid_refresh_token', error: response.responseJSON});
 			});
 		} else {
 			//We do not have any cached token information yet
-			deferred.reject();
+			googleapi.reset();
+			deferred.reject({type: 'no_refresh_token_saved'});
 		}
 
 		return deferred.promise();

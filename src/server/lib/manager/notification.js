@@ -1,5 +1,4 @@
-var userDao = require('../dao/user.js'),
-	gcm = require('node-gcm'),
+var gcm = require('node-gcm'),
 	config = require('../util/config').GCM,
 	logger = require('../util/logger')(__filename);
 
@@ -7,15 +6,14 @@ const SEND_MAX_RETRIES = 4;
 
 var sender = new gcm.Sender( config.API_KEY );
 
-
 function sendToNearestContacts (user) {
-	userDao.myNearestContacts(user, function (err, data) {
+	// Important! require here to avoid circular dependencies: http://selfcontained.us/2012/05/08/node-js-circular-dependencies/
+	require('./user').myNearestContacts(user, function (err, users) {
 		if ( err ) {
 			logger.error(err);
 			return;
 		}
 
-		var users = data.contacts;
 		if ( !users || users.length == 0 ) {
 			logger.info('There are not near contacts');
 			return;

@@ -98,7 +98,14 @@ iris.screen(function(self) {
 	}
 
 	function onGetTokenFail(e) {
-		iris.notify('notify', { msg: 'Please authorize this application to start', type: 'danger' });
+		var msg;
+		if ( e.hasOwnProperty('type') && e.type === 'user_denied_access' ) {
+			msg = 'Please authorize this application to start';
+		} else {
+			msg = 'Login error, please try again later...';
+		}
+		
+		iris.notify('notify', { msg: msg, type: 'danger' });
 		hideStatus();
 		showLogin();
 	}
