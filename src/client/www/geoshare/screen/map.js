@@ -29,7 +29,9 @@ iris.screen(function(self) {
 
 		iris.log('[map] Remove makers');
 
-		resize();
+		// If the nav-bar is collapsing, the offset will be different
+		// give 500 millis to collapse before the nav-tab
+		setTimeout(resize, 500);
 
 		if (!map) {
 			createMap(me);

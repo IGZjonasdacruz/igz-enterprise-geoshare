@@ -18,24 +18,24 @@ iris.path = {
 };
 
 iris.locale(
-    "en_US", {
-        dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        dateFormat: "m/d/Y h:i:s",
-        currency: {
-            formatPos: "s n",
-            formatNeg: "(s n)",
-            decimal: ".",
-            thousand: ",",
-            precision: 2,
-            symbol : "$"
-        },
-        number : {
-            decimal: ".",
-            thousand: ",",
-            precision: 0
-        }
-    }
+	"en_US", {
+		dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+		monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+		dateFormat: "m/d/Y h:i:s",
+		currency: {
+			formatPos: "s n",
+			formatNeg: "(s n)",
+			decimal: ".",
+			thousand: ",",
+			precision: 2,
+			symbol : "$"
+		},
+		number : {
+			decimal: ".",
+			thousand: ",",
+			precision: 0
+		}
+	}
 );
 
 iris.Resource.prototype.ajax = function(method, path, params) {
@@ -109,6 +109,23 @@ function onReady() {
 	}
 
 	iris.welcome(iris.path.screen.welcome.js);
+
+	document.addEventListener("backbutton", showExitConfirm, false);
+}
+
+function showExitConfirm() {
+	navigator.notification.confirm(
+		'Do you really want to exit?', // message
+		exitFromApp,
+		'Exit', // title
+		'Cancel,OK' // buttonLabels
+	);
+}
+
+function exitFromApp (buttonIndex) {
+	if ( buttonIndex == 2 ) {
+		navigator.app.exitApp();
+	}
 }
 
 

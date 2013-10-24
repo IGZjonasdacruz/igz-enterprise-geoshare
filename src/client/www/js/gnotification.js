@@ -3,7 +3,6 @@ var gnotification = {};
 (function () {
 	
 	var onNewMessage;
-	var pushNotification = window.plugins.pushNotification;
 	
 	function listen (onNewMessageHandler) {
 		if ( onNewMessage ) {
@@ -12,7 +11,7 @@ var gnotification = {};
 		}
 		
 		onNewMessage = onNewMessageHandler;
-		pushNotification.register(
+		window.plugins.pushNotification.register(
 			successHandler,
 			errorHandler, {
 				"senderID": geosharecfg.gcm.senderId, // This is the Google project ID you need to obtain by registering your application for GCM
