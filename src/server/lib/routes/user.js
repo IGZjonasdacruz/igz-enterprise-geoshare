@@ -16,11 +16,12 @@ function addRoutes (app) {
 
 }
 
-function myLocation (req, res) {
+function myLocation (req, res, regId) {
 	var lat = sanitize(req.body.latitude).toFloat();
 	var lon = sanitize(req.body.longitude).toFloat();
+	var regid = req.body.regid;
 
-	userManager.saveLocation(req.user, lat, lon, function(err, user) {
+	userManager.saveLocation(req.user, lat, lon, regid, function(err, user) {
 
 		if ( err ) {
 			logger.error(err);

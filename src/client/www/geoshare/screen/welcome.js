@@ -64,6 +64,7 @@ iris.screen(function(self) {
 	}
 
 	function login() {
+		iris.notify('clearNotifications');
 		self.inflate({
 			showMenu: false,
 			showUserBox: false,
@@ -74,11 +75,12 @@ iris.screen(function(self) {
 	}
 
 	function logout(e) {
+		iris.notify('clearNotifications');
 		userRes.logout().done(function() {
 			googleapi.reset();
 
 			if (geoshare.isBrowser) {
-				return document.location.href = 'http://localhost:3000/login';
+				return document.location.href = geosharecfg.auth.redirect_uri;
 			} else {
 				showLogin();
 			}
@@ -87,6 +89,7 @@ iris.screen(function(self) {
 
 	function onGetToken(data) {
 		self.get('logout_btn').show();
+		self.get('collapse_nav_btn').toggle(!self.get('menu').is(':visible'));
 		showStatus('Sending location...');
 		sendLocation();
 

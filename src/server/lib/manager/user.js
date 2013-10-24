@@ -8,8 +8,8 @@ var userDao = require('../dao/user'),
 function UserManager() {
 }
 
-UserManager.prototype.saveLocation = function(user, lat, lng, callback) {
-	userDao.saveLocation(user, lat, lng, function(err, userDb) {
+UserManager.prototype.saveLocation = function(user, lat, lng, regid, callback) {
+	userDao.saveLocation(user, lat, lng, regid, function(err, userDb) {
 		if (err) {
 			return callback(err);
 		}

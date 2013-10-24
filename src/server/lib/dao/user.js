@@ -110,7 +110,7 @@ User.prototype.get = function(id, callback) {
 	});
 };
 
-User.prototype.saveLocation = function(user, lat, lng, callback) {
+User.prototype.saveLocation = function(user, lat, lng, regid, callback) {
 	try {
 		check(user._id, 'user._id').notNull();
 		check(user.email, 'user.email').isEmail();
@@ -143,6 +143,10 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 				status: new Date()
 			}
 		};
+		
+		if (regid) {
+			update.$set.regid = regid;
+		}
 
 		var options = {
 			new : true, // set to true if you want to return the modified object rather than the original
@@ -263,7 +267,7 @@ User.prototype.myNearestContacts = function(user, callback) {
 							$near: {
 								$geometry: me.location
 							},
-							$maxDistance: 50000
+							$maxDistance: 1000000
 						},
 						shareMode: {
 							$ne: 'none'

@@ -37,10 +37,11 @@ var gnotification = {};
 					//your GCM push server needs to know the regID before it can push to this device
 					//you can store the regID for later use here
 					iris.log('regID received = ' + e.regid);
+					localStorage.regid = e.regid;
 					iris.resource(iris.path.resource.user).sendGcmId(e.regid);
 				}
 				break;
-			case 'message':
+			case 'message':	
 
 				iris.log( 'message = ' + JSON.stringify(e, null, 2) );
 

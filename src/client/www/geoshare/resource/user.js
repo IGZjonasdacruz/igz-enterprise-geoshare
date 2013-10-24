@@ -7,7 +7,7 @@ iris.resource(function (self) {
 	});
 
 	self.sendLocation = function(lat, lng) {
-		return self.post("me/location", {latitude: lat, longitude: lng, regid: geosharecfg.gcm.regid}).done(function(data){
+		return self.post("me/location", {latitude: lat, longitude: lng, regid: localStorage.regid}).done(function(data){
 			iris.log('sendLocation done');
 			me = data;
 		});
