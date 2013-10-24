@@ -7,7 +7,7 @@ iris.screen(function(self) {
 
 		self.get('logout_btn').on('click', logout);
 		self.get('login_btn').on('click', login);
-
+		
 		self.screens("screens", [
 			["map", iris.path.screen.map.js],
 			["list", iris.path.screen.list.js]
@@ -16,6 +16,12 @@ iris.screen(function(self) {
 		iris.on(iris.BEFORE_NAVIGATION, onBeforeNavigation);
 
 		self.ui('notify', iris.path.ui.notify.js);
+		
+		var shareModeUI = self.ui('modal', iris.path.ui.shareMode.js, {showStatus: showStatus, hideStatus: hideStatus});
+		
+		self.get('shareMode_btn').on('click', function() {
+			shareModeUI.get().modal('toggle');
+		});
 
 		showLogin();
 	};

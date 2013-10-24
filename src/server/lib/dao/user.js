@@ -1,8 +1,8 @@
 var logger = require('../util/logger')(__filename),
-				check = require('validator').check,
-				util = require('util'),
-				mongodb = require('../util/mongodb'),
-				async = require('async');
+		check = require('validator').check,
+		util = require('util'),
+		mongodb = require('../util/mongodb'),
+		async = require('async');
 
 
 //
@@ -53,12 +53,12 @@ function locationIndex(next) {
 	});
 }
 
-function userIndexes (callback) {
+function userIndexes(callback) {
 	async.parallel([statusIndex, locationIndex], function() {
-		
+
 		logger.info("All user indexes have been ensured");
-		
-		if ( callback ) {
+
+		if (callback) {
 			callback();
 		}
 	});
@@ -78,9 +78,9 @@ User.prototype.reset = function(callback) {
 		db.dropCollection('user', function(err, result) {
 			if (err)
 				return callback(err, null);
-			
+
 			userIndexes(callback);
-			
+
 		});
 	});
 };
@@ -126,12 +126,12 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 			return callback(err, null);
 		}
 
-		var query = { _id: user._id };
+		var query = {_id: user._id};
 
 		var sort = null;
 
 		var update = {
-			$set:{
+			$set: {
 				email: user.email,
 				domain: user.domain,
 				photo: user.photo,
@@ -145,7 +145,7 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 		};
 
 		var options = {
-			new: true, // set to true if you want to return the modified object rather than the original
+			new : true, // set to true if you want to return the modified object rather than the original
 			upsert: true // Atomically inserts the document if no documents matched.
 		};
 
@@ -154,11 +154,57 @@ User.prototype.saveLocation = function(user, lat, lng, callback) {
 				return callback(err, null);
 			}
 
-			if ( userSaved ) {
+			if (userSaved) {
 				logger.info('[saveLocation] lat=' + userSaved.location.coordinates.lat + ', lng=' + userSaved.location.coordinates.lng + ' of ' + userSaved.email + ' saved');
 				callback(null, userSaved);
 			} else {
 				var msg = '[saveLocation] No user[' + user._id + '] found!';
+				logger.warn(msg);
+				callback(new Error(msg), null);
+			}
+
+		});
+
+	});
+};
+
+User.prototype.updateShareMode = function(user, shareMode, callback) {
+	try {
+		check(user._id, 'user._id').notNull();
+	} catch (err) {
+		return callback(err, null);
+	}
+
+	mongodb(function(err, db) {
+		if (err) {
+			return callback(err, null);
+		}
+
+		var query = {_id: user._id};
+
+		var sort = null;
+
+		var update = {
+			$set: {
+				shareMode: shareMode || 'all'
+			}
+		};
+
+		var options = {
+			new : true, // set to true if you want to return the modified object rather than the original
+			upsert: false // Atomically inserts the document if no documents matched.
+		};
+
+		db.collection('user').findAndModify(query, sort, update, options, function(err, userSaved) {
+			if (err) {
+				return callback(err, null);
+			}
+
+			if (userSaved) {
+				logger.info('[updateShareMode] shareMode=' + userSaved.shareMode + ' updated');
+				callback(null, userSaved);
+			} else {
+				var msg = '[updateShareMode] No user[' + user._id + '] found!';
 				logger.warn(msg);
 				callback(new Error(msg), null);
 			}
@@ -189,67 +235,71 @@ User.prototype.myNearestContacts = function(user, callback) {
 		};
 
 		var cfg = {
-			fields : {
+			fields: {
 				location: 1
 			}
 		};
 
 		db.collection('user').findOne(
-			search,
-			cfg,
-			function(err, result) {
-				if (err) {
-					return callback(err, null);
-				}
+				search,
+				cfg,
+				function(err, me) {
+					if (err) {
+						return callback(err, null);
+					}
 
-				if ( !result ) {
-					logger.warn('No user found with id ' + user._id);
-					return callback('No user found with id ' + user._id, null);
-				}
-				
-				logger.info('Last location ' + JSON.stringify(result.location) + ' of ' + user._id + ' user retrieved');
-				search = {
-					_id: {
-						$ne: user._id
-					},
-					domain: user.domain,
-					location: {
-						$near: {
-							$geometry: result.location
+					if (!me) {
+						logger.warn('No user found with id ' + user._id);
+						return callback('No user found with id ' + user._id, null);
+					}
+
+					logger.info('Last location ' + JSON.stringify(me.location) + ' of ' + user._id + ' user retrieved');
+					search = {
+						_id: {
+							$ne: user._id
 						},
-						$maxDistance: 50000
-					}
-				};
-
-				fields = {
-					email: 1,
-					location: 1,
-					_id: 1,
-					gcmId: 1,
-					name: 1,
-					photo: 1
-				};
-				
-				limit = {
-					limit: 20
-				};
-
-				db.collection('user').find(search, {fields: fields, limit: limit}).toArray(
-					function(err, result) {
-						if (err) {
-							return callback(err, null);
+						domain: user.domain,
+						location: {
+							$near: {
+								$geometry: me.location
+							},
+							$maxDistance: 50000
+						},
+						shareMode: {
+							$ne: []
 						}
+					};
 
-						logger.info('Retrieved ' + result.length + ' nearest contacts of ' + user._id + ' user');
-						callback(null, result);
-					}
-				);
-			}
+					fields = {
+						email: 1,
+						location: 1,
+						_id: 1,
+						gcmId: 1,
+						name: 1,
+						photo: 1,
+						shareMode: 1
+					};
+
+					limit = {
+						limit: 20
+					};
+
+					db.collection('user').find(search, {fields: fields, limit: limit}).toArray(
+							function(err, contacts) {
+								if (err) {
+									return callback(err, null);
+								}
+
+								logger.info('Retrieved ' + contacts.length + ' nearest contacts of ' + user._id + ' user');
+								callback(null, {me: me, contacts: contacts});
+							}
+					);
+				}
 		);
 	});
 };
 
-User.prototype.changeGcmId = function (user, gcmId, callback) {
+User.prototype.changeGcmId = function(user, gcmId, callback) {
 
 	try {
 		check(user._id).notNull();
@@ -259,30 +309,30 @@ User.prototype.changeGcmId = function (user, gcmId, callback) {
 	}
 
 	mongodb(function(err, db) {
-		if ( err ) {
+		if (err) {
 			return callback(err, null);
 		}
 
-		var query = { _id: user._id };
+		var query = {_id: user._id};
 		var sort = null;
-		var update = { $set: {gcmId:gcmId} };
+		var update = {$set: {gcmId: gcmId}};
 		var options = {
-			new: true, // set to true if you want to return the modified object rather than the original
+			new : true, // set to true if you want to return the modified object rather than the original
 			upsert: true // Atomically inserts the document if no documents matched.
 		};
 
 		db.collection('user').findAndModify(query, sort, update, options, function(err, userSaved) {
-			if ( err ) {
+			if (err) {
 				return callback(err, null);
 			}
-			
+
 			logger.info('Saved gcm-id=' + userSaved.gcmId + ' for ' + userSaved._id);
 			callback(null, userSaved);
 		});
 	});
 }
 
-User.prototype.remove = function (userId, callback) {
+User.prototype.remove = function(userId, callback) {
 	try {
 		check(userId).notNull();
 	} catch (err) {
@@ -290,12 +340,12 @@ User.prototype.remove = function (userId, callback) {
 	}
 
 	mongodb(function(err, db) {
-		if ( err ) {
+		if (err) {
 			return callback(err, null);
 		}
 
-		db.collection('user').remove({ _id : userId }, function (err, result) {
-			if ( err ) {
+		db.collection('user').remove({_id: userId}, function(err, result) {
+			if (err) {
 				return callback(err, null);
 			}
 

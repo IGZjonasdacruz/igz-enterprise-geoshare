@@ -7,6 +7,7 @@ var logger = require('../util/logger')(__filename),
 function addRoutes (app) {
 
 	app.post('/user/me/location', ensureAuth, myLocation);
+	app.put('/user/me/shareMode', ensureAuth, updateShareMode);
 	app.put('/user/me/gcm-id', ensureAuth, changeGcmId);
 	app.get('/user/contacts/location', ensureAuth, myNearestContacts);
 	app.get('/user/logout', ensureAuth, logout);
@@ -20,6 +21,20 @@ function myLocation (req, res) {
 	var lon = sanitize(req.body.longitude).toFloat();
 
 	userManager.saveLocation(req.user, lat, lon, function(err, user) {
+
+		if ( err ) {
+			logger.error(err);
+			return res.send(500);
+		}
+
+		res.json(user);
+	});
+}
+
+function updateShareMode (req, res) {
+	var shareMode = req.body.shareMode;
+
+	userManager.updateShareMode(req.user, shareMode, function(err, user) {
 
 		if ( err ) {
 			logger.error(err);

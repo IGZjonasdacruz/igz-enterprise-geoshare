@@ -12,6 +12,13 @@ iris.resource(function (self) {
 			me = data;
 		});
 	};
+	
+	self.sendShareMode = function(shareMode) {
+		return self.put("me/shareMode", {shareMode: shareMode}).done(function(data){
+			iris.log('sendShareMode done');
+			me = data;
+		});
+	};
 
 	self.sendGcmId = function(gcmId) {
 		return self.put("me/gcm-id", {gcmId: gcmId});
@@ -23,7 +30,7 @@ iris.resource(function (self) {
 
 			nearestContacts = data;
 			nearestContacts.forEach(function(contact) {
-				processContact(contact);
+				//processContact(contact);
 			});
 		});
 	};
@@ -62,7 +69,7 @@ iris.resource(function (self) {
 	};
 
 	//Distance between two points using the Haversine formula: http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points
-	function getDistanceFromLatLonInKm(me, contact) {
+	function getDistanceFromLatLon(me, contact) {
 		var lat1 = me.location.coordinates[1],
 				lon1 = me.location.coordinates[0],
 				lat2 = contact.location.coordinates[1],

@@ -22,7 +22,7 @@
 										"location": "body",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "43.5",
+										"value": "40.6",
 										"javaType": "",
 										"description": ""
 									},
@@ -31,7 +31,7 @@
 										"location": "body",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "-6.2",
+										"value": "-3.98",
 										"javaType": "",
 										"description": ""
 									},
@@ -40,7 +40,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZROS7RkRsfOgK8DTqkyG8cziUZ5pyEQvQ4lpXLD2GFuse7AhQwBWA",
+										"value": "Bearer ya29.AHES6ZQC_VWQaRH3NiZ1L5PSZ017Ctqs3s0WiVhUULltf_g",
 										"javaType": "",
 										"description": ""
 									},
@@ -52,9 +52,48 @@
 										"value": "test",
 										"javaType": "",
 										"description": ""
+									},
+									{
+										"name": "shareMode",
+										"location": "body",
+										"isList": "true",
+										"isJavaPojo": "false",
+										"value": "email,photo,distance",
+										"javaType": "",
+										"description": ""
 									}
 								],
 								"path": "/me/location",
+								"description": ""
+							},
+							{
+								"name": "Update my share mode",
+								"method": "PUT",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZQC_VWQaRH3NiZ1L5PSZ017Ctqs3s0WiVhUULltf_g",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "shareMode",
+										"location": "body",
+										"isList": "true",
+										"isJavaPojo": "false",
+										"value": "email,photo,distance",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/me/shareMode",
 								"description": ""
 							},
 							{
@@ -70,7 +109,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRVOzA9kco5fr9pylLcJzUaqEygptGvriKxNZR5DONP",
+										"value": "Bearer ya29.AHES6ZQC_VWQaRH3NiZ1L5PSZ017Ctqs3s0WiVhUULltf_g",
 										"javaType": "",
 										"description": ""
 									}

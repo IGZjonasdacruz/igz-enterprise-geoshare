@@ -7,10 +7,11 @@ iris.ui(function(self) {
 
 	self.render = function(me, contact) {
 		self.inflate({
-			email: contact.email,
-			emailto: 'mailto:' + contact.email,
-			photo: contact.photo,
-			distance: contact.distance
+			name: contact.name || "???",
+			email: contact.email || "???",
+			emailto: contact.email ? 'mailto:' + contact.email : '',
+			photo: contact.photo ? contact.photo : '',
+			distance: contact.distance || "???"
 		});
 	};
 

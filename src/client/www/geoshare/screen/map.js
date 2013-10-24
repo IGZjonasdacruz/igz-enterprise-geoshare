@@ -45,7 +45,9 @@ iris.screen(function(self) {
 
 		iris.log('[map] Draw user contacts');
 		contacts.forEach(function(contact) {
-			addMarker(contact);
+			if (contact.location) {
+				addMarker(contact);
+			}
 		});
 	};
 
@@ -80,10 +82,10 @@ iris.screen(function(self) {
 		map.addMarker({
 			lat: user.location.coordinates[1],
 			lng: user.location.coordinates[0],
-			title: user.email,
-			icon: user.photo + '?sz=50',
+			title: user.name ? user.name : '???',
+			icon: user.photo ? user.photo + '?sz=50' : 'img/contact_marker.png',
 			infoWindow: {
-				content: user.email
+				content: user.email ? user.email : '???'
 			}
 		});
 	}
