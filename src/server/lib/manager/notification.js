@@ -9,12 +9,13 @@ var sender = new gcm.Sender( config.API_KEY );
 
 
 function sendToNearestContacts (user) {
-	userDao.myNearestContacts(user, function (err, users) {
+	userDao.myNearestContacts(user, function (err, data) {
 		if ( err ) {
 			logger.error(err);
 			return;
 		}
 
+		var users = data.contacts;
 		if ( !users || users.length == 0 ) {
 			logger.info('There are not near contacts');
 			return;
@@ -37,10 +38,21 @@ function sendToNearestContacts (user) {
 
 		logger.info('Sending GCM PUSH notifications to ' + registrationIds.length + ' contacts...');
 
+
+		/**
+		 * GCM only allows a maximum of 4 different collapse keys to be used by the GCM server per device at any given time
+		 *  
+		 *  --
+		 *   
+		 * The Time to Live (TTL) feature lets the sender specify the maximum lifespan of a message using the 
+		 * time_to_live parameter in the send request. The value of this parameter must be a duration 
+		 * from 0 to 2,419,200 seconds, and it corresponds to the maximum period of time for which GCM will 
+		 * store and try to deliver the message.
+		 */
 		var message = new gcm.Message({
 			collapseKey: 'near_contact',
-			delayWhileIdle: true,
-			timeToLive: 3,
+			delayWhileIdle: true,  // Wait for device to become active before sending.
+			timeToLive: 600, // Time in seconds to keep message queued if device offline.
 			data: { user : user }
 		});
 		
