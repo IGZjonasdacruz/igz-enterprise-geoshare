@@ -45,10 +45,13 @@ iris.resource(function (self) {
 				break;
 			}
 		}
-		processContact(contact)
 		nearestContacts[f] = contact;
 
-		iris.notify('notify', { msg: 'The user ' + contact.email + ' has been discovered!' });
+		if ( f === F ) {
+			// New user
+			iris.notify('notify', { msg: 'The user ' + contact.email + ' has been discovered!' });
+		}
+
 		iris.notify('refresh-nearest-contacts');
 	};
 
