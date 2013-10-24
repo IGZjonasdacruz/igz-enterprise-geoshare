@@ -17,6 +17,27 @@ iris.path = {
 	}
 };
 
+iris.locale(
+    "en_US", {
+        dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        dateFormat: "m/d/Y h:i:s",
+        currency: {
+            formatPos: "s n",
+            formatNeg: "(s n)",
+            decimal: ".",
+            thousand: ",",
+            precision: 2,
+            symbol : "$"
+        },
+        number : {
+            decimal: ".",
+            thousand: ",",
+            precision: 2
+        }
+    }
+);
+
 iris.Resource.prototype.ajax = function(method, path, params) {
 
 	var deferred = $.Deferred();
@@ -68,7 +89,7 @@ function onReady() {
 	});
 
 	window.onorientationchange = function() {
-		//Need at least 800 milliseconds, TODO find a best solution...
+		//Need at least 800 milliseconds
 		setTimeout(function resize() {
 			iris.log('On resize');
 			iris.notify('resize');

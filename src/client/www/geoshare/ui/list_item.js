@@ -11,7 +11,7 @@ iris.ui(function(self) {
 			email: contact.email || "???",
 			emailto: contact.email ? 'mailto:' + contact.email : '',
 			photo: contact.photo ? contact.photo : '',
-			distance: contact.distance || "???"
+			distance: contact.distance === 0 ? '0.00' : iris.number(contact.distance) || '???'
 		});
 	};
 

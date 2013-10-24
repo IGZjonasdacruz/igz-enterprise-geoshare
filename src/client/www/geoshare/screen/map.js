@@ -14,7 +14,7 @@ iris.screen(function(self) {
 
 	function resize() {
 		var $window = $(window);
-		self.get()
+		self.get('map')
 				.height($window.height() - self.get().offset().top - 60);
 
 		if (map) {
@@ -49,6 +49,8 @@ iris.screen(function(self) {
 				addMarker(contact);
 			}
 		});
+
+		self.inflate({ countText: userRes.countText() });
 	};
 
 	self.reset = function() {

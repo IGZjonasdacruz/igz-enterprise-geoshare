@@ -2,21 +2,6 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
 
-.map {
-	background: #fff;
-	padding: 15px;
-	box-shadow: 0 0 10px #999;
-	border-radius: 2px;
-	margin: 0 auto;
-}
-
-.loader {
-    text-align: center;
-}
-.loader p {
-    margin-top: 10px;
-}
-
 .table-contacts tbody tr td {
 	line-height: 50px;
 }

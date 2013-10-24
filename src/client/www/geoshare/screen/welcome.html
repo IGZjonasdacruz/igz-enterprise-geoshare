@@ -44,7 +44,10 @@
 		</div>
 
 		<div data-id='user_box' class='jumbotron' data-jq-toggle='showUserBox'>
-			<img data-jq-attr-src='user.photo' alt='No photo found' height='100' width='100' class='img-rounded hidden-xs' />
+			<div data-id='shareMode_btn' class='inline pull-right btn btn-link'>
+				<span class="glyphicon glyphicon-share"></span> Change share mode
+			</div>
+			<img data-jq-attr-src='user.photo' alt='No photo found' height='100' width='100' class='hidden-xs' />
 			<h1>Welcome <span data-jq-text='user.name'></span>!</h1>
 			<p>You will be visible to other users for one hour.<br>
 				Show the nearest workmates:</p>
@@ -54,16 +57,20 @@
 			<a href='#/map' type='button' class='btn btn-lg btn-primary'>
 				<span class="glyphicon glyphicon-globe"></span> Map
 			</a>
-			<div data-id='shareMode_btn' class='inline pull-right btn btn-lg btn-link'>
-				<small><span class="glyphicon glyphicon-share"></span> Change share mode</small>
-			</div>
 		</div>
 
 		<div data-id='screens'></div>
 
-		<div data-id='loader' class='loader' style='display:none'>
-			<img src='img/loader.gif' alt='loading...'>
-			<p data-id='status'></p>
+		<div data-id='loader' class="panel panel-info" style='display:none;'>
+			<div class="panel-heading">
+				<h3 class="panel-title">Please wait...</h3>
+			</div>
+			<div class="panel-body">
+				<p data-id='status'></p>
+				<div class="progress progress-striped active">
+					<div class="progress-bar progress-bar-info" style="width: 100%"></div>
+				</div>
+			</div>
 		</div>
 		
 		<div data-id='modal'></div>

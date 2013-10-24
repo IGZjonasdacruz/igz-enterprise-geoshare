@@ -15,8 +15,7 @@ iris.screen(function(self) {
 
 		iris.log('[list] render, contacts=' + contacts.length);
 
-		var countText = contacts.length + " near contact" + (contacts.length !== 1 ? 's' : '');
-		self.inflate({ countText: countText, hasContacts: contacts.length > 0 });
+		self.inflate({ countText: userRes.countText(), hasContacts: contacts.length > 0 });
 
 		self.destroyUIs('contacts');
 		contacts.forEach(function(contact) {

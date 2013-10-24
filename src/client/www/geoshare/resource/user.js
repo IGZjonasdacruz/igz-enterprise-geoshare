@@ -27,16 +27,13 @@ iris.resource(function (self) {
 	self.getNearestContacts = function() {
 		return self.get("contacts/location").done(function (data) {
 			iris.log('getNearestContacts done');
-
 			nearestContacts = data;
-			nearestContacts.forEach(function(contact) {
-				//processContact(contact);
-			});
 		});
 	};
 
 	self.logout = function() {
 		return self.get("logout").done(function () {
+			iris.log('logout done');
 			self.reset();
 		});
 	};
@@ -63,37 +60,13 @@ iris.resource(function (self) {
 		return nearestContacts;
 	};
 
+	self.countText = function () {
+		return nearestContacts.length + " near contact" + (nearestContacts.length !== 1 ? 's' : '');
+	}
+
 	self.reset = function () {
 		nearestContacts = null;
 		me = null;
 	};
-
-	//Distance between two points using the Haversine formula: http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points
-	function getDistanceFromLatLon(me, contact) {
-		var lat1 = me.location.coordinates[1],
-				lon1 = me.location.coordinates[0],
-				lat2 = contact.location.coordinates[1],
-				lon2 = contact.location.coordinates[0];
-
-		function deg2rad(deg) {
-			return deg * (Math.PI / 180);
-		}
-
-		var R = 6371; // Radius of the earth in km
-		var dLat = deg2rad(lat2 - lat1);  // deg2rad below
-		var dLon = deg2rad(lon2 - lon1);
-		var a =
-				Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-				Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-				Math.sin(dLon / 2) * Math.sin(dLon / 2)
-				;
-		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		var d = R * c; // Distance in km
-		return parseInt(d * 1000, 10);
-	}
-
-	function processContact (contact) {
-		contact.distance = getDistanceFromLatLonInKm(me, contact);
-	}
 
 }, iris.path.resource.user);
