@@ -25,7 +25,9 @@ iris.screen(function(self) {
 
 		// collapse nav-bar on click
 		self.get('navbar_items').find('a').on('click', function() {
-			self.get('collapse_nav_btn').click();
+			if ( self.get('navbar_items').hasClass('in') ) {
+				self.get('collapse_nav_btn').click();
+			}
 		});
 
 		if (localStorage.access_token) {
@@ -138,7 +140,6 @@ iris.screen(function(self) {
 					showUserBox: true,
 					showLogin: false
 				});
-				self.get('collapse_nav_btn').toggle(!self.get('menu').is(':visible'));
 			});
 		});
 	}
