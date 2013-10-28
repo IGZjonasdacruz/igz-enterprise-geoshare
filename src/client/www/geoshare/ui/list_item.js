@@ -11,8 +11,12 @@ iris.ui(function(self) {
 			email: contact.email || "???",
 			emailto: contact.email ? 'mailto:' + contact.email : '',
 			photo: contact.photo ? contact.photo : '',
-			distance: contact.distance === 0 ? '0.00' : iris.number(contact.distance) || '???'
+			distance: isNumber(contact.distance) ? iris.number(contact.distance) : '???'
 		});
 	};
+
+	function isNumber(n) {
+		return !isNaN(parseFloat(n)) && isFinite(n);
+	}
 
 }, iris.path.ui.list_item.js);
