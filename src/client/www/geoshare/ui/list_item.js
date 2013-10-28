@@ -11,7 +11,8 @@ iris.ui(function(self) {
 			email: contact.email || "???",
 			emailto: contact.email ? 'mailto:' + contact.email : '',
 			photo: contact.photo ? contact.photo : '',
-			distance: isNumber(contact.distance) ? iris.number(contact.distance) : '???'
+			distance: isNumber(contact.distance) ? iris.number(contact.distance) : '???',
+			hangout: 'https://plus.google.com/hangouts/_?gid=' + geosharecfg.google_project_id
 		});
 	};
 
