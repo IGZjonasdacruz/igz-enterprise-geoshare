@@ -10,6 +10,7 @@ var db, pending = [], opening = false;
 
 
 function flushPending (err, db) {
+	var f, F;
 	for ( f = 0, F = pending.length; f < F; f++ ) {
 		pending[f](err, db);
 	}
@@ -40,9 +41,9 @@ function getMongoDB (callback) {
 	//   - use w=1 instead of (https://github.com/mongodb/node-mongodb-native/blob/master/docs/articles/MongoClient.md)
 	// 
 	MongoClient.connect(config.CONN, function(err, database) {
-		var f, F;
 
 		opening = false;
+		db = database;
 
 		if (err) {
 			logger.error("MongoClient.connect: " + err);
@@ -51,7 +52,6 @@ function getMongoDB (callback) {
 			return;
 		}
 
-		db = database;
 		logger.info('Mongodb connection established');
 
 		flushPending(null, db);
