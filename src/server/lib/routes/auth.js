@@ -28,19 +28,7 @@ function passportCallback () {
 
 function oauth2Callback (req, res) {
 	logger.info('Received oauth2callback');
-	/*
-	res.setHeader("Authorization", "Bearer " + req.user.accessToken);
-	res.setHeader("Content-Type", "text/html; charset=utf-8");
-	fs.readFile(__dirname + '/../../public/logged.html', 'utf-8', function(err, html) {
-		if (err) {
-			res.send(500, "Internal error");
-		} else {
-			res.send(200, html);
-		}
-	});
-	*/
 	res.redirect('http://localhost:4400/index_web.html#at=' + req.user.accessToken);
-	//res.json(req.user);
 }
 
 
@@ -56,15 +44,6 @@ passport.use(new GoogleStrategy({
 		logger.info('passport use');
 		logger.info('New accessToken: ' + accessToken + ', refreshToken: ' + refreshToken + ', user: ' + profile.id);
 		done(null, {accessToken: accessToken});
-		//fs.readFile(__dirname + '/../../html/loged.html', 'utf-8', done);
-		/*
-		 
-		return done(null, {
-			id: profile.id,
-			email: profile._json.email,
-			accessToken: accessToken
-		});
-		*/
 	}
 ));
 

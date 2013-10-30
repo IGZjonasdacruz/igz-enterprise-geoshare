@@ -154,36 +154,14 @@ User.prototype.nearestContacts = function(user, callback) {
 			shareMode: { $ne: 'none' }
 		};
 
-		db.collection('user').find(search, { limit: 20 }).toArray(function(err, contacts) {
-			if (err) {
-				return callback(err, null);
-			}
-
-			logger.info('Retrieved ' + contacts.length + ' nearest contacts of ' + user._id + ' user');
-			callback(null, {me: user, contacts: contacts});
-		});
+		db.collection('user').find(search, { limit: 20 }).toArray(callback);
 	});
 };
 
-User.prototype.updateGcmId = function(user, gcmId, callback) {
+User.prototype.update = function(id, update, callback) {
 
 	try {
-		check(gcmId).notEmpty();
-	} catch (err) {
-		return callback(err, null);
-	}
-
-	this.update(user, { $set: { gcmId: gcmId } }, callback);
-}
-
-User.prototype.updateShareMode = function(user, shareMode, callback) {
-	this.update(user, { $set: { shareMode: shareMode || 'all' } }, callback);
-};
-
-User.prototype.update = function(user, update, callback) {
-
-	try {
-		check(user._id).notNull();
+		check(id).notNull();
 	} catch (err) {
 		return callback(err, null);
 	}
@@ -193,7 +171,7 @@ User.prototype.update = function(user, update, callback) {
 			return callback(err, null);
 		}
 
-		var query = {_id: user._id};
+		var query = {_id: id};
 		var sort = null;
 		var options = {
 			new : true, // set to true if you want to return the modified object rather than the original

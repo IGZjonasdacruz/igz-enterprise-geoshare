@@ -1,6 +1,6 @@
 var logger = require('../util/logger')(__filename),
 		ensureAuth = require('../middleware/sec'),
-		userManager = require('../manager/user'),
+		userDao = require('../dao/user'),
 		sanitize = require('validator').sanitize,
 		check = require('validator').check;
 
@@ -13,9 +13,11 @@ function addRoutes (app) {
 }
 
 function updateShareMode (req, res) {
-	var shareMode = req.body.shareMode;
+	var update = {
+		$set: { shareMode: req.body.shareMode || 'all' }
+	};
 
-	userManager.updateShareMode(req.user, shareMode, function(err, user) {
+	userDao.update(req.user._id, update, function(err, user) {
 
 		if ( err ) {
 			logger.error(err);
@@ -29,7 +31,17 @@ function updateShareMode (req, res) {
 function changeGcmId (req, res) {
 	var gcmId = req.body.gcmId;
 
-	userManager.updateGcmId(req.user, gcmId, function(err, result) {
+	try {
+		check(gcmId).notEmpty();
+	} catch (err) {
+		return callback(err, null);
+	}
+
+	var update = {
+		$set: { gcmId: gcmId }
+	};
+
+	userDao.update(req.user._id, update, function(err, result) {
 
 		if ( err ) {
 			logger.error(err);
