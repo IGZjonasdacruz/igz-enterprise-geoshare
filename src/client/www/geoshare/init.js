@@ -13,7 +13,6 @@ iris.path = {
 		shareMode_item: {js: 'ui/shareMode_item.js', html: 'ui/shareMode_item.html'}
 	},
 	resource: {
-		user: 'resource/user.js',
 		app: 'resource/application.js'
 	}
 };
@@ -46,7 +45,7 @@ iris.Resource.prototype.ajax = function(method, path, params) {
 
 	googleapi.getToken().done(function(data) {
 
-		var url = geosharecfg.base_uri + self.setting('path') + path;
+		var url = geosharecfg.base_uri + path;
 
 		iris.log('[iris.Resource.ajax] method[' + method + '] url[' + url + '] access_token[' + data.access_token + ']');
 

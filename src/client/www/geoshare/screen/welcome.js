@@ -1,6 +1,5 @@
 iris.screen(function(self) {
 
-	var userRes = iris.resource(iris.path.resource.user);
 	var appRes = iris.resource(iris.path.resource.app);
 
 	self.create = function() {
@@ -135,7 +134,7 @@ iris.screen(function(self) {
 
 			if (!geoshare.isBrowser) {
 				gnotification.listen(function(data) {
-					iris.resource(iris.path.resource.user).addNearContact(data);
+					appRes.addNearContact(data);
 				});
 			}
 

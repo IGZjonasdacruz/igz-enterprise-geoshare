@@ -1,6 +1,5 @@
 iris.ui(function(self) {
 
-	var userRes = iris.resource(iris.path.resource.user);
 	var appRes = iris.resource(iris.path.resource.app);
 
 	self.settings({
@@ -51,7 +50,7 @@ iris.ui(function(self) {
 			self.setting('showStatus')('Updating share mode');
 		}
 		
-		userRes.sendShareMode(shareMode).done(function() {
+		appRes.sendShareMode(shareMode).done(function() {
 			if (self.setting('hideStatus')) {
 				self.setting('hideStatus')();
 			}

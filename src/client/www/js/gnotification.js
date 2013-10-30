@@ -38,7 +38,7 @@ var gnotification = {};
 					//you can store the regID for later use here
 					iris.log('regID received = ' + e.regid);
 					localStorage.regid = e.regid;
-					iris.resource(iris.path.resource.user).sendGcmId(e.regid);
+					iris.resource(iris.path.resource.app).sendGcmId(e.regid);
 				}
 				break;
 			case 'message':	
