@@ -70,6 +70,27 @@ userIndexes();
 function User() {
 }
 
+User.prototype.save = function(user, callback) {
+	try {
+		check(user._id, 'user._id').notNull();
+		check(user.email, 'user.email').isEmail();
+		check(user.domain, 'user.domain').notEmpty();
+		check(user.location.coordinates[0], 'user.location.coordinates[0]').isFloat();
+		check(user.location.coordinates[1], 'user.location.coordinates[1]').isFloat();
+	} catch (err) {
+		return callback(err, null);
+	}
+
+	mongodb(function(err, db) {
+		if (err) {
+			return callback(err, null);
+		}
+
+		user.status = new Date();
+		db.collection('user').save(user, { safe : true }, callback);
+	});
+};
+
 User.prototype.reset = function(callback) {
 	mongodb(function(err, db) {
 		if (err)

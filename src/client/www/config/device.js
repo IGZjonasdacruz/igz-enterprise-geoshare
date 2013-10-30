@@ -1,7 +1,7 @@
 
 geosharecfg = {
 	//base_uri : 'http://8.34.222.112/',
-	base_uri : 'http://192.168.1.131:3000/',
+	base_uri : 'http://192.168.1.34:3000/',
 	auth : {
 		client_id : '193156067209-5g5dmua151g4bocid0tsohou18lsi5d6.apps.googleusercontent.com',
 		client_secret : 'cc4R6f1JTwlxToFtRy0UrSU5',

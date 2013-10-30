@@ -1,6 +1,6 @@
 iris.screen(function(self) {
 
-	var userRes = iris.resource(iris.path.resource.user);
+	var appRes = iris.resource(iris.path.resource.app);
 
 	self.create = function() {
 		self.tmpl(iris.path.screen.list.html);
@@ -10,12 +10,12 @@ iris.screen(function(self) {
 	};
 
 	self.render = function() {
-		var me = userRes.me();
-		var contacts = userRes.nearestContacts();
+		var me = appRes.me();
+		var contacts = appRes.nearestContacts();
 
 		iris.log('[list] render, contacts=' + contacts.length);
 
-		self.inflate({ countText: userRes.countText(), hasContacts: contacts.length > 0 });
+		self.inflate({ countText: appRes.countText(), hasContacts: contacts.length > 0 });
 
 		self.destroyUIs('contacts');
 		contacts.forEach(function(contact) {

@@ -1,6 +1,7 @@
 iris.screen(function(self) {
 
 	var userRes = iris.resource(iris.path.resource.user);
+	var appRes = iris.resource(iris.path.resource.app);
 
 	self.create = function() {
 		self.tmpl(iris.path.screen.welcome.html);
@@ -91,14 +92,8 @@ iris.screen(function(self) {
 
 	function onGetToken(data) {
 		self.get('logout_btn').show();
-		showStatus('Sending location...');
+		showStatus('Initializing, please wait...');
 		sendLocation();
-
-		if (!geoshare.isBrowser) {
-			gnotification.listen(function(data) {
-				iris.resource(iris.path.resource.user).addNearContact(data);
-			});
-		}
 	}
 
 	function onGetTokenFail(e) {
@@ -126,26 +121,34 @@ iris.screen(function(self) {
 		var pos = position.coords;
 		iris.log('lat = ' + pos.latitude + ', lng=' + pos.longitude);
 
-		userRes.sendLocation(pos.latitude, pos.longitude).done(function() {
-			showStatus('Finding the nearest users...');
+		appRes.signIn(pos.latitude, pos.longitude).done(function() {
 
-			userRes.getNearestContacts().done(function(users) {
-				hideStatus();
+			hideStatus();
 
-				iris.log('All neareat user found =' + users.length);
-
-				self.inflate({
-					user: userRes.me(),
-					showMenu: true,
-					showUserBox: true,
-					showLogin: false
-				});
+			self.inflate({
+				user: appRes.me(),
+				showMenu: true,
+				showUserBox: true,
+				showLogin: false
 			});
-		});
+
+			if (!geoshare.isBrowser) {
+				gnotification.listen(function(data) {
+					iris.resource(iris.path.resource.user).addNearContact(data);
+				});
+			}
+
+		}).fail(onSignInFail);
+	}
+
+	function onSignInFail () {
+		hideStatus();
+		showLogin();
 	}
 
 	function onGetPositionError(error) {
-		iris.notify('notify', {msg: 'Error: cannot get location...'});
+		iris.notify('notify', {msg: 'Cannot get location', type: 'danger'});
+		onSignInFail();
 	}
 
 }, iris.path.screen.welcome.js);

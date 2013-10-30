@@ -13,7 +13,8 @@ iris.path = {
 		shareMode_item: {js: 'ui/shareMode_item.js', html: 'ui/shareMode_item.html'}
 	},
 	resource: {
-		user: 'resource/user.js'
+		user: 'resource/user.js',
+		app: 'resource/application.js'
 	}
 };
 

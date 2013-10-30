@@ -1,7 +1,7 @@
 iris.screen(function(self) {
 
 	var map;
-	var userRes = iris.resource(iris.path.resource.user);
+	var appRes = iris.resource(iris.path.resource.app);
 
 	self.create = function() {
 		self.tmpl(iris.path.screen.map.html);
@@ -24,8 +24,8 @@ iris.screen(function(self) {
 
 	self.render = function() {
 
-		var me = userRes.me();
-		var contacts = userRes.nearestContacts();
+		var me = appRes.me();
+		var contacts = appRes.nearestContacts();
 
 		iris.log('[map] Remove makers');
 
@@ -52,7 +52,7 @@ iris.screen(function(self) {
 			}
 		});
 
-		self.inflate({ countText: userRes.countText() });
+		self.inflate({ countText: appRes.countText() });
 	};
 
 	self.reset = function() {
