@@ -5,37 +5,35 @@ var userDao = require('../dao/user'),
 		logger = require('../util/logger')(__filename),
 		request = require('request');
 
-function UserManager() {
-}
 
-UserManager.prototype.save = function(user, callback) {
+function save(user, callback) {
 	userDao.save(user, callback);
 };
 
-UserManager.prototype.saveLocation = function(user, lat, lng, regid, callback) {
-	userDao.saveLocation(user, lat, lng, regid, function(err, userDb) {
+function remove(user, callback) {
+	request({
+		url: 'https://accounts.google.com/o/oauth2/revoke?token=' + user.accessToken,
+		method: "GET",
+	}, function(err, response, body) {
+
 		if (err) {
 			return callback(err);
 		}
 
-		callback(null, userDb);
-
-		// Find the nearest contacts and send a notification to them
-		notification.sendToNearestContacts(userDb);
+		userDao.remove(user._id, callback);
 	});
-
 };
 
-UserManager.prototype.updateShareMode = function(user, shareMode, callback) {
-	
-	userDao.updateShareMode(user, shareMode, callback
-		// TODO Find the nearest contacts and send a notification to them
-	);
-
+function updateShareMode(user, shareMode, callback) {
+	userDao.updateShareMode(user, shareMode, callback);
 };
 
-UserManager.prototype.myNearestContacts = function(user, callback) {
-	userDao.myNearestContacts(user, function(err, results) {
+function updateGcmId(user, gcmId, callback) {
+	userDao.updateGcmId(user, gcmId, callback);
+};
+
+function nearestContacts(user, callback) {
+	userDao.nearestContacts(user, function(err, results) {
 
 		if (err) {
 			return callback(err);
@@ -48,29 +46,6 @@ UserManager.prototype.myNearestContacts = function(user, callback) {
 		});
 
 		callback(null, contacts);
-	});
-};
-
-UserManager.prototype.changeGcmId = function(user, gcmId, callback) {
-	userDao.changeGcmId(user, gcmId, callback);
-};
-
-UserManager.prototype.logout = function(user, callback) {
-
-	//
-	//TODO Send PUSH to nearest contacts
-	//
-
-	request({
-		url: 'https://accounts.google.com/o/oauth2/revoke?token=' + user.accessToken,
-		method: "GET",
-	}, function(err, response, body) {
-
-		if (err) {
-			return callback(err);
-		}
-
-		userDao.remove(user._id, callback);
 	});
 };
 
@@ -92,7 +67,8 @@ function applyShareFilter(me, contact) {
 	}
 }
 
-//Distance between two points using the Haversine formula: http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points
+// Distance between two points using the Haversine formula:
+// http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points
 function getDistanceFromLatLon(me, location) {
 	var lat1 = me.location.coordinates[1],
 			lon1 = me.location.coordinates[0],
@@ -116,4 +92,10 @@ function getDistanceFromLatLon(me, location) {
 	return parseInt(d * 1000, 10);
 }
 
-module = module.exports = new UserManager();
+module = module.exports = {
+	save : save,
+	remove : remove,
+	updateGcmId : updateGcmId,
+	updateShareMode : updateShareMode,
+	nearestContacts : nearestContacts
+};

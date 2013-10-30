@@ -131,68 +131,6 @@ User.prototype.get = function(id, callback) {
 	});
 };
 
-User.prototype.saveLocation = function(user, lat, lng, regid, callback) {
-	try {
-		check(user._id, 'user._id').notNull();
-		check(user.email, 'user.email').isEmail();
-		check(user.domain, 'user.domain').notEmpty();
-		check(lat, 'lat').isFloat();
-		check(lng, 'lng').isFloat();
-	} catch (err) {
-		return callback(err, null);
-	}
-
-	mongodb(function(err, db) {
-		if (err) {
-			return callback(err, null);
-		}
-
-		var query = {_id: user._id};
-
-		var sort = null;
-
-		var update = {
-			$set: {
-				email: user.email,
-				domain: user.domain,
-				photo: user.photo,
-				name: user.name,
-				location: {
-					type: "Point",
-					coordinates: [lng, lat]
-				},
-				status: new Date()
-			}
-		};
-		
-		if (regid) {
-			update.$set.regid = regid;
-		}
-
-		var options = {
-			new : true, // set to true if you want to return the modified object rather than the original
-			upsert: true // Atomically inserts the document if no documents matched.
-		};
-
-		db.collection('user').findAndModify(query, sort, update, options, function(err, userSaved) {
-			if (err) {
-				return callback(err, null);
-			}
-
-			if (userSaved) {
-				logger.info('[saveLocation] lat=' + userSaved.location.coordinates.lat + ', lng=' + userSaved.location.coordinates.lng + ' of ' + userSaved.email + ' saved');
-				callback(null, userSaved);
-			} else {
-				var msg = '[saveLocation] No user[' + user._id + '] found!';
-				logger.warn(msg);
-				callback(new Error(msg), null);
-			}
-
-		});
-
-	});
-};
-
 User.prototype.updateShareMode = function(user, shareMode, callback) {
 	try {
 		check(user._id, 'user._id').notNull();
@@ -239,92 +177,40 @@ User.prototype.updateShareMode = function(user, shareMode, callback) {
 	});
 };
 
-User.prototype.myNearestContacts = function(user, callback) {
-
+User.prototype.nearestContacts = function(user, callback) {
 	try {
 		check(user._id).notNull();
 		check(user.domain).notEmpty();
-
+		check(user.location.coordinates[0], 'user.location.coordinates[0]').isFloat();
+		check(user.location.coordinates[1], 'user.location.coordinates[1]').isFloat();
 	} catch (e) {
 		return callback(e, null);
 	}
 
 	mongodb(function(err, db) {
 
-		if (err) {
-			return callback(err, null);
-		}
-
 		var search = {
-			_id: user._id
+			_id: { $ne: user._id },
+			domain: user.domain,
+			location: {
+				$near: { $geometry: user.location },
+				$maxDistance: 1000000
+			},
+			shareMode: { $ne: 'none' }
 		};
 
-		var cfg = {
-			fields: {
-				location: 1
+		db.collection('user').find(search, { limit: 20 }).toArray(function(err, contacts) {
+			if (err) {
+				return callback(err, null);
 			}
-		};
 
-		db.collection('user').findOne(
-				search,
-				cfg,
-				function(err, me) {
-					if (err) {
-						return callback(err, null);
-					}
-
-					if (!me) {
-						logger.warn('No user found with id ' + user._id);
-						return callback('No user found with id ' + user._id, null);
-					}
-
-					logger.info('Last location ' + JSON.stringify(me.location) + ' of ' + user._id + ' user retrieved');
-					search = {
-						_id: {
-							$ne: user._id
-						},
-						domain: user.domain,
-						location: {
-							$near: {
-								$geometry: me.location
-							},
-							$maxDistance: 1000000
-						},
-						shareMode: {
-							$ne: 'none'
-						}
-					};
-
-					fields = {
-						email: 1,
-						location: 1,
-						_id: 1,
-						gcmId: 1,
-						name: 1,
-						photo: 1,
-						shareMode: 1
-					};
-
-					limit = {
-						limit: 20
-					};
-
-					db.collection('user').find(search, {fields: fields, limit: limit}).toArray(
-							function(err, contacts) {
-								if (err) {
-									return callback(err, null);
-								}
-
-								logger.info('Retrieved ' + contacts.length + ' nearest contacts of ' + user._id + ' user');
-								callback(null, {me: me, contacts: contacts});
-							}
-					);
-				}
-		);
+			logger.info('Retrieved ' + contacts.length + ' nearest contacts of ' + user._id + ' user');
+			callback(null, {me: user, contacts: contacts});
+		});
 	});
 };
 
-User.prototype.changeGcmId = function(user, gcmId, callback) {
+User.prototype.updateGcmId = function(user, gcmId, callback) {
 
 	try {
 		check(user._id).notNull();

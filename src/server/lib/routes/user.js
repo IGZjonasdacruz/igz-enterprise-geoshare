@@ -6,30 +6,10 @@ var logger = require('../util/logger')(__filename),
 
 function addRoutes (app) {
 
-	app.post('/user/me/location', ensureAuth, myLocation);
 	app.put('/user/me/shareMode', ensureAuth, updateShareMode);
 	app.put('/user/me/gcm-id', ensureAuth, changeGcmId);
-	app.get('/user/contacts/location', ensureAuth, myNearestContacts);
-	app.get('/user/logout', ensureAuth, logout);
 
 	logger.info('User routes added');
-
-}
-
-function myLocation (req, res, regId) {
-	var lat = sanitize(req.body.latitude).toFloat();
-	var lon = sanitize(req.body.longitude).toFloat();
-	var regid = req.body.regid;
-
-	userManager.saveLocation(req.user, lat, lon, regid, function(err, user) {
-
-		if ( err ) {
-			logger.error(err);
-			return res.send(500);
-		}
-
-		res.json(user);
-	});
 }
 
 function updateShareMode (req, res) {
@@ -46,22 +26,10 @@ function updateShareMode (req, res) {
 	});
 }
 
-function myNearestContacts (req, res) {
-	userManager.myNearestContacts(req.user, function(err, result) {
-
-		if ( err ) {
-			logger.error(err);
-			return res.send(500);
-		}
-
-		res.send(200, result);
-	});
-}
-
 function changeGcmId (req, res) {
 	var gcmId = req.body.gcmId;
 
-	userManager.changeGcmId(req.user, gcmId, function(err, result) {
+	userManager.updateGcmId(req.user, gcmId, function(err, result) {
 
 		if ( err ) {
 			logger.error(err);
@@ -70,17 +38,6 @@ function changeGcmId (req, res) {
 
 		res.json({status:200});
 	});
-}
-
-function logout (req, res) {
-	userManager.logout(req.user, function (err) {
-		if ( err ) {
-			logger.error(err);
-			return res.send(500);
-		}
-
-		res.json({status: 200});
-	});	
 }
 
 module = module.exports = addRoutes;

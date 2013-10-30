@@ -41,7 +41,7 @@ function signIn (req, res) {
 			return res.send(500);
 		}
 
-		userManager.myNearestContacts(user, function (err, contacts) {
+		userManager.nearestContacts(user, function (err, contacts) {
 			if ( err ) {
 				logger.error(err);
 				return res.send(500);
@@ -62,7 +62,7 @@ function signIn (req, res) {
  * @return {json}     Status 200 if all goes well.
  */
 function signOut (req, res) {
-	userManager.logout(req.user, function (err) {
+	userManager.remove(req.user, function (err) {
 		if ( err ) {
 			logger.error(err);
 			return res.send(500);
