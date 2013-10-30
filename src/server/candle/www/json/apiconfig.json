@@ -137,6 +137,36 @@
 								],
 								"path": "/logout",
 								"description": ""
+							},
+							{
+								"name": "Update my gcm-id",
+								"method": "PUT",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZTY1CTt5Ci5-fWVYPzg0G6SVmfwQEYEu177E-fQ-Ajde3Gp-8VQlQ",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "gcmId",
+										"location": "body",
+										"isList": "true",
+										"isJavaPojo": "false",
+										"value": "test",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/me/gcm-id",
+								"description": ""
 							}
 						],
 						"path": "/user",
