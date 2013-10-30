@@ -79,11 +79,12 @@ iris.screen(function(self) {
 
 	function logout(e) {
 		iris.notify('clearNotifications');
-		userRes.logout().done(function() {
+		appRes.signOut().done(function() {
 			googleapi.reset();
 
 			if (geoshare.isBrowser) {
-				return document.location.href = geosharecfg.auth.redirect_uri;
+				setTimeout(function(){window.location.reload();}, 500);
+				// location.reload(); // TODO why fails?
 			} else {
 				showLogin();
 			}

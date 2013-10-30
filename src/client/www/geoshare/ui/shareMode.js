@@ -1,6 +1,7 @@
 iris.ui(function(self) {
 
 	var userRes = iris.resource(iris.path.resource.user);
+	var appRes = iris.resource(iris.path.resource.app);
 
 	self.settings({
 		showStatus: null,
@@ -21,7 +22,7 @@ iris.ui(function(self) {
 	};
 
 	self.render = function() {
-		var me = userRes.me();
+		var me = appRes.me();
 		self.ui('shareMode_items').forEach(function(ui) {
 			var key = ui.getState().key;
 			ui.render(me.shareMode === undefined || me.shareMode === 'all' || Array.isArray(me.shareMode) && me.shareMode.indexOf(key) > -1);
