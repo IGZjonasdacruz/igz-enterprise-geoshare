@@ -9,7 +9,7 @@
 					<span class='icon-bar'></span>
 				</button>
 
-				<a class='navbar-brand' href='#'>GeoShare</a>
+				<span class='navbar-brand'>GeoShare</span>
 			</div>
 			<div class='navbar-collapse collapse' data-id='navbar_items'>
 				<ul class='nav navbar-nav' data-id='menu' data-jq-toggle='showMenu'>
@@ -25,7 +25,7 @@
 					</li>
 				</ul>
 				<ul class='nav navbar-nav navbar-right' data-jq-toggle='showMenu'>
-					<li><a href='#' data-id='logout_btn' style='display:none;'>Sign out</a></li>
+					<li><a href='#' data-id='logout_btn'>Sign out</a></li>
 				</ul>
 			</div>
 		</div>
@@ -44,19 +44,13 @@
 		</div>
 
 		<div data-id='user_box' class='jumbotron' data-jq-toggle='showUserBox'>
-			<div data-id='shareMode_btn' class='pull-right btn btn-link'>
-				<span class="glyphicon glyphicon-share"></span> Privacy
-			</div>
 			<img data-jq-attr-src='user.photo' alt='No photo found' height='100' width='100' class='hidden-xs' />
 			<h1>Welcome <span data-jq-text='user.name'></span>!</h1>
 			<p>You will be visible to other users for one hour.<br>
-				Show the nearest workmates:</p>
-			<a href='#/list' type='button' class='btn btn-primary'>
-				<span class="glyphicon glyphicon-user"></span> List
-			</a>
-			<a href='#/map' type='button' class='btn btn-primary'>
-				<span class="glyphicon glyphicon-globe"></span> Map
-			</a>
+				You can change what information you want to share:</p>
+			<div data-id='shareMode_btn' class='btn btn-primary'>
+				<span class="glyphicon glyphicon-share"></span> Privacy
+			</div>
 		</div>
 
 		<div data-id='screens'></div>

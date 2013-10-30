@@ -38,7 +38,7 @@ iris.screen(function(self) {
 	};
 
 	function showLogin() {
-		self.get('collapse_nav_btn').hide();
+		self.get('collapse_nav_btn').toggleClass('hidden', true);
 		self.inflate({
 			showMenu: false,
 			showUserBox: false,
@@ -94,8 +94,7 @@ iris.screen(function(self) {
 	}
 
 	function onGetToken(data) {
-		self.get('logout_btn').show();
-		showStatus('Initializing, please wait...');
+		showStatus('Initializing');
 		sendLocation();
 	}
 
@@ -127,6 +126,7 @@ iris.screen(function(self) {
 		appRes.signIn(pos.latitude, pos.longitude).done(function() {
 
 			hideStatus();
+			self.get('collapse_nav_btn').toggleClass('hidden', false);
 
 			self.inflate({
 				user: appRes.me(),

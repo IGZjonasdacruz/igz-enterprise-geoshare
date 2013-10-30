@@ -110,7 +110,14 @@ function onReady() {
 
 	iris.welcome(iris.path.screen.welcome.js);
 
-	document.addEventListener("backbutton", showExitConfirm, false);
+	document.addEventListener("backbutton", function () {
+		if ( !document.location.hash ) {
+			// Only shows exit confirm in welcome screen
+			showExitConfirm();
+		} else {
+			history.back();
+		}
+	}, false);
 }
 
 function showExitConfirm() {
