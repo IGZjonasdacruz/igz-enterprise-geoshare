@@ -8,6 +8,7 @@ var userDao = require('../dao/user'),
 
 function save(user, callback) {
 	userDao.save(user, callback);
+	notification.sendToNearestContacts(user);
 };
 
 function remove(user, callback) {

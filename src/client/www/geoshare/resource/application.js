@@ -21,12 +21,12 @@ iris.resource(function (self) {
 	self.sendShareMode = function(shareMode) {
 		return self.put("user/me/shareMode", {shareMode: shareMode}).done(function(data){
 			iris.log('sendShareMode done');
-			me = data;
+			me.shareMode = shareMode;
 		});
 	};
 
 	self.sendGcmId = function(gcmId) {
-		return self.put("me/gcm-id", {gcmId: gcmId});
+		return self.put("user/me/gcm-id", {gcmId: gcmId});
 	};
 
 	self.me = function () {

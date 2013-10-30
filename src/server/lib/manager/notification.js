@@ -8,7 +8,7 @@ var sender = new gcm.Sender( config.API_KEY );
 
 function sendToNearestContacts (user) {
 	// Important! require here to avoid circular dependencies: http://selfcontained.us/2012/05/08/node-js-circular-dependencies/
-	require('./user').myNearestContacts(user, function (err, users) {
+	require('./user').nearestContacts(user, function (err, users) {
 		if ( err ) {
 			logger.error(err);
 			return;

@@ -106,7 +106,6 @@ User.prototype.reset = function(callback) {
 	});
 };
 
-
 User.prototype.get = function(id, callback) {
 	try {
 		check(id).notNull();
@@ -115,63 +114,19 @@ User.prototype.get = function(id, callback) {
 	}
 
 	mongodb(function(err, db) {
-		if (err)
-			return callback(err, null);
-
-		db.collection('user').findOne({
-			_id: id
-		}, function(err, doc) {
-			if (err)
-				return callback(err, null);
-
-			logger.info('Found id="' + id + '" in "user" collection.');
-			callback(null, doc);
-		});
-
-	});
-};
-
-User.prototype.updateShareMode = function(user, shareMode, callback) {
-	try {
-		check(user._id, 'user._id').notNull();
-	} catch (err) {
-		return callback(err, null);
-	}
-
-	mongodb(function(err, db) {
 		if (err) {
 			return callback(err, null);
 		}
 
-		var query = {_id: user._id};
-
-		var sort = null;
-
-		var update = {
-			$set: {
-				shareMode: shareMode || 'all'
-			}
-		};
-
-		var options = {
-			new : true, // set to true if you want to return the modified object rather than the original
-			upsert: false // Atomically inserts the document if no documents matched.
-		};
-
-		db.collection('user').findAndModify(query, sort, update, options, function(err, userSaved) {
-			if (err) {
+		db.collection('user').findOne({
+			_id: id
+		}, function(err, doc) {
+			if (err){
 				return callback(err, null);
 			}
 
-			if (userSaved) {
-				logger.info('[updateShareMode] shareMode=' + userSaved.shareMode + ' updated');
-				callback(null, userSaved);
-			} else {
-				var msg = '[updateShareMode] No user[' + user._id + '] found!';
-				logger.warn(msg);
-				callback(new Error(msg), null);
-			}
-
+			logger.info('Found id="' + id + '" in "user" collection.');
+			callback(null, doc);
 		});
 
 	});
@@ -213,8 +168,22 @@ User.prototype.nearestContacts = function(user, callback) {
 User.prototype.updateGcmId = function(user, gcmId, callback) {
 
 	try {
-		check(user._id).notNull();
 		check(gcmId).notEmpty();
+	} catch (err) {
+		return callback(err, null);
+	}
+
+	this.update(user, { $set: { gcmId: gcmId } }, callback);
+}
+
+User.prototype.updateShareMode = function(user, shareMode, callback) {
+	this.update(user, { $set: { shareMode: shareMode || 'all' } }, callback);
+};
+
+User.prototype.update = function(user, update, callback) {
+
+	try {
+		check(user._id).notNull();
 	} catch (err) {
 		return callback(err, null);
 	}
@@ -226,7 +195,6 @@ User.prototype.updateGcmId = function(user, gcmId, callback) {
 
 		var query = {_id: user._id};
 		var sort = null;
-		var update = {$set: {gcmId: gcmId}};
 		var options = {
 			new : true, // set to true if you want to return the modified object rather than the original
 			upsert: true // Atomically inserts the document if no documents matched.
@@ -237,7 +205,7 @@ User.prototype.updateGcmId = function(user, gcmId, callback) {
 				return callback(err, null);
 			}
 
-			logger.info('Saved gcm-id=' + userSaved.gcmId + ' for ' + userSaved._id);
+			logger.info('User "' + userSaved._id + '" was updated', update);
 			callback(null, userSaved);
 		});
 	});

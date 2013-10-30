@@ -22,7 +22,7 @@ function updateShareMode (req, res) {
 			return res.send(500);
 		}
 
-		res.json(user);
+		res.json({status:200});
 	});
 }
 

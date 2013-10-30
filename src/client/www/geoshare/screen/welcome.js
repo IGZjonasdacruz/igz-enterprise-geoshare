@@ -6,7 +6,7 @@ iris.screen(function(self) {
 		self.tmpl(iris.path.screen.welcome.html);
 
 		self.get('logout_btn').on('click', logout);
-		self.get('login_btn').on('click', login);
+		self.get('login_btn').on('click', onBtnLogin);
 
 		self.screens("screens", [
 			["map", iris.path.screen.map.js],
@@ -65,8 +65,17 @@ iris.screen(function(self) {
 		self.get('status').text('');
 	}
 
+	function onBtnLogin (e) {
+		if (geoshare.isBrowser) {
+			location.reload();
+		} else {
+			login();
+		}
+	}
+
 	function login() {
 		iris.notify('clearNotifications');
+		
 		self.inflate({
 			showMenu: false,
 			showUserBox: false,
@@ -80,13 +89,7 @@ iris.screen(function(self) {
 		iris.notify('clearNotifications');
 		appRes.signOut().done(function() {
 			googleapi.reset();
-
-			if (geoshare.isBrowser) {
-				setTimeout(function(){window.location.reload();}, 500);
-				// location.reload(); // TODO why fails?
-			} else {
-				showLogin();
-			}
+			showLogin();
 		});
 	}
 
