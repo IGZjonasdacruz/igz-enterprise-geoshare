@@ -41,7 +41,7 @@ function ensureAuthenticated (req, res, next) {
 	function (err, response, body) {
 
 		if ( err ) {
-			logger.error('Request google user info error: ' + err);
+			logger.error('Request google user info: ' + err);
 			return res.send(500);
 		}
 
@@ -63,13 +63,13 @@ function ensureAuthenticated (req, res, next) {
 
 		// hd = The hosted domain e.g. example.com if the user is Google apps user.
 
-		if ( !resJson.hasOwnProperty('email') || !resJson.hasOwnProperty('sub')/* || !resJson.hasOwnProperty('hd')*/ ) {
+		if ( !resJson.hasOwnProperty('email') || !resJson.hasOwnProperty('sub') || !resJson.hasOwnProperty('hd') ) {
 			logger.warn('The request to ' + GOOGLE_USER_INFO_URL + ' doesn\'t returns email, hd or sub field. body=' + body);
 			return res.send(500);
 		}
 
 		// Expose user for next middelwares
-		logger.info('Loaded user info of ' + resJson.email);
+		logger.info('Loaded user info', resJson);
 		req.user = { _id: resJson.sub, name: resJson.name,
 			photo: resJson.picture,
 			profile: resJson.profile,
