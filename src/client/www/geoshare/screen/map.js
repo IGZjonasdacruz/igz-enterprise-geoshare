@@ -52,7 +52,7 @@ iris.screen(function(self) {
 			}
 		});
 
-		self.inflate({ countText: appRes.countText() });
+		self.inflate({countText: appRes.countText()});
 	};
 
 	self.reset = function() {
@@ -83,15 +83,34 @@ iris.screen(function(self) {
 	}
 
 	function addMarker(user) {
+		
+		var div = $('<div></div>');
+		var divEmail = $('<div></div>');
+		
+		divEmail.html(user.email ? user.email : "???");
+		
+		div.append(divEmail);
+		
+		var divHangout = $('<div></div>');
+		var linkHangout = $('<a></a>');
+		linkHangout.css({'textDecoration': 'none', 'cursor': 'pointer'});
+		linkHangout.html('<img src="https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-24x100-normal.png" \
+							alt="Start a Hangout" \
+							style="border:0;width:86px;height:20px;"/>');
+		setUpHangout(linkHangout, user);
+		divHangout.append(linkHangout);
+		div.append(divHangout);
+		
 		map.addMarker({
 			lat: user.location.coordinates[1],
 			lng: user.location.coordinates[0],
 			title: user.name ? user.name : '???',
 			icon: user.photo ? user.photo + '?sz=50' : 'img/contact_marker.png',
 			infoWindow: {
-				content: user.email ? user.email : '???'
+				content: div[0]
 			}
 		});
+
 	}
 
 }, iris.path.screen.map.js);

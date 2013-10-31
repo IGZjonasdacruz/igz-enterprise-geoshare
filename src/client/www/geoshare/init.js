@@ -10,7 +10,8 @@ iris.path = {
 		notify: {js: 'ui/notify.js', html: 'ui/notify.html'},
 		notify_item: {js: 'ui/notify_item.js', html: 'ui/notify_item.html'},
 		shareMode: {js: 'ui/shareMode.js', html: 'ui/shareMode.html'},
-		shareMode_item: {js: 'ui/shareMode_item.js', html: 'ui/shareMode_item.html'}
+		shareMode_item: {js: 'ui/shareMode_item.js', html: 'ui/shareMode_item.html'},
+		hangout: {js: 'ui/hangout.js', html: 'ui/hangout.html'}
 	},
 	resource: {
 		app: 'resource/application.js'
