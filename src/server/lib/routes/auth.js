@@ -7,7 +7,9 @@ var passport = require('passport'),
 
 
 const GOOGLE_SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
-											 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/plus.login'];
+						'https://www.googleapis.com/auth/userinfo.email',
+						'https://www.googleapis.com/auth/plus.login',
+						'https://www.googleapis.com/auth/calendar.readonly'];
 
 
 function addRoutes ( app ) {

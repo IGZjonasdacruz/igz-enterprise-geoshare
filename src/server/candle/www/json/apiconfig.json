@@ -45,7 +45,7 @@
 										"description": ""
 									},
 									{
-										"name": "regid",
+										"name": "gcmid",
 										"location": "body",
 										"isList": "false",
 										"isJavaPojo": "false",
@@ -63,7 +63,7 @@
 										"description": ""
 									}
 								],
-								"path": "/me/location",
+								"path": "/sign-in",
 								"description": ""
 							},
 							{
@@ -169,7 +169,7 @@
 								"description": ""
 							}
 						],
-						"path": "/user",
+						"path": "",
 						"description": ""
 					}
 				],
@@ -177,6 +177,49 @@
 				"protocol": "http",
 				"port": "3000",
 				"path": ""
+			}
+		]
+	},
+	{
+		"name": "Google Calendar",
+		"version": [
+			{
+				"name": "0.0.1",
+				"host": "www.googleapis.com",
+				"endpoint": [
+					{
+						"name": "users",
+						"method": [
+							{
+								"name": "Calendar List",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"path": "/me/calendarList",
+								"description": "",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZQC_VWQaRH3NiZ1L5PSZ017Ctqs3s0WiVhUULltf_g",
+										"javaType": "",
+										"description": ""
+									}
+								]
+							}
+						],
+						"path": "/users",
+						"description": ""
+					}
+				],
+				"description": "",
+				"protocol": "https",
+				"port": "443",
+				"path": "/calendar/v3"
 			}
 		]
 	}
