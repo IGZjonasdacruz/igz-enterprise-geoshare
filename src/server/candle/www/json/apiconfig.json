@@ -167,6 +167,78 @@
 								],
 								"path": "/me/gcm-id",
 								"description": ""
+							},
+							{
+								"name": "Get Calendars",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZTiUswqT0rUiympjv_8T4kMwGmP2Wg6tv5nrE6X",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/user/me/calendars",
+								"description": ""
+							},
+							{
+								"name": "Get Upcoming Events from Calendar",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZRq8s8NXktMHxoexr0C4nXW1ksDCdnJ1ZJu_v1p",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "calendarId",
+										"location": "path",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "intelygenz.com_k36c3iga1jolon64a6s2lijrtk@group.calendar.google.com",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/user/me/upcomingEvents/:calendarId",
+								"description": ""
+							},
+							{
+								"name": "All Upcoming Events",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZRq8s8NXktMHxoexr0C4nXW1ksDCdnJ1ZJu_v1p",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/user/me/upcomingEvents",
+								"description": ""
 							}
 						],
 						"path": "",
@@ -226,7 +298,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZSmyFI4j2VSRKWXkeMI8heaYWnLPwlAUfmNrS8k",
+										"value": "Bearer ya29.AHES6ZTiUswqT0rUiympjv_8T4kMwGmP2Wg6tv5nrE6X",
 										"javaType": "",
 										"description": ""
 									},
@@ -244,7 +316,7 @@
 										"location": "query",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "2013-11-03T09:00:00+01:00",
+										"value": "2013-11-02T19:55:09.767Z",
 										"javaType": "",
 										"description": ""
 									},
