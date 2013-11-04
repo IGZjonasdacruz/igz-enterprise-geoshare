@@ -205,7 +205,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRXixNoNI3tYAecaREiHay-ryBhBMxvghqOf-nSiA2kS-2txWQ4",
+										"value": "Bearer ya29.AHES6ZSmyFI4j2VSRKWXkeMI8heaYWnLPwlAUfmNrS8k",
 										"javaType": "",
 										"description": ""
 									}
@@ -226,7 +226,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRXixNoNI3tYAecaREiHay-ryBhBMxvghqOf-nSiA2kS-2txWQ4",
+										"value": "Bearer ya29.AHES6ZSmyFI4j2VSRKWXkeMI8heaYWnLPwlAUfmNrS8k",
 										"javaType": "",
 										"description": ""
 									},
@@ -235,7 +235,25 @@
 										"location": "path",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "o0e0ht6k6c2p8js49bevhnf28c@group.calendar.google.com",
+										"value": "intelygenz.com_k36c3iga1jolon64a6s2lijrtk@group.calendar.google.com",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "timeMin",
+										"location": "query",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "2013-11-03T09:00:00+01:00",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "timeMax",
+										"location": "query",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "2013-11-03T11:00:00+01:00",
 										"javaType": "",
 										"description": ""
 									}
@@ -250,6 +268,67 @@
 				"protocol": "https",
 				"port": "443",
 				"path": "/calendar/v3"
+			}
+		]
+	},
+	{
+		"name": "Google Geolocation",
+		"version": [
+			{
+				"name": "0.0.1",
+				"host": "maps.googleapis.com",
+				"endpoint": [
+					{
+						"name": "all",
+						"method": [
+							{
+								"name": "geolocalize",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "output",
+										"location": "path",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "json",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "address",
+										"location": "query",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Plaza Santa María Soledad Torres Acosta, 2, 28004 Madrid, España",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "sensor",
+										"location": "query",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "true",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/geocode/:output",
+								"description": ""
+							}
+						],
+						"path": "",
+						"description": ""
+					}
+				],
+				"description": "",
+				"protocol": "https",
+				"port": "443",
+				"path": "/maps/api"
 			}
 		]
 	}
