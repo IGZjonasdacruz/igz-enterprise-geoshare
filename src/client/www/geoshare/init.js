@@ -46,7 +46,8 @@ iris.Resource.prototype.ajax = function(method, path, params) {
 
 	googleapi.getToken().done(function(data) {
 
-		var url = geosharecfg.base_uri + path;
+		var base_uri = self.setting('base_uri') || geosharecfg.base_uri;
+		var url = base_uri + path;
 
 		iris.log('[iris.Resource.ajax] method[' + method + '] url[' + url + '] access_token[' + data.access_token + ']');
 

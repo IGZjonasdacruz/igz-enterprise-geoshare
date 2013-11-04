@@ -2,6 +2,7 @@ var logger = require('../util/logger')(__filename),
 		ensureAuth = require('../middleware/sec'),
 		notification = require('../util/notification'),
 		geoUtil = require('../util/geo'),
+		gplus = require('../util/gplus'),
 		userDao = require('../dao/user'),
 		sanitize = require('validator').sanitize,
 		check = require('validator').check,
@@ -35,6 +36,11 @@ function signIn (req, res) {
 	};
 
 	user.gcmId = req.body.gcmId;
+
+	// gplus.people(user.accessToken, function (err, result) {
+	// 	console.log('**** err=', err)
+	// 	console.log('**** result=', result)
+	// });
 
 	userDao.save(user, function(err, result) {
 
