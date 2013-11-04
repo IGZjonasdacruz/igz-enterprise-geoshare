@@ -188,7 +188,7 @@
 				"host": "www.googleapis.com",
 				"endpoint": [
 					{
-						"name": "users",
+						"name": "all",
 						"method": [
 							{
 								"name": "Calendar List",
@@ -197,7 +197,7 @@
 								"content-type": "application/x-www-form-urlencoded",
 								"response content-type": "application/x-www-form-urlencoded",
 								"java return type": "Response",
-								"path": "/me/calendarList",
+								"path": "/users/me/calendarList",
 								"description": "",
 								"param": [
 									{
@@ -205,14 +205,44 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZQC_VWQaRH3NiZ1L5PSZ017Ctqs3s0WiVhUULltf_g",
+										"value": "Bearer ya29.AHES6ZRXixNoNI3tYAecaREiHay-ryBhBMxvghqOf-nSiA2kS-2txWQ4",
+										"javaType": "",
+										"description": ""
+									}
+								]
+							},
+							{
+								"name": "Events",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"path": "/calendars/:calendarId/events",
+								"description": "",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZRXixNoNI3tYAecaREiHay-ryBhBMxvghqOf-nSiA2kS-2txWQ4",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "calendarId",
+										"location": "path",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "o0e0ht6k6c2p8js49bevhnf28c@group.calendar.google.com",
 										"javaType": "",
 										"description": ""
 									}
 								]
 							}
 						],
-						"path": "/users",
+						"path": "",
 						"description": ""
 					}
 				],
