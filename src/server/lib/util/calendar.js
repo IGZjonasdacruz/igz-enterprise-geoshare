@@ -3,9 +3,10 @@ var logger = require('../util/logger')(__filename),
 		async = require('async');
 
 
-const BASE_URL = 'https://www.googleapis.com/calendar/v3/';
+var BASE_URL_CALENDAR = 'https://www.googleapis.com/calendar/v3/',
+		BASE_URL_MAPS = 'https://maps.googleapis.com/maps/api/';
 
-function doCall(method, path, accessToken, done) {
+function doCall(method, BASE_URL, path, accessToken, done) {
 	request({
 		headers: {
 			authorization: 'Bearer ' + accessToken
@@ -30,11 +31,10 @@ function doCall(method, path, accessToken, done) {
 }
 
 function calendars(accessToken, done) {
-	doCall('GET', 'users/me/calendarList', accessToken, function(err, calendars) {
+	doCall('GET', BASE_URL_CALENDAR, 'users/me/calendarList', accessToken, function(err, calendars) {
 		if (err) {
 			return done(err, null);
 		}
-
 		var results = [];
 		if (calendars && calendars.items) {
 			calendars.items.forEach(function(calendar) {
@@ -62,14 +62,12 @@ function upcomingEventsFromCalendar(accessToken, calendarId, done) {
 	var timeMax = time.toISOString();
 
 	var url = 'calendars/' + encodeURIComponent(calendarId) + "/events?timeMin=" + timeMin + "&timeMax=" + timeMax;
-	doCall('GET', url, accessToken, function(err, events) {
+	doCall('GET', BASE_URL_CALENDAR, url, accessToken, function(err, events) {
 		if (err) {
 			return done(err, null);
 		}
 
 		var results = [];
-
-
 		if (events && events.items) {
 			events.items.forEach(function(event) {
 				if (event.kind === "calendar#event") {
@@ -98,17 +96,64 @@ function allUpcomingEvents(accessToken, done) {
 		}
 
 		async.each(calendars, function(calendar, callback) {
+
 			upcomingEventsFromCalendar(accessToken, calendar.id, function(err, events) {
 				if (err) {
 					callback(err);
-				} else {					calendar.events = events;
+				} else {
+					calendar.events = events;
 					callback();
 				}
 			});
 		}, function(err) {
-			done(err, calendars);
-		});
 
+			if (err) {
+				return done(err, null);
+			}
+
+			var results = [];
+			var q = async.queue(function(event, callback) {
+				if (!event.address) {
+					return callback();
+				}
+				var url = "geocode/json?address=" + event.address + "&sensor=true";
+				doCall('GET', BASE_URL_MAPS, url, accessToken, function(err, results) {
+					if (results.status === 'OK' && results.results && results.results.length > 0) {
+						if (results.results[0].geometry) { //Gets the first location
+							event.formatted_address = results.results[0].formatted_address;
+							event.location = results.results[0].geometry.location;
+						}
+					}
+					callback();
+				});
+			});
+			
+			q.drain = function() {
+				done(null, results);
+			};
+
+			//Creates a fake task to ensure q.drain method is called
+			q.push({}, function(err) {
+			});
+			
+			if (calendars) {
+				calendars.forEach(function(calendar) {
+					if (calendar && calendar.events) {
+						calendar.events.forEach(function(event) {
+							var location = event.location || calendar.location;
+							if (location) {
+								event.address = location;
+								event.idCalendar = calendar.id;
+								results.push(event);
+								q.push(event, function(err) {
+								});
+							}
+
+						});
+					}
+				});
+			}
+		});
 	});
 }
 
@@ -116,4 +161,5 @@ module.exports = {
 	calendars: calendars,
 	upcomingEventsFromCalendar: upcomingEventsFromCalendar,
 	allUpcomingEvents: allUpcomingEvents
-};
+}
+;

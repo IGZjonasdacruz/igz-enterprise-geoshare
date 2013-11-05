@@ -181,7 +181,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZTiUswqT0rUiympjv_8T4kMwGmP2Wg6tv5nrE6X",
+										"value": "Bearer ya29.AHES6ZShbqoLmtqnp7_oZC6w-dquB8g0ih99RnLFxTovqA",
 										"javaType": "",
 										"description": ""
 									}
@@ -202,13 +202,13 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRq8s8NXktMHxoexr0C4nXW1ksDCdnJ1ZJu_v1p",
+										"value": "Bearer ya29.AHES6ZShbqoLmtqnp7_oZC6w-dquB8g0ih99RnLFxTovqA",
 										"javaType": "",
 										"description": ""
 									},
 									{
 										"name": "calendarId",
-										"location": "path",
+										"location": "query",
 										"isList": "false",
 										"isJavaPojo": "false",
 										"value": "intelygenz.com_k36c3iga1jolon64a6s2lijrtk@group.calendar.google.com",
@@ -216,7 +216,7 @@
 										"description": ""
 									}
 								],
-								"path": "/user/me/upcomingEvents/:calendarId",
+								"path": "/user/me/upcomingEvents",
 								"description": ""
 							},
 							{
@@ -232,7 +232,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRq8s8NXktMHxoexr0C4nXW1ksDCdnJ1ZJu_v1p",
+										"value": "Bearer ya29.AHES6ZTEPgl-gWtjQJSevYxAxpHLi96rMmFnxa4hyCh59A",
 										"javaType": "",
 										"description": ""
 									}
