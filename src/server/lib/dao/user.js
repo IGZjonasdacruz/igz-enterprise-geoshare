@@ -54,7 +54,11 @@ function locationIndex(next) {
 }
 
 function userIndexes(callback) {
-	async.parallel([statusIndex, locationIndex], function() {
+	async.parallel([statusIndex, locationIndex], function(err) {
+		
+		if (err) {
+			return callback(err);
+		}
 
 		logger.info("All user indexes have been ensured");
 

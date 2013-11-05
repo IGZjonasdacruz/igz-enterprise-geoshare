@@ -9,7 +9,6 @@ function addRoutes(app) {
 
 	app.put('/user/me/shareMode', ensureAuth, updateShareMode);
 	app.put('/user/me/gcm-id', ensureAuth, changeGcmId);
-	app.get('/user/me/calendars', ensureAuth, calendars);
 	app.get('/user/me/upcomingEvents', ensureAuth, upcomingEvents);
 
 	logger.info('User routes added');
@@ -68,9 +67,8 @@ function calendars(req, res) {
 
 }
 
-function calendars(req, res) {
-	calendar.calendars(req.user.accessToken, function(err, json) {
-
+function upcomingEvents(req, res) {
+	calendar.upcomingEvents(req.user.accessToken, function(err, json) {
 		if (err) {
 			logger.error(err);
 			return res.send(500);
@@ -78,32 +76,6 @@ function calendars(req, res) {
 
 		res.json({result: json});
 	});
-
-}
-
-function upcomingEvents(req, res) {
-	if (req.query['calendarId']) {
-		calendar.upcomingEventsFromCalendar(req.user.accessToken, req.query['calendarId'], function(err, json) {
-
-			if (err) {
-				logger.error(err);
-				return res.send(500);
-			}
-
-			res.json({result: json});
-		});
-	} else {
-		calendar.allUpcomingEvents(req.user.accessToken, function(err, json) {
-
-			if (err) {
-				logger.error(err);
-				return res.send(500);
-			}
-
-			res.json({result: json});
-		});
-	}
-
 }
 
 module = module.exports = addRoutes;

@@ -15,7 +15,7 @@ function doCall(method, BASE_URL, path, accessToken, done) {
 		method: method
 
 	}, function(err, res, body) {
-		logger.info('err=' + err + ', method=' + method + ', path=' + path + ', res.statusCode=' + res.statusCode + ', accessToken=' + accessToken);
+		//logger.info('err=' + err + ', method=' + method + ', path=' + path + ', res.statusCode=' + res.statusCode + ', accessToken=' + accessToken);
 
 		if (err) {
 			return done(err, null);
@@ -158,8 +158,5 @@ function allUpcomingEvents(accessToken, done) {
 }
 
 module.exports = {
-	calendars: calendars,
-	upcomingEventsFromCalendar: upcomingEventsFromCalendar,
-	allUpcomingEvents: allUpcomingEvents
-}
-;
+	upcomingEvents: allUpcomingEvents
+};

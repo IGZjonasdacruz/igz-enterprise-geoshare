@@ -169,57 +169,6 @@
 								"description": ""
 							},
 							{
-								"name": "Get Calendars",
-								"method": "GET",
-								"type": "text",
-								"content-type": "application/x-www-form-urlencoded",
-								"response content-type": "application/x-www-form-urlencoded",
-								"java return type": "Response",
-								"param": [
-									{
-										"name": "Authorization",
-										"location": "header",
-										"isList": "false",
-										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZShbqoLmtqnp7_oZC6w-dquB8g0ih99RnLFxTovqA",
-										"javaType": "",
-										"description": ""
-									}
-								],
-								"path": "/user/me/calendars",
-								"description": ""
-							},
-							{
-								"name": "Get Upcoming Events from Calendar",
-								"method": "GET",
-								"type": "text",
-								"content-type": "application/x-www-form-urlencoded",
-								"response content-type": "application/x-www-form-urlencoded",
-								"java return type": "Response",
-								"param": [
-									{
-										"name": "Authorization",
-										"location": "header",
-										"isList": "false",
-										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZShbqoLmtqnp7_oZC6w-dquB8g0ih99RnLFxTovqA",
-										"javaType": "",
-										"description": ""
-									},
-									{
-										"name": "calendarId",
-										"location": "query",
-										"isList": "false",
-										"isJavaPojo": "false",
-										"value": "intelygenz.com_k36c3iga1jolon64a6s2lijrtk@group.calendar.google.com",
-										"javaType": "",
-										"description": ""
-									}
-								],
-								"path": "/user/me/upcomingEvents",
-								"description": ""
-							},
-							{
 								"name": "All Upcoming Events",
 								"method": "GET",
 								"type": "text",
@@ -232,7 +181,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZTEPgl-gWtjQJSevYxAxpHLi96rMmFnxa4hyCh59A",
+										"value": "Bearer ya29.AHES6ZTJ6JyEvHKQDNJEWLkonZrn0SRhQ4LWqQLVPjq1ro0",
 										"javaType": "",
 										"description": ""
 									}
