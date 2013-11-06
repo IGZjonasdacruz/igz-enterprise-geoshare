@@ -15,7 +15,7 @@ function doCall (method, path, accessToken, done) {
 
 	}, function (err, res, body) {
 
-		logger.info('err=' + err + ', method=' + method + ', path=' + path + ', res.statusCode=' + res.statusCode + ', accessToken=' + accessToken);
+		//logger.info('err=' + err + ', method=' + method + ', path=' + path + ', res.statusCode=' + res.statusCode + ', accessToken=' + accessToken);
 
 		if ( err ) {
 			return done(err, null);

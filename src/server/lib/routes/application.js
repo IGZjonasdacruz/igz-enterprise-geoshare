@@ -6,6 +6,7 @@ var logger = require('../util/logger')(__filename),
 		calendar = require('../util/calendar'),
 		userDao = require('../dao/user'),
 		eventDao = require('../dao/event'),
+		gPlusDao = require('../dao/gplus'),
 		sanitize = require('validator').sanitize,
 		check = require('validator').check,
 		request = require('request');
@@ -39,10 +40,20 @@ function signIn(req, res) {
 
 	user.gcmId = req.body.gcmId;
 
-	// gplus.people(user.accessToken, function (err, result) {
-	// 	console.log('**** err=', err)
-	// 	console.log('**** result=', result)
-	// });
+	//This may take a while. We can end the request without having to wait to finish this operation.
+	gplus.people(user.accessToken, function(err, contacts) {
+		if (err) {
+			return logger.error(err);
+		}
+
+		gPlusDao.save(user, contacts, function(err, result) {
+			if (err) {
+				return logger.error(err);
+			}
+			logger.info( (contacts.items ? contacts.items.length : 0) + ' user contacts has been saved');
+		});
+
+	});
 
 	//This may take a while. We can end the request without having to wait to finish this operation.
 	calendar.upcomingEvents(user, function(err, events) {

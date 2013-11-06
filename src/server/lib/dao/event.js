@@ -96,7 +96,6 @@ function Event() {
 Event.prototype.save = function(user, events, callback) {
 	try {
 		check(user._id, 'user._id').notNull();
-		check(events, 'events').notNull();
 	} catch (err) {
 		return callback(err, null);
 	}
@@ -147,7 +146,7 @@ Event.prototype.reset = function(callback) {
 			if (err)
 				return callback(err, null);
 
-			userIndexes(callback);
+			eventIndexes(callback);
 
 		});
 	});
