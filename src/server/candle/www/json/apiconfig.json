@@ -226,7 +226,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZSmyFI4j2VSRKWXkeMI8heaYWnLPwlAUfmNrS8k",
+										"value": "Bearer ya29.AHES6ZRgD6v-wbufIqLN9MeZWfln3Poflf3Z1_zwrWuyKwZ2",
 										"javaType": "",
 										"description": ""
 									}
@@ -247,7 +247,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZTiUswqT0rUiympjv_8T4kMwGmP2Wg6tv5nrE6X",
+										"value": "Bearer ya29.AHES6ZRgD6v-wbufIqLN9MeZWfln3Poflf3Z1_zwrWuyKwZ2",
 										"javaType": "",
 										"description": ""
 									},
@@ -256,7 +256,7 @@
 										"location": "path",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "intelygenz.com_k36c3iga1jolon64a6s2lijrtk@group.calendar.google.com",
+										"value": "intelygenz.com_2d38383638353438302d323337@resource.calendar.google.com",
 										"javaType": "",
 										"description": ""
 									},
@@ -350,6 +350,49 @@
 				"protocol": "https",
 				"port": "443",
 				"path": "/maps/api"
+			}
+		]
+	},
+	{
+		"name": "Google+",
+		"version": [
+			{
+				"name": "0.0.1",
+				"host": "www.googleapis.com",
+				"endpoint": [
+					{
+						"name": "all",
+						"method": [
+							{
+								"name": "Get People",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"path": "/people/me/people/visible",
+								"description": "",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZRgD6v-wbufIqLN9MeZWfln3Poflf3Z1_zwrWuyKwZ2",
+										"javaType": "",
+										"description": ""
+									}
+								]
+							}
+						],
+						"path": "",
+						"description": ""
+					}
+				],
+				"description": "",
+				"protocol": "https",
+				"port": "443",
+				"path": "/plus/v1"
 			}
 		]
 	}

@@ -30,8 +30,8 @@ function doCall(method, BASE_URL, path, accessToken, done) {
 	});
 }
 
-function calendars(accessToken, done) {
-	doCall('GET', BASE_URL_CALENDAR, 'users/me/calendarList', accessToken, function(err, calendars) {
+function calendars(user, done) {
+	doCall('GET', BASE_URL_CALENDAR, 'users/me/calendarList', user.accessToken, function(err, calendars) {
 		if (err) {
 			return done(err, null);
 		}
@@ -55,14 +55,27 @@ function calendars(accessToken, done) {
 	});
 }
 
-function upcomingEventsFromCalendar(accessToken, calendarId, done) {
+function checkAttendee(user, event) {
+	return true;
+	if (event.creator && event.creator.email === user.email || event.organizer && event.organizer.email === user.email) {
+		return true;
+	}
+	
+	if (event.attendees) {
+		return rdo =event.attendees.some(function(attendee) {
+			return attendee.email === user.email && attendee.responseStatus === "accepted";
+		});
+	}
+}
+
+function upcomingEventsFromCalendar(user, calendarId, done) {
 	var time = new Date();
 	var timeMin = time.toISOString();
 	time.setHours(time.getHours() + 24);
 	var timeMax = time.toISOString();
 
 	var url = 'calendars/' + encodeURIComponent(calendarId) + "/events?timeMin=" + timeMin + "&timeMax=" + timeMax;
-	doCall('GET', BASE_URL_CALENDAR, url, accessToken, function(err, events) {
+	doCall('GET', BASE_URL_CALENDAR, url, user.accessToken, function(err, events) {
 		if (err) {
 			return done(err, null);
 		}
@@ -70,7 +83,7 @@ function upcomingEventsFromCalendar(accessToken, calendarId, done) {
 		var results = [];
 		if (events && events.items) {
 			events.items.forEach(function(event) {
-				if (event.kind === "calendar#event") {
+				if (event.kind === "calendar#event" && checkAttendee(user, event)) {
 					var item = {};
 					item.id = event.id;
 					item.summary = event.summary;
@@ -89,15 +102,15 @@ function upcomingEventsFromCalendar(accessToken, calendarId, done) {
 }
 
 
-function allUpcomingEvents(accessToken, done) {
-	calendars(accessToken, function(err, calendars) {
+function allUpcomingEvents(user, done) {
+	calendars(user, function(err, calendars) {
 		if (err) {
 			return done(err, null);
 		}
 
 		async.each(calendars, function(calendar, callback) {
 
-			upcomingEventsFromCalendar(accessToken, calendar.id, function(err, events) {
+			upcomingEventsFromCalendar(user, calendar.id, function(err, events) {
 				if (err) {
 					callback(err);
 				} else {
@@ -117,7 +130,7 @@ function allUpcomingEvents(accessToken, done) {
 					return callback();
 				}
 				var url = "geocode/json?address=" + event.address + "&sensor=true";
-				doCall('GET', BASE_URL_MAPS, url, accessToken, function(err, results) {
+				doCall('GET', BASE_URL_MAPS, url, user.accessToken, function(err, results) {
 					if (results.status === 'OK' && results.results && results.results.length > 0) {
 						if (results.results[0].geometry) { //Gets the first location
 							event.formatted_address = results.results[0].formatted_address;
@@ -127,7 +140,7 @@ function allUpcomingEvents(accessToken, done) {
 					callback();
 				});
 			});
-			
+
 			q.drain = function() {
 				done(null, results);
 			};
@@ -135,7 +148,7 @@ function allUpcomingEvents(accessToken, done) {
 			//Creates a fake task to ensure q.drain method is called
 			q.push({}, function(err) {
 			});
-			
+
 			if (calendars) {
 				calendars.forEach(function(calendar) {
 					if (calendar && calendar.events) {

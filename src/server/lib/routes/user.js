@@ -68,7 +68,7 @@ function calendars(req, res) {
 }
 
 function upcomingEvents(req, res) {
-	calendar.upcomingEvents(req.user.accessToken, function(err, json) {
+	calendar.upcomingEvents(req.user, function(err, json) {
 		if (err) {
 			logger.error(err);
 			return res.send(500);

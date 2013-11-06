@@ -107,12 +107,14 @@ Event.prototype.save = function(user, events, callback) {
 		}
 
 		async.each(events, function(event, callback) {
+			
+			
 			db.collection('event').save({
 				_id: event.id,
 				user: user._id,
 				summary: event.summary,
-				start: event.start.dateTime,
-				end: event.end.dateTime,
+				start: event.start && event.start.dateTime,
+				end: event.end && event.end.dateTime,
 				address: event.address,
 				formatted_address: event.formatted_address,
 				calendar: event.idCalendar,
