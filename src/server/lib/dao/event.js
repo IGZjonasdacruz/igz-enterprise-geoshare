@@ -74,12 +74,34 @@ function userIndex(next) {
 	});
 }
 
+function eventIndex(next) {
+	mongodb(function(err, db) {
+		if (err) {
+			throw err;
+		}
+
+		db.collection('event').ensureIndex({
+			"event": 1
+		}, {
+			w: 1
+		},
+		function(err, result) {
+			if (err) {
+				throw err;
+			}
+
+			next();
+		}
+		);
+	});
+}
+
 function eventIndexes(callback) {
 	async.parallel([userIndex, statusIndex, locationIndex], function(err) {
 		if (err) {
 			return logger.error(err);
 		}
-		
+
 		logger.info("All event indexes have been ensured");
 
 		if (callback) {
@@ -94,45 +116,52 @@ function Event() {
 }
 
 Event.prototype.save = function(user, events, callback) {
+
 	try {
 		check(user._id, 'user._id').notNull();
 	} catch (err) {
 		return callback(err, null);
 	}
 
-	mongodb(function(err, db) {
+	this.remove(user._id, function(err, result) {
 		if (err) {
 			return callback(err, null);
 		}
 
-		async.each(events, function(event, callback) {
-			
-			
-			db.collection('event').save({
-				_id: event.id,
-				user: user._id,
-				summary: event.summary,
-				start: event.start && event.start.dateTime,
-				end: event.end && event.end.dateTime,
-				address: event.address,
-				formatted_address: event.formatted_address,
-				calendar: event.idCalendar,
-				location: {
-					type: 'Point',
-					coordinates: [
-						event.location.lng,
-						event.location.lat
-					]
-				},
-				status: new Date(event.end.dateTime)
-			},
-			{safe: true}, callback);
-		}, function(err) {
+		mongodb(function(err, db) {
 			if (err) {
-				callback(err);
-			} else if (callback) {
-				callback();
+				return callback(err, null);
 			}
+
+			async.each(events, function(event, callback) {
+
+
+				db.collection('event').save({
+					event: event.id,
+					user: user._id,
+					summary: event.summary,
+					start: event.start && event.start.dateTime,
+					end: event.end && event.end.dateTime,
+					address: event.address,
+					formatted_address: event.formatted_address,
+					calendar: event.idCalendar,
+					location: {
+						type: 'Point',
+						coordinates: [
+							event.location.lng,
+							event.location.lat
+						]
+					},
+					status: new Date(event.end.dateTime)
+				},
+				{safe: true}, callback);
+			}, function(err) {
+				if (err) {
+					callback(err);
+				} else if (callback) {
+					callback();
+				}
+			});
 		});
 	});
 };
