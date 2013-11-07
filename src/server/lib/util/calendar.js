@@ -31,13 +31,19 @@ function doCall(method, BASE_URL, path, accessToken, done) {
 }
 
 function calendars(user, done) {
+
 	doCall('GET', BASE_URL_CALENDAR, 'users/me/calendarList', user.accessToken, function(err, calendars) {
 		if (err) {
 			return done(err, null);
 		}
+
 		var results = [];
 		if (calendars && calendars.items) {
+
 			calendars.items.forEach(function(calendar) {
+			
+				//logger.info('Calendar kind ', calendar.kind);
+
 				if (calendar.kind === "calendar#calendarListEntry") {
 					var item = {};
 					item.id = calendar.id;
@@ -50,6 +56,7 @@ function calendars(user, done) {
 			});
 		}
 
+		logger.info('User "' + user.name + '" has ' + results.length + ' calendars');
 		done(null, results);
 
 	});
@@ -80,6 +87,7 @@ function upcomingEventsFromCalendar(user, calendarId, done) {
 			return done(err, null);
 		}
 
+
 		var results = [];
 		if (events && events.items) {
 			events.items.forEach(function(event) {
@@ -89,6 +97,8 @@ function upcomingEventsFromCalendar(user, calendarId, done) {
 					item.summary = event.summary;
 					item.start = event.start;
 					item.end = event.end;
+
+					logger.info('Event "' + event.summary + '" location = ' + event.location);
 					if (event.location) {
 						item.location = event.location;
 					}
@@ -97,6 +107,7 @@ function upcomingEventsFromCalendar(user, calendarId, done) {
 			});
 		}
 
+		logger.info('calendar ' + calendarId + ' has ' + results.length + ' events.')
 		done(null, results);
 	});
 }
@@ -126,9 +137,13 @@ function allUpcomingEvents(user, done) {
 
 			var results = [];
 			var q = async.queue(function(event, callback) {
+				logger.info('Searching for event address = ' + event.address, event);
+
 				if (!event.address) {
 					return callback();
 				}
+
+
 				var url = "geocode/json?address=" + event.address + "&sensor=true";
 				doCall('GET', BASE_URL_MAPS, url, user.accessToken, function(err, results) {
 					if (results.status === 'OK' && results.results && results.results.length > 0) {
@@ -151,10 +166,15 @@ function allUpcomingEvents(user, done) {
 
 			if (calendars) {
 				calendars.forEach(function(calendar) {
+
+
+					logger.info('Calendar "' + calendar.summary + '" has ' + calendar.events.length + ' events');
 					if (calendar && calendar.events) {
 						calendar.events.forEach(function(event) {
 							var location = event.location || calendar.location;
+							logger.info('Location "' + location + '"', event);
 							if (location) {
+
 								event.address = location;
 								event.idCalendar = calendar.id;
 								results.push(event);
