@@ -203,4 +203,22 @@ Event.prototype.remove = function(userId, callback) {
 	});
 };
 
+Event.prototype.get = function(search, callback) {
+	
+	mongodb(function(err, db) {
+		if (err) {
+			return callback(err, null);
+		}
+		
+		db.collection('event').find(search).toArray(function(err, events) {
+			if (err){
+				return callback(err, null);
+			}
+
+			callback(null, events);
+		});
+
+	});
+};
+
 module.exports = new Event(); // This module returns the same event instance (Singleton)

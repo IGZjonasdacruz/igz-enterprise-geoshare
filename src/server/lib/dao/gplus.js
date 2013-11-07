@@ -39,11 +39,15 @@ GPlus.prototype.save = function(user, contacts, callback) {
 		if (err) {
 			return callback(err, null);
 		}
-
-
+		
+		var contactIds = [];
+		contacts.forEach(function(contact) {
+			contactIds.push(contact.id);
+		});
+		
 		db.collection('contacts').save({
 			_id: user._id,
-			contacts: contacts.items || [] 
+			contacts: contactIds 
 		},
 		{safe: true}, callback);
 	});
@@ -83,6 +87,32 @@ GPlus.prototype.remove = function(userId, callback) {
 
 			callback(null, result);
 		});
+	});
+};
+
+GPlus.prototype.get = function(userId, callback) {
+	try {
+		check(userId).notNull();
+	} catch (err) {
+		return callback(err);
+	}
+
+	mongodb(function(err, db) {
+		if (err) {
+			return callback(err, null);
+		}
+
+		db.collection('contacts').findOne({
+			_id: userId
+		}, function(err, doc) {
+			if (err){
+				return callback(err, null);
+			}
+
+			logger.info('Found id="' + userId + '" in "contacts" collection.');
+			callback(null, doc);
+		});
+
 	});
 };
 

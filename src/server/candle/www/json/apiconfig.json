@@ -188,6 +188,27 @@
 								],
 								"path": "/user/me/upcomingEvents",
 								"description": ""
+							},
+							{
+								"name": "Future Nearest Users",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.AHES6ZQdS_i59eOoRhQvK2_MVLxjTgTJSII9sYm5RhAbaJ-C5wQ2er3ENA",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/user/me/futureNearestContacts",
+								"description": ""
 							}
 						],
 						"path": "",
@@ -378,7 +399,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRgD6v-wbufIqLN9MeZWfln3Poflf3Z1_zwrWuyKwZ2",
+										"value": "Bearer ya29.AHES6ZQkCand6OoOSZpbawrRCHut-hFv0iaQwTxQ0IHLr0fy5pI4ERbqKw",
 										"javaType": "",
 										"description": ""
 									}

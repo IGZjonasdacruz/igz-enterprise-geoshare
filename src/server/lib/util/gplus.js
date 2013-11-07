@@ -25,7 +25,7 @@ function doCall (method, path, accessToken, done) {
 			var json = JSON.parse(body);
 			done(null, json);
 		}
-	})
+	});
 }
 
 function people (accessToken, done) {

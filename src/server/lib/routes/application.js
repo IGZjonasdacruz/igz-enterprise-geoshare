@@ -46,7 +46,7 @@ function signIn(req, res) {
 			return logger.error(err);
 		}
 
-		gPlusDao.save(user, contacts, function(err, result) {
+		gPlusDao.save(user, contacts.items ? contacts.items : [], function(err, result) {
 			if (err) {
 				return logger.error(err);
 			}
