@@ -77,6 +77,8 @@ function signIn(req, res) {
 				}
 				logger.info(events.length + ' events of ' + user.name + ' user has been saved');
 			});
+		} else {
+			logger.info('No valid events found for user ' + user.name);
 		}
 	}
 	);

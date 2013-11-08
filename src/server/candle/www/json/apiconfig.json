@@ -169,27 +169,6 @@
 								"description": ""
 							},
 							{
-								"name": "All Upcoming Events",
-								"method": "GET",
-								"type": "text",
-								"content-type": "application/x-www-form-urlencoded",
-								"response content-type": "application/x-www-form-urlencoded",
-								"java return type": "Response",
-								"param": [
-									{
-										"name": "Authorization",
-										"location": "header",
-										"isList": "false",
-										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZTJ6JyEvHKQDNJEWLkonZrn0SRhQ4LWqQLVPjq1ro0",
-										"javaType": "",
-										"description": ""
-									}
-								],
-								"path": "/user/me/upcomingEvents",
-								"description": ""
-							},
-							{
 								"name": "Future Nearest Users",
 								"method": "GET",
 								"type": "text",
@@ -202,7 +181,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZQdS_i59eOoRhQvK2_MVLxjTgTJSII9sYm5RhAbaJ-C5wQ2er3ENA",
+										"value": "Bearer ya29.AHES6ZQKiu-JafgN40y93rVBZ8QedoPhCf9sOneizSW_Mwb9",
 										"javaType": "",
 										"description": ""
 									}

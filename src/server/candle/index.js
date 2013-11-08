@@ -8,7 +8,8 @@ var commons  = require('./lib/commons.js')
 
 app.configure(
  function() {
-  app.use( express.bodyParser() );
+  app.use( express.urlencoded() );
+  app.use( express.json() );
   app.use( express.static((config.dir || __dirname) + '/www'));
   app.use( app.router );
   app.use(

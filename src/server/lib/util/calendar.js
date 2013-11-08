@@ -1,38 +1,16 @@
 var logger = require('../util/logger')(__filename),
 		request = require('request'),
-		async = require('async');
+		async = require('async'),
+		geo = require('../util/geo'),
+		util = require('../util/util');
 
 
-var BASE_URL_CALENDAR = 'https://www.googleapis.com/calendar/v3/',
-		BASE_URL_MAPS = 'https://maps.googleapis.com/maps/api/';
+var BASE_URL_CALENDAR = 'https://www.googleapis.com/calendar/v3/';
 
-function doCall(method, BASE_URL, path, accessToken, done) {
-	request({
-		headers: {
-			authorization: 'Bearer ' + accessToken
-		},
-		url: BASE_URL + path,
-		method: method
-
-	}, function(err, res, body) {
-		//logger.info('err=' + err + ', method=' + method + ', path=' + path + ', res.statusCode=' + res.statusCode + ', accessToken=' + accessToken);
-
-		if (err) {
-			return done(err, null);
-		}
-
-		if (res.statusCode === 200) {
-			var json = JSON.parse(body);
-			done(null, json);
-		} else {
-			done('status code ' + res.statusCode, null);
-		}
-	});
-}
 
 function calendars(user, done) {
 
-	doCall('GET', BASE_URL_CALENDAR, 'users/me/calendarList', user.accessToken, function(err, calendars) {
+	util.doCall('GET', BASE_URL_CALENDAR, 'users/me/calendarList', user.accessToken, function(err, calendars) {
 		if (err) {
 			return done(err, null);
 		}
@@ -63,7 +41,6 @@ function calendars(user, done) {
 }
 
 function checkAttendee(user, event) {
-	return true;
 	if (event.creator && event.creator.email === user.email || event.organizer && event.organizer.email === user.email) {
 		return true;
 	}
@@ -82,7 +59,7 @@ function upcomingEventsFromCalendar(user, calendarId, done) {
 	var timeMax = time.toISOString();
 
 	var url = 'calendars/' + encodeURIComponent(calendarId) + "/events?timeMin=" + timeMin + "&timeMax=" + timeMax;
-	doCall('GET', BASE_URL_CALENDAR, url, user.accessToken, function(err, events) {
+	util.doCall('GET', BASE_URL_CALENDAR, url, user.accessToken, function(err, events) {
 		if (err) {
 			return done(err, null);
 		}
@@ -142,18 +119,8 @@ function allUpcomingEvents(user, done) {
 				if (!event.address) {
 					return callback();
 				}
-
-
-				var url = "geocode/json?address=" + event.address + "&sensor=true";
-				doCall('GET', BASE_URL_MAPS, url, user.accessToken, function(err, results) {
-					if (results.status === 'OK' && results.results && results.results.length > 0) {
-						if (results.results[0].geometry) { //Gets the first location
-							event.formatted_address = results.results[0].formatted_address;
-							event.location = results.results[0].geometry.location;
-						}
-					}
-					callback();
-				});
+				
+				geo.geoLoc(event, callback);
 			});
 
 			q.drain = function() {
@@ -161,8 +128,7 @@ function allUpcomingEvents(user, done) {
 			};
 
 			//Creates a fake task to ensure q.drain method is called
-			q.push({}, function(err) {
-			});
+			q.push({});
 
 			if (calendars) {
 				calendars.forEach(function(calendar) {
@@ -179,6 +145,9 @@ function allUpcomingEvents(user, done) {
 								event.idCalendar = calendar.id;
 								results.push(event);
 								q.push(event, function(err) {
+									if (err) {
+										logger.error("Error: " + err);
+									}
 								});
 							}
 
