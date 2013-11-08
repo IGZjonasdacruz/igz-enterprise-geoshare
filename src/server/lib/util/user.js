@@ -1,6 +1,6 @@
 var logger = require('../util/logger')(__filename),
-		async = require('async')
-eventDao = require('../dao/event'),
+		async = require('async'),
+		eventDao = require('../dao/event'),
 		gPlusDao = require('../dao/gplus'),
 		geo = require('../util/geo'),
 		time = require('../util/time'),
@@ -42,7 +42,7 @@ function filterFurureEvents(userEvents, contactEvents) {
 			var distance = geo.distance(userEvent.location.coordinates, contactEvent.location.coordinates);
 			var interval = time.overlay([userEvent.start, userEvent.end], [contactEvent.start, contactEvent.end]);
 
-			if (interval.duration) {
+			if (interval.overlay) {
 				var nearUser = {
 					me: userEvent.user,
 					contact: contactEvent.user,
@@ -91,7 +91,7 @@ function futureNearestContacts(user, callback) {
 		}
 	], function(err, userEvents, contacts, contactEvents) {
 		logger.info('Found  ' + contacts.length + ' contacts for the user ' + user.name);
-		
+
 		if (err) {
 			return callback(err);
 		}

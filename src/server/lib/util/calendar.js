@@ -84,7 +84,7 @@ function upcomingEventsFromCalendar(user, calendarId, done) {
 			});
 		}
 
-		logger.info('calendar ' + calendarId + ' has ' + results.length + ' events.')
+		logger.info('calendar ' + calendarId + ' has ' + results.length + ' events.');
 		done(null, results);
 	});
 }

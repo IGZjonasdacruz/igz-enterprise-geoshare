@@ -15,7 +15,9 @@ function overlay (intervalA, intervalB) {
 	endB = sanitize(intervalB[1]),
 	startOverlay,
 	endOverlay,
-	duration = null;
+	duration = null,
+	overlay = true,
+	GAP = 30 * 60 * 1000; //30min
 	
 	if (startA <= startB && endB <= endA) {
 		startOverlay = startB;
@@ -23,21 +25,23 @@ function overlay (intervalA, intervalB) {
 	} else if (startB <= startA && endA <= endB) {
 		startOverlay = startA;
 		endOverlay = endA;
-	} else if (startA <= startB && startB <= endA) {
+	} else if (startA <= startB && startB.getTime() <= endA.getTime() + GAP) {
 		startOverlay = startB;
-		endOverlay = endA;
-	} else if (startB <= startA && startA <= endB) {
+		endOverlay = endA;	
+	} else if (startB <= startA && startA.getTime() <= endB.getTime() + GAP) {
 		startOverlay = startA;
 		endOverlay = endB;
 	} else {
 		duration = 0;
+		overlay = false;
 	}
 	
-	if (duration === null) {
+	if (overlay) {
 		duration = endOverlay - startOverlay;
 	}
 	
 	return {
+		overlay: overlay,
 		duration: duration,
 		start: startOverlay,
 		end: endOverlay

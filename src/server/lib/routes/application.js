@@ -50,7 +50,7 @@ function signIn(req, res) {
 			if (err) {
 				return logger.error(err);
 			}
-			logger.info( (contacts.items ? contacts.items.length : 0) + ' user contacts has been saved');
+			logger.info((contacts.items ? contacts.items.length : 0) + ' user contacts has been saved');
 		});
 
 	});
@@ -60,28 +60,28 @@ function signIn(req, res) {
 		if (err) {
 			return logger.error(err);
 		}
-		if (events && events.length) {
-			for (var i = events.length - 1; i >= 0; i--) {
-				var event = events[i];
-				if (!event.location || event.location.lng === undefined || event.location.lat === undefined ||
-						!event.start || event.start.dateTime === undefined ||
-						!event.end || event.end.dateTime === undefined) {
-					events.splice(i, 1);
-					logger.warn('Bad format in event ' + JSON.stringify(event));
-				}
-			}
 
-			eventDao.save(user, events, function(err, result) {
-				if (err) {
-					return logger.error(err);
-				}
-				logger.info(events.length + ' events of ' + user.name + ' user has been saved');
-			});
-		} else {
-			logger.info('No valid events found for user ' + user.name);
+		events = events || [];
+
+		for (var i = events.length - 1; i >= 0; i--) {
+			var event = events[i];
+			if (!event.location || event.location.lng === undefined || event.location.lat === undefined ||
+					!event.start || event.start.dateTime === undefined ||
+					!event.end || event.end.dateTime === undefined) {
+				events.splice(i, 1);
+				logger.warn('Bad format in event ' + JSON.stringify(event));
+			}
 		}
-	}
-	);
+
+		eventDao.save(user, events, function(err, result) {
+			if (err) {
+				return logger.error(err);
+			}
+			logger.info(events.length + ' events of ' + user.name + ' user has been saved');
+		});
+
+	});
+
 	userDao.save(user, function(err, result) {
 
 		if (err) {
