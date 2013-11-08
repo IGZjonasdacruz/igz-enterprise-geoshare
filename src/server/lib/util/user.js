@@ -33,7 +33,7 @@ function contactEvents(contacts, callback) {
 	});
 }
 
-function filterFurureEvents(userEvents, contactEvents) {
+function filterFutureEvents(userEvents, contactEvents) {
 
 	var nearUsers = [];
 
@@ -42,7 +42,7 @@ function filterFurureEvents(userEvents, contactEvents) {
 			var distance = geo.distance(userEvent.location.coordinates, contactEvent.location.coordinates);
 			var interval = time.overlay([userEvent.start, userEvent.end], [contactEvent.start, contactEvent.end]);
 
-			if (interval.overlay) {
+			if (interval.overlay && distance < 30000) {
 				var nearUser = {
 					me: userEvent.user,
 					contact: contactEvent.user,
@@ -96,7 +96,7 @@ function futureNearestContacts(user, callback) {
 			return callback(err);
 		}
 
-		var nearUsers = filterFurureEvents(userEvents, contactEvents);
+		var nearUsers = filterFutureEvents(userEvents, contactEvents);
 
 		logger.info('Found  ' + nearUsers.length + ' near future contacts for the user ' + user.name);
 

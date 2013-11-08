@@ -49,8 +49,7 @@ function geoLoc(event, callback) {
 			if (results.results[0].geometry) { //Gets the first location
 				event.formatted_address = results.results[0].formatted_address;
 				event.location = results.results[0].geometry.location;
-				
-				logger.info('Found ' + results.results.length + ' geocoordinates for the event ' + event.event + ", user " + event.user);
+				logger.info('Found ' + results.results.length + ' geocoordinates for the event');
 
 			}
 		}
