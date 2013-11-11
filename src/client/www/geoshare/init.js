@@ -6,6 +6,7 @@ iris.path = {
 		map: {js: 'screen/map.js', html: 'screen/map.html'}
 	},
 	ui: {
+		list: {js: 'ui/list.js', html: 'ui/list.html'},
 		list_item: {js: 'ui/list_item.js', html: 'ui/list_item.html'},
 		notify: {js: 'ui/notify.js', html: 'ui/notify.html'},
 		notify_item: {js: 'ui/notify_item.js', html: 'ui/notify_item.html'},

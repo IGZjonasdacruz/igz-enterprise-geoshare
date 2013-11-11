@@ -152,9 +152,7 @@ function futureNearestContacts(user, callback) {
 			return callback(err);
 		}
 
-		callback(null, {
-			nearEvents: nearEvents
-		});
+		callback(null, nearEvents);
 	});
 }
 

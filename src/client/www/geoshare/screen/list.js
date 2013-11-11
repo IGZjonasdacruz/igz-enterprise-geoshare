@@ -5,22 +5,32 @@ iris.screen(function(self) {
 	self.create = function() {
 		self.tmpl(iris.path.screen.list.html);
 
-		iris.on('refresh-nearest-contacts', self.render);
+		self.ui("contacts", iris.path.ui.list.js);
+		self.get("now_btn").click(function() {
+			$(this).addClass('active');
+			self.get("future_btn").removeClass('active');
+		});
+
+		self.get("future_btn").click(function() {
+			$(this).addClass('active');
+			self.get("now_btn").removeClass('active');
+			jQuery.when(appRes.futureNearestContacts()).then(
+					function(futureNearestContacts) {
+						self.reset();
+					},
+					function (err) {
+						iris.log('Error during futureNearestContacts retrieving', err);
+					}
+			);
+		});
+
 		self.render();
+
+
 	};
 
 	self.render = function() {
-		var me = appRes.me();
-		var contacts = appRes.nearestContacts();
 
-		iris.log('[list] render, contacts=' + contacts.length);
-
-		self.inflate({ countText: appRes.countText(), hasContacts: contacts.length > 0 });
-
-		self.destroyUIs('contacts');
-		contacts.forEach(function(contact) {
-			self.ui("contacts", iris.path.ui.list_item.js).render(me, contact);
-		});
 	};
 
 	self.reset = function() {

@@ -17,7 +17,7 @@ iris.screen(function(self) {
 
 		self.ui('notify', iris.path.ui.notify.js);
 
-		var shareModeUI = self.ui('modal', iris.path.ui.shareMode.js, {showStatus: showStatus, hideStatus: hideStatus});
+		var shareModeUI = self.ui('privacy', iris.path.ui.shareMode.js, {showStatus: showStatus, hideStatus: hideStatus});
 
 		self.get('shareMode_btn').on('click', function() {
 			shareModeUI.get().modal('toggle');

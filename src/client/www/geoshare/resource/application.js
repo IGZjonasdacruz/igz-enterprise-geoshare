@@ -1,9 +1,9 @@
-iris.resource(function (self) {
+iris.resource(function(self) {
 
-	var nearestContacts = [], me = null;
+	var nearestContacts = [], futureNearestContacts = null, me = null;
 
 	self.signIn = function(lat, lng) {
-		return self.post("sign-in", {lat: lat, lng: lng}).done(function(data){
+		return self.post("sign-in", {lat: lat, lng: lng}).done(function(data) {
 			iris.log('signIn done');
 
 			me = data.user;
@@ -12,14 +12,14 @@ iris.resource(function (self) {
 	};
 
 	self.signOut = function() {
-		return self.get("sign-out").done(function () {
+		return self.get("sign-out").done(function() {
 			iris.log('signOut done');
 			self.reset();
 		});
 	};
 
 	self.sendShareMode = function(shareMode) {
-		return self.put("user/me/shareMode", {shareMode: shareMode}).done(function(data){
+		return self.put("user/me/shareMode", {shareMode: shareMode}).done(function(data) {
 			iris.log('sendShareMode done');
 			me.shareMode = shareMode;
 		});
@@ -29,35 +29,50 @@ iris.resource(function (self) {
 		return self.put("user/me/gcm-id", {gcmId: gcmId});
 	};
 
-	self.me = function () {
+	self.me = function() {
 		return me;
 	};
 
-	self.nearestContacts = function () {
+	self.nearestContacts = function() {
 		return nearestContacts;
 	};
 
-	self.countText = function () {
+	self.futureNearestContacts = function() {
+		var dfd = new jQuery.Deferred();
+		
+		if (futureNearestContacts) {
+			dfd.resolve(futureNearestContacts);
+			return dfd.promise();
+		} else {
+			return self.get("user/me/futureNearestContacts").done(function(data) {
+				iris.log('futureNearestContacts retrieved', data);
+				futureNearestContacts = data;
+			});
+		}
+
+	};
+
+	self.countText = function() {
 		return nearestContacts.length + " near contact" + (nearestContacts.length !== 1 ? 's' : '');
 	};
 
-	self.reset = function () {
+	self.reset = function() {
 		nearestContacts = [];
 		me = null;
 	};
 
-	self.addNearContact = function (data) {
+	self.addNearContact = function(data) {
 		var contact = data.user;
-		for ( var f = 0, F = nearestContacts.length; f < F; f++ ) {
-			if ( nearestContacts[f].email === contact.email ) {
+		for (var f = 0, F = nearestContacts.length; f < F; f++) {
+			if (nearestContacts[f].email === contact.email) {
 				break;
 			}
 		}
 		nearestContacts[f] = contact;
 
-		if ( f === F ) {
+		if (f === F) {
 			// New user
-			iris.notify('notify', { msg: 'The user "' + contact.name + '" has been discovered!' });
+			iris.notify('notify', {msg: 'The user "' + contact.name + '" has been discovered!'});
 		}
 
 		iris.notify('refresh-nearest-contacts');
