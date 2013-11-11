@@ -17,12 +17,28 @@ function userEvents(user, callback) {
 
 
 function userContacts(user, callback) {
-	gPlusDao.get(user._id, function(err, contacts) {
-		callback(err, contacts.contacts);
+	gPlusDao.get(user._id, function(err, contact) {
+		callback(err, contact.contacts);
 	});
 }
 
-function contactEvents(contacts, callback) {
+function contactsInfo(contacts, callback) {
+	gPlusDao.find({
+		_id: {
+			$in: contacts
+		}
+	},
+	{
+		name: 1,
+		profile: 1,
+		email: 1,
+		locale: 1,
+		photo: 1
+	}
+	, callback);
+}
+
+function getContactEvents(contacts, callback) {
 	contacts = contacts || [];
 	eventDao.get({
 		user: {
@@ -33,39 +49,49 @@ function contactEvents(contacts, callback) {
 	});
 }
 
-function filterFutureEvents(userEvents, contactEvents) {
+function filterFutureEvents(userEvents, contactEvents, callback) {
 
 	var nearUsers = [];
+	try {
+		userEvents.forEach(function(userEvent) {
+			contactEvents.forEach(function(contactEvent) {
+				var distance = geo.distance(userEvent.location.coordinates, contactEvent.location.coordinates);
+				var interval = time.overlay([userEvent.start, userEvent.end], [contactEvent.start, contactEvent.end]);
 
-	userEvents.forEach(function(userEvent) {
-		contactEvents.forEach(function(contactEvent) {
-			var distance = geo.distance(userEvent.location.coordinates, contactEvent.location.coordinates);
-			var interval = time.overlay([userEvent.start, userEvent.end], [contactEvent.start, contactEvent.end]);
+				if (interval.overlay && distance < 30000) {
+					var nearUser = {
+						me: {
+							id: userEvent.user,
+							location: userEvent.location,
+							time: {
+								start: userEvent.start,
+								end: userEvent.end
+							}
+						},
+						contact: {
+							id: contactEvent.user,
+							location: contactEvent.location,
+							time: {
+								start: contactEvent.start,
+								end: contactEvent.end
+							}
+						},
+						time: {
+							distance: distance,
+							interval: interval
+						}
+					};
 
-			if (interval.overlay && distance < 30000) {
-				var nearUser = {
-					me: userEvent.user,
-					contact: contactEvent.user,
-					me_location: userEvent.location,
-					contact_location: contactEvent.location,
-					distance: distance,
-					interval: interval,
-					me_event: {
-						start: userEvent.start,
-						end: userEvent.end
-					},
-					contact_event: {
-						start: contactEvent.start,
-						end: contactEvent.end
-					}
-				};
+					nearUsers.push(nearUser);
+				}
 
-				nearUsers.push(nearUser);
-			}
-
+			});
 		});
-	});
-	return nearUsers;
+		callback(null, nearUsers);
+	} catch (e) {
+		callback(e, null);
+	}
+
 }
 
 
@@ -84,29 +110,50 @@ function futureNearestContacts(user, callback) {
 			});
 		},
 		function(userEvents, contacts, callback) {
-			logger.info('Found  ' + contactEvents.length + ' future events of the contacts of the user ' + user.name);
-			contactEvents(contacts, function(err, contactEvents) {
+			logger.info('Found  ' + contacts.length + ' contacts of the user ' + user.name);
+			getContactEvents(contacts, function(err, contactEvents) {
 				callback(err, userEvents, contacts, contactEvents);
 			});
-		}
-	], function(err, userEvents, contacts, contactEvents) {
-		logger.info('Found  ' + contacts.length + ' contacts for the user ' + user.name);
+		},
+		function(userEvents, contacts, contactEvents, callback) {
+			logger.info('Found  ' + contactEvents.length + ' contact events for the user ' + user.name);
 
+			filterFutureEvents(userEvents, contactEvents, function(err, nearEvents) {
+				callback(err, userEvents, contacts, contactEvents, nearEvents);
+			});
+		},
+		function(userEvents, contacts, contactEvents, nearEvents, callback) {
+			logger.info('Found  ' + nearEvents.length + ' near future events for the user ' + user.name);
+
+			var nearContacts = [];
+			nearEvents.forEach(function(nearEvent) {
+				nearContacts.push(nearEvent.contact.id);
+			});
+
+			contactsInfo(nearContacts, function(err, contacts) {
+				nearEvents.forEach(function(nearEvent) {
+					for (var i = 0; i < contacts.length; i++) {
+						var contact = contacts[i];
+						if (contact._id === nearEvent.contact.id) {
+							for (var key in contact) {
+								if (key !== '_id') {
+									nearEvent.contact[key] = contact[key];
+								}
+							}
+							break;
+						}
+					}
+					callback(err, userEvents, contacts, contactEvents, nearEvents);
+				});
+			});
+		}
+	], function(err, userEvents, contacts, contactEvents, nearEvents) {
 		if (err) {
 			return callback(err);
 		}
 
-		var nearUsers = filterFutureEvents(userEvents, contactEvents);
-
-		logger.info('Found  ' + nearUsers.length + ' near future contacts for the user ' + user.name);
-
 		callback(null, {
-			nearUsers: nearUsers,
-			debug: {
-				userEvents: userEvents,
-				contacts: contacts,
-				contactEvents: contactEvents
-			}
+			nearEvents: nearEvents
 		});
 	});
 }

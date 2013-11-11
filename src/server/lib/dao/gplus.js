@@ -47,6 +47,11 @@ GPlus.prototype.save = function(user, contacts, callback) {
 		
 		db.collection('contacts').save({
 			_id: user._id,
+			name: user.name,
+			profile: user.profile,
+			email: user.email,
+			photo: user.photo,
+			locale: user.locale,
 			contacts: contactIds 
 		},
 		{safe: true}, callback);
@@ -111,6 +116,24 @@ GPlus.prototype.get = function(userId, callback) {
 
 			logger.info('Found id="' + userId + '" in "contacts" collection.');
 			callback(null, doc);
+		});
+
+	});
+};
+
+GPlus.prototype.find = function(search, fields, callback) {
+	
+	mongodb(function(err, db) {
+		if (err) {
+			return callback(err, null);
+		}
+		
+		db.collection('contacts').find(search, { fields: fields }).toArray(function(err, contacts) {
+			if (err){
+				return callback(err, null);
+			}
+
+			callback(null, contacts);
 		});
 
 	});

@@ -68,6 +68,7 @@ function upcomingEventsFromCalendar(user, calendarId, done) {
 		var results = [];
 		if (events && events.items) {
 			events.items.forEach(function(event) {
+				
 				if (event.kind === "calendar#event" && checkAttendee(user, event)) {
 					var item = {};
 					item.id = event.id;
