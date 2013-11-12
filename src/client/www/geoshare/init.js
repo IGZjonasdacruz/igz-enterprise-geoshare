@@ -20,25 +20,42 @@ iris.path = {
 };
 
 iris.locale(
-	"en_US", {
-		dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-		monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-		dateFormat: "m/d/Y h:i:s",
-		currency: {
-			formatPos: "s n",
-			formatNeg: "(s n)",
-			decimal: ".",
-			thousand: ",",
-			precision: 2,
-			symbol : "$"
-		},
-		number : {
-			decimal: ".",
-			thousand: ",",
-			precision: 0
-		}
+		"en", {
+	dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+	monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+	dateFormat: "m/d/Y h:i:s",
+	currency: {
+		formatPos: "s n",
+		formatNeg: "(s n)",
+		decimal: ".",
+		thousand: ",",
+		precision: 2,
+		symbol: "$"
+	},
+	number: {
+		decimal: ".",
+		thousand: ",",
+		precision: 0
 	}
+}
 );
+
+iris.locale(
+		"es", {
+	dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+	monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+	dateFormat: "d/m/Y H:i:s",
+	currency: {
+		formatPos: "n",
+		formatNeg: "-n",
+		decimal: ",",
+		thousand: ".",
+		precision: 2
+	}
+}
+);
+
+iris.locale('en');
 
 iris.Resource.prototype.ajax = function(method, path, params) {
 
@@ -113,8 +130,8 @@ function onReady() {
 
 	iris.welcome(iris.path.screen.welcome.js);
 
-	document.addEventListener("backbutton", function () {
-		if ( !document.location.hash ) {
+	document.addEventListener("backbutton", function() {
+		if (!document.location.hash) {
 			// Only shows exit confirm in welcome screen
 			showExitConfirm();
 		} else {
@@ -125,15 +142,15 @@ function onReady() {
 
 function showExitConfirm() {
 	navigator.notification.confirm(
-		'Do you really want to exit?', // message
-		exitFromApp,
-		'Exit', // title
-		'Cancel,OK' // buttonLabels
-	);
+			'Do you really want to exit?', // message
+			exitFromApp,
+			'Exit', // title
+			'Cancel,OK' // buttonLabels
+			);
 }
 
-function exitFromApp (buttonIndex) {
-	if ( buttonIndex == 2 ) {
+function exitFromApp(buttonIndex) {
+	if (buttonIndex == 2) {
 		navigator.app.exitApp();
 	}
 }

@@ -52,7 +52,7 @@ iris.screen(function(self) {
 			}
 		});
 
-		self.inflate({countText: appRes.countText()});
+		self.inflate({countText: countText()});
 	};
 
 	self.reset = function() {
@@ -83,14 +83,14 @@ iris.screen(function(self) {
 	}
 
 	function addMarker(user) {
-		
+
 		var div = $('<div></div>');
 		var divEmail = $('<div></div>');
-		
+
 		divEmail.html(user.email ? user.email : "???");
-		
+
 		div.append(divEmail);
-		
+
 		var divHangout = $('<div></div>');
 		var linkHangout = $('<a></a>');
 		linkHangout.css({'textDecoration': 'none', 'cursor': 'pointer'});
@@ -100,7 +100,7 @@ iris.screen(function(self) {
 		setUpHangout(linkHangout, user);
 		divHangout.append(linkHangout);
 		div.append(divHangout);
-		
+
 		map.addMarker({
 			lat: user.location.coordinates[1],
 			lng: user.location.coordinates[0],
@@ -112,5 +112,10 @@ iris.screen(function(self) {
 		});
 
 	}
+
+
+	function countText() {
+		return appRes.nearestContacts().length + " near contact" + (appRes.nearestContacts().length !== 1 ? 's' : '');
+	};
 
 }, iris.path.screen.map.js);

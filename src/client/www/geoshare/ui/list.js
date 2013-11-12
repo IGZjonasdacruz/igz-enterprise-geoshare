@@ -1,4 +1,9 @@
 iris.ui(function(self) {
+	
+	self.settings = {
+		contacts: [],
+		isFuture: false
+	};
 
 	var appRes = iris.resource(iris.path.resource.app);
 
@@ -12,21 +17,26 @@ iris.ui(function(self) {
 
 	self.render = function() {
 		var me = appRes.me();
-		var contacts = appRes.nearestContacts();
+		var contacts = self.setting('contacts');
 
 		iris.log('[list] render, contacts=' + contacts.length);
-
-		self.inflate({ countText: appRes.countText(), hasContacts: contacts.length > 0 });
+		
+		self.inflate({ countText: countText(), hasContacts: contacts.length > 0, isFuture: self.setting('isFuture') });
 
 		self.destroyUIs('contacts');
 		contacts.forEach(function(contact) {
-			self.ui("contacts", iris.path.ui.list_item.js).render(me, contact);
+			self.ui("contacts", iris.path.ui.list_item.js, {isFuture: self.setting('isFuture')}).render(me, contact);
 		});
 	};
 
 	self.reset = function() {
 		self.destroyUIs('contacts');
 		return self;
+	};
+	
+	
+	function countText () {
+		return self.setting('contacts').length + " near contact" + (self.setting('contacts').length !== 1 ? 's' : '');
 	};
 
 }, iris.path.ui.list.js);

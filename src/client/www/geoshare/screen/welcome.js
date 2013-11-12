@@ -125,6 +125,7 @@ iris.screen(function(self) {
 
 		appRes.signIn(pos.latitude, pos.longitude).done(function() {
 
+			iris.locale(appRes.me().locale || 'en');
 			hideStatus();
 			self.get('collapse_nav_btn').toggleClass('hidden', false);
 

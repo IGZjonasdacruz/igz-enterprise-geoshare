@@ -52,13 +52,10 @@ iris.resource(function(self) {
 
 	};
 
-	self.countText = function() {
-		return nearestContacts.length + " near contact" + (nearestContacts.length !== 1 ? 's' : '');
-	};
-
 	self.reset = function() {
 		nearestContacts = [];
 		me = null;
+		futureNearestContacts = null;
 	};
 
 	self.addNearContact = function(data) {

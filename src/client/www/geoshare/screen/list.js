@@ -4,29 +4,32 @@ iris.screen(function(self) {
 
 	self.create = function() {
 		self.tmpl(iris.path.screen.list.html);
-
-		self.ui("contacts", iris.path.ui.list.js);
+		
+		self.load(self.get("now_btn"), self.get("future_btn"), appRes.nearestContacts());
+		
 		self.get("now_btn").click(function() {
-			$(this).addClass('active');
-			self.get("future_btn").removeClass('active');
+			self.load(self.get("now_btn"), self.get("future_btn"), appRes.nearestContacts());
 		});
 
 		self.get("future_btn").click(function() {
-			$(this).addClass('active');
-			self.get("now_btn").removeClass('active');
 			jQuery.when(appRes.futureNearestContacts()).then(
-					function(futureNearestContacts) {
-						self.reset();
+					function(contacts) {
+						self.load(self.get("future_btn"), self.get("now_btn"), contacts, true);
 					},
-					function (err) {
-						iris.log('Error during futureNearestContacts retrieving', err);
+					function(err) {
+						iris.log('Error during retrieving contacts', err);
 					}
 			);
 		});
 
 		self.render();
+	};
 
-
+	self.load = function(active, inactive, contacts, isFuture) {
+		self.reset();
+		self.ui("contacts", iris.path.ui.list.js, {contacts: contacts, isFuture: isFuture || false});
+		active.addClass('active');
+		inactive.removeClass('active');
 	};
 
 	self.render = function() {

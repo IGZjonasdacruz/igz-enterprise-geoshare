@@ -37,7 +37,7 @@ function locationIndex(next) {
 	mongodb(function(err, db) {
 		if (err) {
 			throw err;
-		}
+			}
 
 		db.collection('user').ensureIndex({
 			"location": "2dsphere"
@@ -53,8 +53,28 @@ function locationIndex(next) {
 	});
 }
 
+function nearestUsersIndex(next) {
+	mongodb(function(err, db) {
+		if (err) {
+			throw err;
+			}
+
+		db.collection('user').ensureIndex({
+			"location": "2dsphere", "domain": 1, "shareMode": 1
+		},
+		function(err, result) {
+			if (err) {
+				throw err;
+			}
+
+			next();
+		}
+		);
+	});
+}
+
 function userIndexes(callback) {
-	async.parallel([statusIndex, locationIndex], function(err) {
+	async.parallel([statusIndex, locationIndex, nearestUsersIndex], function(err) {
 		
 		if (err) {
 			return callback(err);
@@ -149,13 +169,13 @@ User.prototype.nearestContacts = function(user, callback) {
 	mongodb(function(err, db) {
 
 		var search = {
-			_id: { $ne: user._id },
+				location: {
+					$near: { $geometry: user.location },
+					$maxDistance: 1000000
+				},
 			domain: user.domain,
-			location: {
-				$near: { $geometry: user.location },
-				$maxDistance: 1000000
-			},
-			shareMode: { $ne: 'none' }
+			shareMode: { $ne: 'none' },
+			_id: { $ne: user._id }
 		};
 
 		db.collection('user').find(search, { limit: 20 }).toArray(callback);

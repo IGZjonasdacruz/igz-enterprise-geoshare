@@ -60,25 +60,18 @@ function filterFutureEvents(userEvents, contactEvents, callback) {
 
 				if (interval.overlay && distance < 30000) {
 					var nearUser = {
-						me: {
-							id: userEvent.user,
-							location: userEvent.location,
-							time: {
-								start: userEvent.start,
-								end: userEvent.end
-							}
-						},
-						contact: {
-							id: contactEvent.user,
-							location: contactEvent.location,
-							time: {
-								start: contactEvent.start,
-								end: contactEvent.end
-							}
-						},
+						id: contactEvent.user,
+						location: contactEvent.location,
+						location_me: userEvent.location,
+						distance: distance,
+						overlappingTime: interval,
 						time: {
-							distance: distance,
-							interval: interval
+							start: contactEvent.start,
+							end: contactEvent.end
+						},
+						time_me: {
+							start: userEvent.start,
+							end: userEvent.end
 						}
 					};
 
@@ -126,18 +119,19 @@ function futureNearestContacts(user, callback) {
 			logger.info('Found  ' + nearEvents.length + ' near future events for the user ' + user.name);
 
 			var nearContacts = [];
+
 			nearEvents.forEach(function(nearEvent) {
-				nearContacts.push(nearEvent.contact.id);
+				nearContacts.push(nearEvent.id);
 			});
 
 			contactsInfo(nearContacts, function(err, contacts) {
 				nearEvents.forEach(function(nearEvent) {
 					for (var i = 0; i < contacts.length; i++) {
 						var contact = contacts[i];
-						if (contact._id === nearEvent.contact.id) {
+						if (contact._id === nearEvent.id) {
 							for (var key in contact) {
 								if (key !== '_id') {
-									nearEvent.contact[key] = contact[key];
+									nearEvent[key] = contact[key];
 								}
 							}
 							break;
