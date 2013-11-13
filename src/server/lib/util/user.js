@@ -16,6 +16,29 @@ function userEvents(user, callback) {
 }
 
 
+function samePlace(place1, place2) {
+	return place1.lat === place2.lat && place1.lgn === place2.lgn;
+}
+
+function reduceOverlappingTimeEvents(events) {
+	for (var i = events.length - 1; i >= 1; i--) {
+		for (var j = i - 1; j >= 0; j--) {
+			if (events[i].user === events[j].user && samePlace(events[i].location, events[j].location)) {
+				var interval = time.overlay([events[i].start.dateTime, events[i].end.dateTime], [events[j].start.dateTime, events[j].end.dateTime], 0);
+				if (interval.overlay) {
+					events[j].start.dateTime = Math.min(events[i].start.dateTime, events[j].start.dateTime);
+					events[j].end.dateTime = Math.max(events[i].end.dateTime, events[j].end.dateTime);
+					events[j].events = events[j].events.concat(events[i].events);
+					events.splice(i, 1);
+					break;
+				}
+			}
+		}
+	}
+}
+
+
+
 function userContacts(user, callback) {
 	gPlusDao.get(user._id, function(err, contact) {
 		callback(err, contact.contacts);
@@ -48,6 +71,7 @@ function getContactEvents(contacts, callback) {
 		callback(err, contactEvents);
 	});
 }
+
 
 function filterFutureEvents(userEvents, contactEvents, callback) {
 
@@ -84,11 +108,10 @@ function filterFutureEvents(userEvents, contactEvents, callback) {
 	} catch (e) {
 		callback(e, null);
 	}
-
 }
 
 
-function futureNearestContacts(user, callback) {
+function futureNearestContacts(user, cbk) {
 
 	logger.info('Searching future contacts for the user ' + user.name + " ...");
 
@@ -109,7 +132,7 @@ function futureNearestContacts(user, callback) {
 			});
 		},
 		function(userEvents, contacts, contactEvents, callback) {
-			logger.info('Found  ' + contactEvents.length + ' contact events for the user ' + user.name);
+			logger.info('There are ' + contactEvents.length + ' contact events for the user ' + user.name + ' after the reduction');
 
 			filterFutureEvents(userEvents, contactEvents, function(err, nearEvents) {
 				callback(err, userEvents, contacts, contactEvents, nearEvents);
@@ -137,19 +160,21 @@ function futureNearestContacts(user, callback) {
 							break;
 						}
 					}
-					callback(err, userEvents, contacts, contactEvents, nearEvents);
+
 				});
+				callback(err, userEvents, contacts, contactEvents, nearEvents);
 			});
 		}
 	], function(err, userEvents, contacts, contactEvents, nearEvents) {
 		if (err) {
-			return callback(err);
+			return cbk(err);
 		}
 
-		callback(null, nearEvents);
+		cbk(null, nearEvents);
 	});
 }
 
 module.exports = {
-	futureNearestContacts: futureNearestContacts
+	futureNearestContacts: futureNearestContacts,
+	reduceOverlappingTimeEvents: reduceOverlappingTimeEvents
 };

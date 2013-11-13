@@ -69,7 +69,6 @@ function calendars(req, res) {
 }
 
 function futureNearestContacts(req, res) {
-
 	user.futureNearestContacts(req.user, function(err, result) {
 		if (err) {
 			logger.error(err);

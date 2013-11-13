@@ -39,13 +39,20 @@ iris.resource(function(self) {
 
 	self.futureNearestContacts = function() {
 		var dfd = new jQuery.Deferred();
-		
+
 		if (futureNearestContacts) {
 			dfd.resolve(futureNearestContacts);
 			return dfd.promise();
 		} else {
 			return self.get("user/me/futureNearestContacts").done(function(data) {
 				iris.log('futureNearestContacts retrieved', data);
+				data.sort(function(eventA, eventB) {
+					if (eventA.overlappingTime && eventA.overlappingTime.start && eventB.overlappingTime && eventB.overlappingTime.start) {
+						return eventA.overlappingTime.start - eventB.overlappingTime.start;
+					} else {
+						return 0;
+					}
+				});
 				futureNearestContacts = data;
 			});
 		}

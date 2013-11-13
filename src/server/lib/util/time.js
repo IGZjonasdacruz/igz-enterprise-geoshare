@@ -7,52 +7,45 @@
  * 
  * @return {time interval} or {empty}.
  */
-function overlay (intervalA, intervalB) {
-	
+function overlay(intervalA, intervalB, gap) {
+
 	var startA = sanitize(intervalA[0]),
-	endA = sanitize(intervalA[1]),
-	startB = sanitize(intervalB[0]),
-	endB = sanitize(intervalB[1]),
-	startOverlay,
-	endOverlay,
-	duration = null,
-	overlay = true,
-	GAP = 30 * 60 * 1000; //30min
-	
+			endA = sanitize(intervalA[1]),
+			startB = sanitize(intervalB[0]),
+			endB = sanitize(intervalB[1]),
+			startOverlay,
+			endOverlay,
+			overlay = true,
+			GAP = gap === 0 || gap ? gap : 30 * 60 * 1000; //30min
+
 	if (startA <= startB && endB <= endA) {
 		startOverlay = startB;
 		endOverlay = endB;
 	} else if (startB <= startA && endA <= endB) {
 		startOverlay = startA;
 		endOverlay = endA;
-	} else if (startA <= startB && startB.getTime() <= endA.getTime() + GAP) {
+	} else if (startA <= startB && startB <= endA + GAP) {
 		startOverlay = startB;
-		endOverlay = endA;	
-	} else if (startB <= startA && startA.getTime() <= endB.getTime() + GAP) {
+		endOverlay = endA;
+	} else if (startB <= startA && startA <= endB + GAP) {
 		startOverlay = startA;
 		endOverlay = endB;
 	} else {
-		duration = 0;
 		overlay = false;
 	}
-	
-	if (overlay) {
-		duration = endOverlay - startOverlay;
-	}
-	
 	return {
 		overlay: overlay,
-		duration: duration,
-		start: startOverlay,
-		end: endOverlay
+		duration: endOverlay - startOverlay,
+		start: Math.min(startOverlay, endOverlay),
+		end: Math.max(startOverlay, endOverlay)
 	};
-	
+
 }
 
 function sanitize(date) {
-	return date instanceof Date ? date : new Date(date);
+	return date instanceof Date ? date.getTime() : (new Date(date)).getTime();
 }
 
 module.exports = {
-	overlay : overlay
+	overlay: overlay
 };

@@ -4,6 +4,7 @@ var logger = require('../util/logger')(__filename),
 		geoUtil = require('../util/geo'),
 		gplus = require('../util/gplus'),
 		calendar = require('../util/calendar'),
+		userUtil = require('../util/user'),
 		userDao = require('../dao/user'),
 		eventDao = require('../dao/event'),
 		gPlusDao = require('../dao/gplus'),
@@ -70,9 +71,16 @@ function signIn(req, res) {
 					!event.end || event.end.dateTime === undefined) {
 				events.splice(i, 1);
 				logger.warn('Bad format in event ' + JSON.stringify(event));
+			} else {
+				event.start.dateTime = (new Date (event.start.dateTime)).getTime();
+				event.end.dateTime = (new Date (event.end.dateTime)).getTime();
+				event.events = [{id: event.id, summary: event.summary, calendar: event.idCalendar}];
 			}
 		}
-
+		
+		logger.info('There are '  +events.length + ' events for the user ' + user.name);
+		userUtil.reduceOverlappingTimeEvents(events);
+		logger.info('There are '  +events.length + ' events after overlapping time reduction for the user ' + user.name);
 		eventDao.save(user, events, function(err, result) {
 			if (err) {
 				return logger.error(err);

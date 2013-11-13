@@ -24,12 +24,8 @@ iris.ui(function(self) {
 
 		if (contact.overlappingTime) {
 			data.duration = isNumber(contact.overlappingTime.duration) ? formatTime(contact.overlappingTime.duration) : '???';
-			if (contact.overlappingTime.start && contact.overlappingTime.end) {
-				var from = Math.min (new Date(contact.overlappingTime.start), new Date(contact.overlappingTime.end));
-				var to = Math.max (new Date(contact.overlappingTime.start), new Date(contact.overlappingTime.end));
-			}
-			data.from = from ? formatDate(from) : '???';
-			data.to = to ? formatDate(to) : '???';
+			data.from = contact.overlappingTime.start ? formatDate(contact.overlappingTime.start) : '???';
+			data.to = contact.overlappingTime.end ? formatDate(contact.overlappingTime.end) : '???';
 			data.isGap = contact.overlappingTime.duration < 0 ? true : false;
 		}
 

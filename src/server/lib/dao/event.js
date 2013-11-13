@@ -137,14 +137,12 @@ Event.prototype.save = function(user, events, callback) {
 
 
 				db.collection('event').save({
-					event: event.id,
+					events: event.events,
 					user: user._id,
-					summary: event.summary,
 					start: event.start && event.start.dateTime,
 					end: event.end && event.end.dateTime,
 					address: event.address,
 					formatted_address: event.formatted_address,
-					calendar: event.idCalendar,
 					location: {
 						type: 'Point',
 						coordinates: [
