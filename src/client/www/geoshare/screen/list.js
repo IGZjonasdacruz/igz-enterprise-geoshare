@@ -4,17 +4,17 @@ iris.screen(function(self) {
 
 	self.create = function() {
 		self.tmpl(iris.path.screen.list.html);
-		
-		self.load(self.get("now_btn"), self.get("future_btn"), appRes.nearestContacts());
-		
+
+		self.load(appRes.nearestContacts());
+
 		self.get("now_btn").click(function() {
-			self.load(self.get("now_btn"), self.get("future_btn"), appRes.nearestContacts());
+			self.load(appRes.nearestContacts());
 		});
 
-		self.get("future_btn").click(function() {
-			jQuery.when(appRes.futureNearestContacts()).then(
+		self.get("events").find("a").click(function() {
+			jQuery.when(appRes[$(this).data("id")]()).then(
 					function(contacts) {
-						self.load(self.get("future_btn"), self.get("now_btn"), contacts, true);
+						self.load(contacts, true);
 					},
 					function(err) {
 						iris.log('Error during retrieving contacts', err);
@@ -25,11 +25,9 @@ iris.screen(function(self) {
 		self.render();
 	};
 
-	self.load = function(active, inactive, contacts, isFuture) {
+	self.load = function(contacts, isFuture) {
 		self.reset();
-		self.ui("contacts", iris.path.ui.list.js, {contacts: contacts, isFuture: isFuture || false});
-		active.addClass('active');
-		inactive.removeClass('active');
+		self.ui("contacts", iris.path.ui.list.js, {contacts: contacts, isFuture: isFuture || false})
 	};
 
 	self.render = function() {

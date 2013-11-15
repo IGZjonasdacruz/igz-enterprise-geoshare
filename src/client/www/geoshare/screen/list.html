@@ -1,8 +1,20 @@
 <div >
-	<div class="btn-group btn-group-lg" style="margin-bottom: 15px;">
-		<button data-id="now_btn" type="button" class="btn btn-default active">Right now</button>
-		<button data-id="future_btn" type="button" class="btn btn-default">In the next 24h</button>
-	</div>
+	<ul class="nav nav-tabs" style="margin-bottom: 15px;">
+		<li class="active"><a data-id="now_btn" data-toggle="tab">Right now</a></li>
+		<li class="dropdown">
+			<a data-id="future_btn" data-toggle="dropdown">
+				In the next 24h
+				<b class="caret"></b>
+			</a>
+			<ul class="dropdown-menu" data-id="events" role="menu">
+				<li><a data-id="events" data-toggle="tab">Me</a></li>
+				<li><a data-id="contactEvents">Contacts</a></li>
+				<li><a  data-id="futureNearestContacts" data-toggle="tab">Time mach</a></li>
+			</ul>
+		</li>
+
+	</ul>
+
 	<div data-id="contacts">
 
 	</div>

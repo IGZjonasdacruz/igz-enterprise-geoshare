@@ -208,7 +208,7 @@ Event.prototype.get = function(search, callback) {
 			return callback(err, null);
 		}
 		
-		db.collection('event').find(search).toArray(function(err, events) {
+		db.collection('event').find(search, {sort: {start: 1}}).toArray(function(err, events) {
 			if (err){
 				return callback(err, null);
 			}

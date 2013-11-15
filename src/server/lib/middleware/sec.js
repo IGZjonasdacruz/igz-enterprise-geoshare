@@ -2,7 +2,7 @@
 var request = require('request'),
 		logger = require('../util/logger')(__filename);
 
-const GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
+var GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
 
 
 /**

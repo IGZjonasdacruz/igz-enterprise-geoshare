@@ -6,7 +6,7 @@ var passport = require('passport'),
 		fs = require('fs');
 
 
-const GOOGLE_SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
+var GOOGLE_SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
 						'https://www.googleapis.com/auth/userinfo.email',
 						'https://www.googleapis.com/auth/plus.login',
 						'https://www.googleapis.com/auth/calendar.readonly'];

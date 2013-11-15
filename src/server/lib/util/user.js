@@ -110,6 +110,52 @@ function filterFutureEvents(userEvents, contactEvents, callback) {
 	}
 }
 
+function contactEvents(user, cbk) {
+
+	logger.info('Searching contacts for the user ' + user.name + " ...");
+
+	async.waterfall([
+		function(callback) {
+			userContacts(user, function(err, contacts) {
+				callback(err, contacts);
+			});
+		},
+		function(contacts, callback) {
+			logger.info('Found  ' + contacts.length + ' contacts of the user ' + user.name);
+			getContactEvents(contacts, function(err, contactEvents) {
+				callback(err, contacts, contactEvents);
+			});
+		},
+		function(contactIds, contactEvents, callback) {
+			logger.info('Found  ' + contactEvents.length + ' contacts events for the user ' + user.name);
+			
+			contactsInfo(contactIds, function(err, contacts) {
+				contactEvents.forEach(function(contactEvent) {
+					for (var i = 0; i < contacts.length; i++) {
+						var contact = contacts[i];
+						if (contact._id === contactEvent.user) {
+							for (var key in contact) {
+								if (key !== '_id') {
+									contactEvent[key] = contact[key];
+								}
+							}
+							break;
+						}
+					}
+
+				});
+				callback(err, contactEvents);
+			});
+		}
+	], function(err, contactEvents) {
+		if (err) {
+			return cbk(err);
+		}
+
+		cbk(null, contactEvents);
+	});
+}
+
 
 function futureNearestContacts(user, cbk) {
 
@@ -176,5 +222,7 @@ function futureNearestContacts(user, cbk) {
 
 module.exports = {
 	futureNearestContacts: futureNearestContacts,
-	reduceOverlappingTimeEvents: reduceOverlappingTimeEvents
+	reduceOverlappingTimeEvents: reduceOverlappingTimeEvents,
+	userEvents: userEvents,
+	contactEvents: contactEvents
 };

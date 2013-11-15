@@ -1,6 +1,10 @@
 iris.resource(function(self) {
 
-	var nearestContacts = [], futureNearestContacts = null, me = null;
+	var nearestContacts = [],
+	futureNearestContacts = null,
+	events = null,
+	contactEvents = null,
+	me = null;
 
 	self.signIn = function(lat, lng) {
 		return self.post("sign-in", {lat: lat, lng: lng}).done(function(data) {
@@ -33,6 +37,36 @@ iris.resource(function(self) {
 		return me;
 	};
 
+	self.events = function() {
+		var dfd = new jQuery.Deferred();
+
+		if (events) {
+			dfd.resolve(events);
+			return dfd.promise();
+		} else {
+			return self.get("user/me/events").done(function(data) {
+				iris.log('me events retrieved', data);
+				events = data;
+			});
+		}
+
+	};
+	
+	self.contactEvents = function() {
+		var dfd = new jQuery.Deferred();
+
+		if (contactEvents) {
+			dfd.resolve(contactEvents);
+			return dfd.promise();
+		} else {
+			return self.get("user/me/contactEvents").done(function(data) {
+				iris.log('me contactEvents retrieved', data);
+				contactEvents = data;
+			});
+		}
+
+	};
+
 	self.nearestContacts = function() {
 		return nearestContacts;
 	};
@@ -63,6 +97,8 @@ iris.resource(function(self) {
 		nearestContacts = [];
 		me = null;
 		futureNearestContacts = null;
+		events = null;
+		contactEvents  = null;
 	};
 
 	self.addNearContact = function(data) {
