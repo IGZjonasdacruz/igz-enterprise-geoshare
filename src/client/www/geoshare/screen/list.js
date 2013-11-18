@@ -4,14 +4,20 @@ iris.screen(function(self) {
 
 	self.create = function() {
 		self.tmpl(iris.path.screen.list.html);
-
+		
+		var lNow = Ladda.create(self.get('now_btn')[0]);
+		var lFurure = Ladda.create(self.get('future_btn')[0]);
+		
 		self.load(appRes.nearestContacts());
 
 		self.get("now_btn").click(function() {
+			lNow.start();
 			self.load(appRes.nearestContacts());
+			lNow.stop();
 		});
 
 		self.get("events").find("a").click(function() {
+			lFurure.start();
 			jQuery.when(appRes[$(this).data("id")]()).then(
 					function(contacts) {
 						self.load(contacts);
@@ -19,7 +25,9 @@ iris.screen(function(self) {
 					function(err) {
 						iris.log('Error during retrieving contacts', err);
 					}
-			);
+			).always(function() {
+					lFurure.stop();
+			});
 		});
 
 		self.render();
