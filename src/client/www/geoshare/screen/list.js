@@ -14,7 +14,7 @@ iris.screen(function(self) {
 		self.get("events").find("a").click(function() {
 			jQuery.when(appRes[$(this).data("id")]()).then(
 					function(contacts) {
-						self.load(contacts, true);
+						self.load(contacts);
 					},
 					function(err) {
 						iris.log('Error during retrieving contacts', err);
@@ -25,9 +25,9 @@ iris.screen(function(self) {
 		self.render();
 	};
 
-	self.load = function(contacts, isFuture) {
+	self.load = function(contacts) {
 		self.reset();
-		self.ui("contacts", iris.path.ui.list.js, {contacts: contacts, isFuture: isFuture || false})
+		self.ui("contacts", iris.path.ui.list.js, {contacts: contacts});
 	};
 
 	self.render = function() {

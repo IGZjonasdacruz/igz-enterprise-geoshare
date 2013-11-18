@@ -128,16 +128,14 @@ function contactEvents(user, cbk) {
 		},
 		function(contactIds, contactEvents, callback) {
 			logger.info('Found  ' + contactEvents.length + ' contacts events for the user ' + user.name);
-			
+
 			contactsInfo(contactIds, function(err, contacts) {
 				contactEvents.forEach(function(contactEvent) {
 					for (var i = 0; i < contacts.length; i++) {
 						var contact = contacts[i];
 						if (contact._id === contactEvent.user) {
 							for (var key in contact) {
-								if (key !== '_id') {
-									contactEvent[key] = contact[key];
-								}
+								contactEvent[key] = contact[key];
 							}
 							break;
 						}
@@ -199,9 +197,7 @@ function futureNearestContacts(user, cbk) {
 						var contact = contacts[i];
 						if (contact._id === nearEvent.id) {
 							for (var key in contact) {
-								if (key !== '_id') {
-									nearEvent[key] = contact[key];
-								}
+								nearEvent[key] = contact[key];
 							}
 							break;
 						}

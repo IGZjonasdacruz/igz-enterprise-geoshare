@@ -1,11 +1,10 @@
 iris.ui(function(self) {
-	
-	self.settings = {
-		contacts: [],
-		isFuture: false
-	};
 
 	var appRes = iris.resource(iris.path.resource.app);
+	
+	self.settings = {
+		eventsType: appRes.eventsType.now
+	};
 
 	self.create = function() {
 		self.tmplMode(self.APPEND);
@@ -20,12 +19,18 @@ iris.ui(function(self) {
 		var contacts = self.setting('contacts');
 
 		iris.log('[list] render, contacts=' + contacts.length);
-		
-		self.inflate({ countText: countText(), hasContacts: contacts.length > 0, isFuture: self.setting('isFuture') });
+		self.inflate({
+			countText: countText(),
+			hasContacts: contacts.length > 0,
+			showTime: contacts.eventsType !== appRes.eventsType.now,
+			showDistance: contacts.eventsType === appRes.eventsType.now || contacts.eventsType === appRes.eventsType.overlay,
+			showHangout: contacts.eventsType !== appRes.eventsType.me,
+			showAddress: contacts.eventsType === appRes.eventsType.me
+		});
 
 		self.destroyUIs('contacts');
 		contacts.forEach(function(contact) {
-			self.ui("contacts", iris.path.ui.list_item.js, {isFuture: self.setting('isFuture')}).render(me, contact);
+			self.ui("contacts", iris.path.ui.list_item.js, {eventsType: contacts.eventsType}).render(me, contact);
 		});
 	};
 
@@ -33,10 +38,24 @@ iris.ui(function(self) {
 		self.destroyUIs('contacts');
 		return self;
 	};
+
+
+	function countText() {
+		var type = 'near contacts';
 	
+		switch (self.setting('contacts').eventsType) {
+			case appRes.eventsType.me:
+			case appRes.eventsType.contacts:
+				type = 'future event locations';
+				break;
+			case appRes.eventsType.overlay:
+				type = 'future overlapping events';
+				break;
+			
+		}
+		
+	return self.setting('contacts').length + " " + type ;
+	}
 	
-	function countText () {
-		return self.setting('contacts').length + " near contact" + (self.setting('contacts').length !== 1 ? 's' : '');
-	};
 
 }, iris.path.ui.list.js);

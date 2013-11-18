@@ -1,7 +1,8 @@
 iris.ui(function(self) {
 
+	var appRes = iris.resource(iris.path.resource.app);
 	self.settings = {
-		isFuture: false
+		eventsType: appRes.eventsType.now
 	};
 
 	var hangout = null;
@@ -18,8 +19,12 @@ iris.ui(function(self) {
 			email: contact.email || "???",
 			emailto: contact.email ? 'mailto:' + contact.email : '',
 			photo: contact.photo ? contact.photo : '',
-			distance: isNumber(contact.distance) ? iris.number(contact.distance) : '???',
-			isFuture: self.setting('isFuture') 
+			distance: contact.distance || contact.distance === 0 ? iris.number(contact.distance) : '???',
+			address: contact.formatted_address,
+			showTime: self.setting('eventsType') !== appRes.eventsType.now,
+			showDistance: self.setting('eventsType') === appRes.eventsType.now || self.setting('eventsType') === appRes.eventsType.overlay,
+			showHangout: self.setting('eventsType') !== appRes.eventsType.me,
+			showAddress: self.setting('eventsType') === appRes.eventsType.me
 		};
 
 		if (contact.overlappingTime) {
@@ -27,6 +32,11 @@ iris.ui(function(self) {
 			data.from = contact.overlappingTime.start ? formatDate(contact.overlappingTime.start) : '???';
 			data.to = contact.overlappingTime.end ? formatDate(contact.overlappingTime.end) : '???';
 			data.isGap = contact.overlappingTime.duration < 0 ? true : false;
+		} else if (self.setting('eventsType') === appRes.eventsType.me || self.setting('eventsType') === appRes.eventsType.contacts) {
+			data.duration = contact.start && contact.end ? formatTime(contact.end - contact.start) : '???';
+			data.from = contact.start ? formatDate(contact.start) : '???';
+			data.to = contact.end ? formatDate(contact.end) : '???';
+			data.isGap = false;
 		}
 
 		self.inflate(data);
@@ -58,7 +68,7 @@ iris.ui(function(self) {
 		var m = Math.floor(s / 60);
 		s = s - m * 60;
 
-		return ( milliseconds < 0 ? "-" : "" ) + format(h) + ":" + format(m) + ":" + format(s);
+		return (milliseconds < 0 ? "-" : "") + format(h) + ":" + format(m) + ":" + format(s);
 
 	}
 

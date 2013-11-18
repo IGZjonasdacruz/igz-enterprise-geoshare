@@ -1,10 +1,17 @@
 iris.resource(function(self) {
 
 	var nearestContacts = [],
-	futureNearestContacts = null,
-	events = null,
-	contactEvents = null,
-	me = null;
+			futureNearestContacts = null,
+			events = null,
+			contactEvents = null,
+			me = null;
+
+	self.eventsType = {
+		now: 'now',
+		overlay: 'overlay',
+		contacts: 'contacts',
+		me: 'me'
+	};
 
 	self.signIn = function(lat, lng) {
 		return self.post("sign-in", {lat: lat, lng: lng}).done(function(data) {
@@ -45,13 +52,19 @@ iris.resource(function(self) {
 			return dfd.promise();
 		} else {
 			return self.get("user/me/events").done(function(data) {
+				Array.isArray(data) && data.forEach(function(event) {
+					event.email = self.me().email;
+					event.name = self.me().name;
+					event.photo = self.me().photo;
+				});
+				data.eventsType = self.eventsType.me;
 				iris.log('me events retrieved', data);
 				events = data;
 			});
 		}
 
 	};
-	
+
 	self.contactEvents = function() {
 		var dfd = new jQuery.Deferred();
 
@@ -60,6 +73,7 @@ iris.resource(function(self) {
 			return dfd.promise();
 		} else {
 			return self.get("user/me/contactEvents").done(function(data) {
+				data.eventsType = self.eventsType.contacts;
 				iris.log('me contactEvents retrieved', data);
 				contactEvents = data;
 			});
@@ -68,6 +82,7 @@ iris.resource(function(self) {
 	};
 
 	self.nearestContacts = function() {
+		nearestContacts.eventsType = self.eventsType.now;
 		return nearestContacts;
 	};
 
@@ -79,14 +94,15 @@ iris.resource(function(self) {
 			return dfd.promise();
 		} else {
 			return self.get("user/me/futureNearestContacts").done(function(data) {
-				iris.log('futureNearestContacts retrieved', data);
-				data.sort(function(eventA, eventB) {
+				Array.isArray(data) && data.sort(function(eventA, eventB) {
 					if (eventA.overlappingTime && eventA.overlappingTime.start && eventB.overlappingTime && eventB.overlappingTime.start) {
 						return eventA.overlappingTime.start - eventB.overlappingTime.start;
 					} else {
 						return 0;
 					}
 				});
+				data.eventsType = self.eventsType.overlay;
+				iris.log('futureNearestContacts retrieved', data);
 				futureNearestContacts = data;
 			});
 		}
@@ -98,7 +114,7 @@ iris.resource(function(self) {
 		me = null;
 		futureNearestContacts = null;
 		events = null;
-		contactEvents  = null;
+		contactEvents = null;
 	};
 
 	self.addNearContact = function(data) {
