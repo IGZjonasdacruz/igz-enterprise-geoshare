@@ -21,6 +21,7 @@ function samePlace(place1, place2) {
 }
 
 function reduceOverlappingTimeEvents(events) {
+	var now = (new Date()).getTime();
 	for (var i = events.length - 1; i >= 1; i--) {
 		for (var j = i - 1; j >= 0; j--) {
 			if (events[i].user === events[j].user && samePlace(events[i].location, events[j].location)) {
@@ -32,6 +33,9 @@ function reduceOverlappingTimeEvents(events) {
 					events.splice(i, 1);
 					break;
 				}
+			}
+			if (now > events[j].start.dateTime) {
+				events[j].start.dateTime = now;
 			}
 		}
 	}
