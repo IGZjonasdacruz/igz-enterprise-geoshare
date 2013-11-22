@@ -25,7 +25,8 @@ iris.ui(function(self) {
 			showTime: contacts.eventsType !== appRes.eventsType.now,
 			showDistance: contacts.eventsType === appRes.eventsType.now || contacts.eventsType === appRes.eventsType.overlay,
 			showHangout: contacts.eventsType !== appRes.eventsType.me,
-			showAddress: contacts.eventsType === appRes.eventsType.me
+			showAddress: contacts.eventsType === appRes.eventsType.me,
+			showDuration: contacts.eventsType === appRes.eventsType.me || contacts.eventsType === appRes.eventsType.contacts
 		});
 
 		self.destroyUIs('contacts');

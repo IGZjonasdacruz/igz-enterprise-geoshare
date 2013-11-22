@@ -43,7 +43,12 @@ function overlay(intervalA, intervalB, gap) {
 }
 
 function sanitize(date) {
-	return date instanceof Date ? date.getTime() : (new Date(date)).getTime();
+	var date = date instanceof Date ? date.getTime() : (new Date(date)).getTime();
+	var now = (new Date()).getTime();
+	if (now > date) {
+		date = now;
+	}
+	return date;
 }
 
 module.exports = {

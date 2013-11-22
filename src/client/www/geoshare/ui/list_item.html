@@ -1,14 +1,12 @@
-<tr>  
+<tr style="vertical-align: middle">  
 	<td style='text-align: center;'>
-		<img data-jq-attr-src='photo' alt='No photo found' height='50' width='50' />
+		<a data-jq-attr-href='emailto'><img data-jq-attr-src='photo' alt='No photo found' height='50' width='50' /></a>
+		<div><a data-jq-attr-href='emailto' data-jq-text="name"></a></div>
 	</td>
-	<td>
-		<a data-jq-attr-href='emailto' data-jq-text="name"></a>
-	</td>
-	<td style='text-align: right;' data-jq-toggle='showDistance'><span data-jq-text="distance"></span></td>
+	<td style='text-align: right;' data-jq-toggle='showDistance'><span data-id="distance" data-jq-text="distance"></span></td>
 	<td style='text-align: left;' data-jq-toggle='showAddress'><span data-jq-text="address"></span></td>
-	<td style='text-align: right;' data-jq-toggle='showTime'><span data-jq-text="duration"></span></td>
-	<td style='text-align: right;' data-jq-toggle='showTime'><span data-jq-toggle="isGap">gap </span><span data-jq-text="from"></span></td>
-	<td style='text-align: right;' data-jq-toggle='showTime'><span data-jq-text="to"></span></td>
+	<td style='text-align: right;' data-jq-toggle='showDuration'><span data-jq-text="duration"></span></td>
+	<td style='text-align: right;' data-jq-toggle='showTime'><span data-jq-toggle="isGap">gap </span><span data-id="from" data-jq-text="from"></span></td>
+	<td style='text-align: right;' data-jq-toggle='showTime'><span data-id="to" data-jq-text="to"></span></td>
 	<td style='text-align: right;' data-jq-toggle='showHangout'><div data-id="hangout"></div></td>
 </tr>
