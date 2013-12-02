@@ -31,26 +31,29 @@ iris.screen(function(self) {
 
 		// If the nav-bar is collapsing, the offset will be different
 		// give 500 millis to collapse before the nav-tab
-		setTimeout(resize, 500);
-
-		if (!map) {
-			createMap(me);
-		}
-
-		map.removeMarkers();
-
-		iris.log('[map] Set map center');
-		map.setCenter(me.location.coordinates[1], me.location.coordinates[0]);
-
-		iris.log('[map] Draw user, lat=' + me.location.coordinates[1] + ', lng=' + me.location.coordinates[0]);
-		addMarker(me);
-
-		iris.log('[map] Draw user contacts');
-		contacts.forEach(function(contact) {
-			if (contact.location) {
-				addMarker(contact);
+		setTimeout(function() {
+			resize();
+			if (!map) {
+				createMap(me);
 			}
-		});
+
+			map.removeMarkers();
+
+			iris.log('[map] Set map center');
+			map.setCenter(me.location.coordinates[1], me.location.coordinates[0]);
+
+			iris.log('[map] Draw user, lat=' + me.location.coordinates[1] + ', lng=' + me.location.coordinates[0]);
+			addMarker(me);
+
+			iris.log('[map] Draw user contacts');
+			contacts.forEach(function(contact) {
+				if (contact.location) {
+					addMarker(contact);
+				}
+			});
+		}, 500);
+
+
 
 		self.inflate({countText: countText()});
 	};
@@ -116,6 +119,7 @@ iris.screen(function(self) {
 
 	function countText() {
 		return appRes.nearestContacts().length + " near contact" + (appRes.nearestContacts().length !== 1 ? 's' : '');
-	};
+	}
+	;
 
 }, iris.path.screen.map.js);
