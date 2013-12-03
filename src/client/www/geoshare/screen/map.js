@@ -5,6 +5,8 @@ iris.screen(function(self) {
 
 	self.create = function() {
 		self.tmpl(iris.path.screen.map.html);
+		
+		self.ui("map-slider", iris.path.ui.map_slider.js);
 
 		self.on('resize', resize);
 		self.on('refresh-nearest-contacts', self.render);
@@ -51,6 +53,7 @@ iris.screen(function(self) {
 					addMarker(contact);
 				}
 			});
+			
 		}, 500);
 
 
