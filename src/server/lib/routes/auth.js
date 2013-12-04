@@ -2,7 +2,7 @@ var passport = require('passport'),
 		GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
 		user = require('../dao/user'),
 		logger = require('../util/logger')(__filename),
-		config = require('../util/config').OAUTH2;
+		config = require('../util/config').OAUTH2,
 		fs = require('fs');
 
 

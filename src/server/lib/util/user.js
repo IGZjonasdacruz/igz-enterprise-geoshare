@@ -4,13 +4,21 @@ var logger = require('../util/logger')(__filename),
 		gPlusDao = require('../dao/gplus'),
 		geo = require('../util/geo'),
 		time = require('../util/time'),
-		util = require('../util/util');
+		util = require('../util/util'),
+		ObjectID = require('mongodb').ObjectID;
 
 
-function userEvents(user, callback) {
-	eventDao.get({
+function userEvents(user, event, callback) {
+
+	var search = {
 		user: user._id
-	}, function(err, userEvents) {
+	};
+
+	if (event) {
+		search['_id'] = new ObjectID(event);
+	}
+
+	eventDao.get(search, function(err, userEvents) {
 		callback(err, userEvents);
 	});
 }
@@ -156,13 +164,13 @@ function contactEvents(user, cbk) {
 }
 
 
-function futureNearestContacts(user, cbk) {
+function futureNearestContacts(user, event, cbk) {
 
 	logger.info('Searching future contacts for the user ' + user.name + " ...");
 
 	async.waterfall([
 		function(callback) {
-			userEvents(user, callback);
+			userEvents(user, event, callback);
 		},
 		function(userEvents, callback) {
 			logger.info('Found  ' + userEvents.length + ' future events for the user ' + user.name);
@@ -220,6 +228,8 @@ function futureNearestContacts(user, cbk) {
 module.exports = {
 	futureNearestContacts: futureNearestContacts,
 	reduceOverlappingTimeEvents: reduceOverlappingTimeEvents,
-	userEvents: userEvents,
+	userEvents: function(user, callback) {
+		userEvents(user, undefined, callback);
+	},
 	contactEvents: contactEvents
 };

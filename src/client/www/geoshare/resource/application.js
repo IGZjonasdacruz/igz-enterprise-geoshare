@@ -86,14 +86,14 @@ iris.resource(function(self) {
 		return nearestContacts;
 	};
 
-	self.futureNearestContacts = function() {
+	self.futureNearestContacts = function(event) {
 		var dfd = new jQuery.Deferred();
 
-		if (futureNearestContacts) {
+		if (futureNearestContacts && !event) {
 			dfd.resolve(futureNearestContacts);
 			return dfd.promise();
 		} else {
-			return self.get("user/me/futureNearestContacts").done(function(data) {
+			return self.put("user/me/futureNearestContacts", {event: event}).done(function(data) {
 				Array.isArray(data) && data.sort(function(eventA, eventB) {
 					if (eventA.overlappingTime && eventA.overlappingTime.start && eventB.overlappingTime && eventB.overlappingTime.start) {
 						return eventA.overlappingTime.start - eventB.overlappingTime.start;
@@ -103,7 +103,9 @@ iris.resource(function(self) {
 				});
 				data.eventsType = self.eventsType.overlay;
 				iris.log('futureNearestContacts retrieved', data);
-				futureNearestContacts = data;
+				if (!event) {
+					futureNearestContacts = data;
+				}
 			});
 		}
 

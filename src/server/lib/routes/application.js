@@ -10,7 +10,8 @@ var logger = require('../util/logger')(__filename),
 		gPlusDao = require('../dao/gplus'),
 		sanitize = require('validator').sanitize,
 		check = require('validator').check,
-		request = require('request');
+		request = require('request'),
+		async = require('async');
 
 function addRoutes(app) {
 
@@ -28,6 +29,8 @@ function addRoutes(app) {
  * 
  * @return {json}     The nearest contacts.
  */
+
+
 function signIn(req, res) {
 
 	var user = req.user;
@@ -41,76 +44,23 @@ function signIn(req, res) {
 
 	user.gcmId = req.body.gcmId;
 
-	//This may take a while. We can end the request without having to wait to finish this operation.
-	gplus.people(user.accessToken, function(err, contacts) {
-		if (err) {
-			return logger.error(err);
+	async.parallel([
+		function(callback) {
+			saveUserContacts(user, callback);
+		},
+		function(callback) {
+			saveUserEvents(user, callback);
+		},
+		function(callback) {
+			saveUser(user, callback);
 		}
-
-		gPlusDao.save(user, contacts.items ? contacts.items : [], function(err, result) {
-			if (err) {
-				return logger.error(err);
-			}
-			logger.info((contacts.items ? contacts.items.length : 0) + ' user contacts has been saved');
-		});
-
-	});
-
-	//This may take a while. We can end the request without having to wait to finish this operation.
-	calendar.upcomingEvents(user, function(err, events) {
-		if (err) {
-			return logger.error(err);
-		}
-
-		events = events || [];
-
-		for (var i = events.length - 1; i >= 0; i--) {
-			var event = events[i];
-			if (!event.location || event.location.lng === undefined || event.location.lat === undefined ||
-					!event.start || event.start.dateTime === undefined ||
-					!event.end || event.end.dateTime === undefined) {
-				events.splice(i, 1);
-				logger.warn('Bad format in event ' + JSON.stringify(event));
-			} else {
-				event.start.dateTime = (new Date (event.start.dateTime)).getTime();
-				event.end.dateTime = (new Date (event.end.dateTime)).getTime();
-				event.events = [{id: event.id, summary: event.summary, calendar: event.idCalendar}];
-			}
-		}
-		
-		logger.info('There are '  +events.length + ' events for the user ' + user.name);
-		userUtil.reduceOverlappingTimeEvents(events);
-		logger.info('There are '  +events.length + ' events after overlapping time reduction for the user ' + user.name);
-		eventDao.save(user, events, function(err, result) {
-			if (err) {
-				return logger.error(err);
-			}
-			logger.info(events.length + ' events of ' + user.name + ' user has been saved');
-		});
-
-	});
-
-	userDao.save(user, function(err, result) {
-
+	], function(err, result) {
 		if (err) {
 			logger.error(err);
 			return res.send(500);
+		} else {
+			res.json(result[2]);
 		}
-
-		userDao.nearestContacts(user, function(err, contacts) {
-			if (err) {
-				logger.error(err);
-				return res.send(500);
-			}
-
-			contacts.forEach(function(contact) {
-				applyShareFilter(user, contact);
-			});
-
-			notification.sendToNearestContacts(user, contacts);
-			res.json({user: user, nearestContacts: contacts});
-		})
-
 	});
 }
 
@@ -144,8 +94,6 @@ function signOut(req, res) {
 	});
 }
 
-
-
 //
 // Util
 //
@@ -164,5 +112,82 @@ function applyShareFilter(user, contact) {
 		contact.distance = geoUtil.distance(user.location.coordinates, contact.location.coordinates);
 	}
 }
+
+function saveUserContacts(user, callback) {
+	gplus.people(user.accessToken, function(err, contacts) {
+		if (err) {
+			return callback(err);
+		}
+
+		gPlusDao.save(user, contacts.items ? contacts.items : [], function(err, result) {
+			if (!err) {
+				logger.info((contacts.items ? contacts.items.length : 0) + ' user contacts has been saved');
+			}
+
+			callback(err);
+		});
+
+	});
+}
+
+function saveUserEvents(user, callback) {
+	calendar.upcomingEvents(user, function(err, events) {
+		if (err) {
+			return callback(err);
+		}
+
+		events = events || [];
+
+		for (var i = events.length - 1; i >= 0; i--) {
+			var event = events[i];
+			if (!event.location || event.location.lng === undefined || event.location.lat === undefined ||
+					!event.start || event.start.dateTime === undefined ||
+					!event.end || event.end.dateTime === undefined) {
+				events.splice(i, 1);
+				logger.warn('Bad format in event ' + JSON.stringify(event));
+			} else {
+				event.start.dateTime = (new Date(event.start.dateTime)).getTime();
+				event.end.dateTime = (new Date(event.end.dateTime)).getTime();
+				event.events = [{id: event.id, summary: event.summary, calendar: event.idCalendar}];
+			}
+		}
+
+		logger.info('There are ' + events.length + ' events for the user ' + user.name);
+		userUtil.reduceOverlappingTimeEvents(events);
+		logger.info('There are ' + events.length + ' events after overlapping time reduction for the user ' + user.name);
+		eventDao.save(user, events, function(err, result) {
+			if (!err) {
+				logger.info(events.length + ' events of ' + user.name + ' user has been saved');
+			}
+
+			return callback(err);
+		});
+
+	});
+}
+
+function saveUser(user, callback) {
+	userDao.save(user, function(err, result) {
+
+		if (err) {
+			return callback(err);
+		}
+
+		userDao.nearestContacts(user, function(err, contacts) {
+			if (err) {
+				return callback(err);
+			}
+
+			contacts.forEach(function(contact) {
+				applyShareFilter(user, contact);
+			});
+
+			notification.sendToNearestContacts(user, contacts);
+			callback(err, {user: user, nearestContacts: contacts});
+		});
+
+	});
+}
+
 
 module = module.exports = addRoutes;

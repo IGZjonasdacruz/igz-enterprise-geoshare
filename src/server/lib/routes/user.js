@@ -10,7 +10,7 @@ function addRoutes(app) {
 
 	app.put('/user/me/shareMode', ensureAuth, updateShareMode);
 	app.put('/user/me/gcm-id', ensureAuth, changeGcmId);
-	app.get('/user/me/futureNearestContacts', ensureAuth, futureNearestContacts);
+	app.put('/user/me/futureNearestContacts', ensureAuth, futureNearestContacts);
 	app.get('/user/me/events', ensureAuth, userEvents);
 	app.get('/user/me/contactEvents', ensureAuth, contactEvents);
 
@@ -71,7 +71,7 @@ function calendars(req, res) {
 }
 
 function futureNearestContacts(req, res) {
-	user.futureNearestContacts(req.user, function(err, result) {
+	user.futureNearestContacts(req.user, req.body.event, function(err, result) {
 		if (err) {
 			logger.error(err);
 			return res.send(500);

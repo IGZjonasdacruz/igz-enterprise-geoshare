@@ -10,6 +10,7 @@ iris.screen(function(self) {
 
 		self.on('resize', resize);
 		self.on('refresh-nearest-contacts', self.render);
+		self.on('refresh-me-position', self.render);
 
 		self.render();
 	};
@@ -24,9 +25,8 @@ iris.screen(function(self) {
 		}
 	}
 
-	self.render = function() {
-
-		var me = appRes.me();
+	self.render = function(me) {
+		me = me || appRes.me();
 		var contacts = appRes.nearestContacts();
 
 		iris.log('[map] Remove makers');
@@ -40,9 +40,9 @@ iris.screen(function(self) {
 			}
 
 			map.removeMarkers();
-
+			
 			iris.log('[map] Set map center');
-			map.setCenter(me.location.coordinates[1], me.location.coordinates[0]);
+			map.panTo(new google.maps.LatLng(me.location.coordinates[1], me.location.coordinates[0]));
 
 			iris.log('[map] Draw user, lat=' + me.location.coordinates[1] + ', lng=' + me.location.coordinates[0]);
 			addMarker(me);

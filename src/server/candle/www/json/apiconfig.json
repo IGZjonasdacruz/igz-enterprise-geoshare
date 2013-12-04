@@ -170,7 +170,7 @@
 							},
 							{
 								"name": "Future Nearest Users",
-								"method": "GET",
+								"method": "PUT",
 								"type": "text",
 								"content-type": "application/x-www-form-urlencoded",
 								"response content-type": "application/x-www-form-urlencoded",
@@ -181,7 +181,37 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZQKiu-JafgN40y93rVBZ8QedoPhCf9sOneizSW_Mwb9",
+										"value": "Bearer ya29.1.AADtN_XDN_kYUlVJYvJujRgiVpdhL6W-HNGD5X6-PNJYuNQGuk2Xc4Pc5rmg-k1seA",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/user/me/futureNearestContacts",
+								"description": ""
+							},
+							{
+								"name": "Future Nearest Users By Event",
+								"method": "PUT",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.1.AADtN_XDN_kYUlVJYvJujRgiVpdhL6W-HNGD5X6-PNJYuNQGuk2Xc4Pc5rmg-k1seA",
+										"javaType": "",
+										"description": ""
+									},
+									{
+										"name": "event",
+										"location": "body",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "529f9b0dfb7150856e000002",
 										"javaType": "",
 										"description": ""
 									}

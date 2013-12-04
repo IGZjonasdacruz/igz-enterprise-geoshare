@@ -55,6 +55,10 @@ iris.ui(function(self) {
 			self.get('progress-bar')
 					.attr('aria-valuetransitiongoal', 100 * (items[actual].time - minTime) / (maxTime - minTime))
 					.progressbar({'text': items[actual].text, display_text: 'fill'});
+			if (items[actual].text != "now") {
+				debugger
+			}
+			iris.notify('refresh-me-position', items[actual].data);
 
 		}
 		
