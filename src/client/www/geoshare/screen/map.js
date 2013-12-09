@@ -11,8 +11,6 @@ iris.screen(function(self) {
 		self.on('resize', resize);
 		self.on('refresh-nearest-contacts', self.render);
 		self.on('refresh-me-position', self.render);
-
-		self.render();
 	};
 
 	function resize() {
@@ -25,10 +23,10 @@ iris.screen(function(self) {
 		}
 	}
 
-	self.render = function(me) {
-		me = me || appRes.me();
-		var contacts = appRes.nearestContacts();
-
+	self.render = function(data) {
+		var me = (data && data.me) || appRes.me();
+		var contacts = (data && data.contacts) || appRes.nearestContacts();
+		
 		iris.log('[map] Remove makers');
 
 		// If the nav-bar is collapsing, the offset will be different
@@ -58,7 +56,7 @@ iris.screen(function(self) {
 
 
 
-		self.inflate({countText: countText()});
+		self.inflate({countText: countText(contacts)});
 	};
 
 	self.reset = function() {
@@ -120,8 +118,8 @@ iris.screen(function(self) {
 	}
 
 
-	function countText() {
-		return appRes.nearestContacts().length + " near contact" + (appRes.nearestContacts().length !== 1 ? 's' : '');
+	function countText(contacts) {
+		return contacts.length + " near contact" + (contacts.length !== 1 ? 's' : '');
 	}
 	;
 

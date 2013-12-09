@@ -1,7 +1,7 @@
 iris.ui(function(self) {
 
 	var appRes = iris.resource(iris.path.resource.app);
-	
+
 	self.settings = {
 		eventsType: appRes.eventsType.now
 	};
@@ -43,7 +43,7 @@ iris.ui(function(self) {
 
 	function countText() {
 		var type = 'near contacts';
-	
+
 		switch (self.setting('contacts').eventsType) {
 			case appRes.eventsType.me:
 			case appRes.eventsType.contacts:
@@ -52,11 +52,10 @@ iris.ui(function(self) {
 			case appRes.eventsType.overlay:
 				type = 'future overlapping events';
 				break;
-			
 		}
-		
-	return self.setting('contacts').length + " " + type ;
+
+		return self.setting('contacts').length + " " + type;
 	}
-	
+
 
 }, iris.path.ui.list.js);

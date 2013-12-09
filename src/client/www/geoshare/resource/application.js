@@ -93,7 +93,7 @@ iris.resource(function(self) {
 			dfd.resolve(futureNearestContacts);
 			return dfd.promise();
 		} else {
-			return self.put("user/me/futureNearestContacts", {event: event}).done(function(data) {
+			return self.put("user/me/futureNearestContacts", {event: event && event._id}).done(function(data) {
 				Array.isArray(data) && data.sort(function(eventA, eventB) {
 					if (eventA.overlappingTime && eventA.overlappingTime.start && eventB.overlappingTime && eventB.overlappingTime.start) {
 						return eventA.overlappingTime.start - eventB.overlappingTime.start;
@@ -110,6 +110,7 @@ iris.resource(function(self) {
 		}
 
 	};
+	
 
 	self.reset = function() {
 		nearestContacts = [];

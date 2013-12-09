@@ -33,21 +33,21 @@ iris.ui(function(self) {
 					iris.log('Error during retrieving events', err);
 				}
 		).always(function() {
-				self.render();
-				self.get("next").click(function() {
-					if (actual < items.length -1) {
-						actual++;
-						self.render();
-					}
-				});
-				self.get("previous").click(function() {
-					if (actual > 0) {
-						actual--;
-						self.render();
-					}
-				});
+			self.render();
+			self.get("next").click(function() {
+				if (actual < items.length - 1) {
+					actual++;
+					self.render();
+				}
+			});
+			self.get("previous").click(function() {
+				if (actual > 0) {
+					actual--;
+					self.render();
+				}
+			});
 		}));
-		
+
 	};
 
 	self.render = function() {
@@ -56,12 +56,21 @@ iris.ui(function(self) {
 					.attr('aria-valuetransitiongoal', 100 * (items[actual].time - minTime) / (maxTime - minTime))
 					.progressbar({'text': items[actual].text, display_text: 'fill'});
 			if (items[actual].text != "now") {
-				debugger
+				appRes.futureNearestContacts(items[actual].data).then(function(events) {
+					iris.notify('refresh-me-position', {
+						me: items[actual].data,
+						contacts: events
+					});
+				});
+			} else {
+				iris.notify('refresh-me-position', {
+					me: items[actual].data
+				});
 			}
-			iris.notify('refresh-me-position', items[actual].data);
+
 
 		}
-		
+
 		self.get("previous").toggleClass('disabled', actual <= 0);
 		self.get("next").toggleClass('disabled', actual >= items.length - 1);
 	};
