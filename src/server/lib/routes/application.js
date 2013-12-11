@@ -141,13 +141,13 @@ function saveUserEvents(user, callback) {
 		for (var i = events.length - 1; i >= 0; i--) {
 			var event = events[i];
 			if (!event.location || event.location.lng === undefined || event.location.lat === undefined ||
-					!event.start || event.start.dateTime === undefined ||
-					!event.end || event.end.dateTime === undefined) {
+					!event.start ||
+					!event.end) {
 				events.splice(i, 1);
 				logger.warn('Bad format in event ' + JSON.stringify(event));
 			} else {
-				event.start.dateTime = (new Date(event.start.dateTime)).getTime();
-				event.end.dateTime = (new Date(event.end.dateTime)).getTime();
+				event.start.dateTime = (new Date(event.start.dateTime || event.start.date + " 00:00:00")).getTime();
+				event.end.dateTime = (new Date(event.end.dateTime || event.end.date + " 00:00:00")).getTime();
 				event.events = [{id: event.id, summary: event.summary, calendar: event.idCalendar}];
 			}
 		}
