@@ -2,13 +2,15 @@ iris.screen(function(self) {
 
 	var appRes = iris.resource(iris.path.resource.app);
 
+	var timeInterval = null;
+
 	self.create = function() {
 		self.tmpl(iris.path.screen.welcome.html);
 
 		self.get('logout_btn').on('click', logout);
 		self.get('login_btn').on('click', onBtnLogin);
 		self.get('refresh_btn').on('click', onBtnRefresh);
-		
+
 
 		self.screens("screens", [
 			["map", iris.path.screen.map.js],
@@ -27,7 +29,7 @@ iris.screen(function(self) {
 
 		// collapse nav-bar on click
 		self.get('navbar_items').find('a').on('click', function() {
-			if ( self.get('navbar_items').hasClass('in') ) {
+			if (self.get('navbar_items').hasClass('in')) {
 				self.get('collapse_nav_btn').click();
 			}
 		});
@@ -67,21 +69,21 @@ iris.screen(function(self) {
 		self.get('status').text('');
 	}
 
-	function onBtnLogin (e) {
+	function onBtnLogin(e) {
 		if (geoshare.isBrowser) {
 			location.reload();
 		} else {
 			login();
 		}
 	}
-	
-	function onBtnRefresh (e) {
+
+	function onBtnRefresh(e) {
 		login();
 	}
 
 	function login() {
 		iris.notify('clearNotifications');
-		
+
 		self.inflate({
 			showMenu: false,
 			showUserBox: false,
@@ -127,7 +129,12 @@ iris.screen(function(self) {
 
 	function onGetPosition(position) {
 		var pos = position.coords;
+		var timeRemaining = 3600;
 		iris.log('lat = ' + pos.latitude + ', lng=' + pos.longitude);
+
+		if (timeInterval !== null) {
+			clearInterval(timeInterval);
+		}
 
 		appRes.signIn(pos.latitude, pos.longitude).done(function() {
 
@@ -139,7 +146,8 @@ iris.screen(function(self) {
 				user: appRes.me(),
 				showMenu: true,
 				showUserBox: true,
-				showLogin: false
+				showLogin: false,
+				timeRemaining: timeRemaining
 			});
 
 			if (!geoshare.isBrowser) {
@@ -148,10 +156,19 @@ iris.screen(function(self) {
 				});
 			}
 
+			timeInterval = setInterval(function() {
+				timeRemaining--;
+				self.inflate({
+					timeRemaining: timeRemaining
+				});
+			}, 1000);
+
+
+
 		}).fail(onSignInFail);
 	}
 
-	function onSignInFail () {
+	function onSignInFail() {
 		hideStatus();
 		showLogin();
 	}
