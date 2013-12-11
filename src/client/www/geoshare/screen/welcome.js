@@ -7,6 +7,8 @@ iris.screen(function(self) {
 
 		self.get('logout_btn').on('click', logout);
 		self.get('login_btn').on('click', onBtnLogin);
+		self.get('refresh_btn').on('click', onBtnRefresh);
+		
 
 		self.screens("screens", [
 			["map", iris.path.screen.map.js],
@@ -71,6 +73,10 @@ iris.screen(function(self) {
 		} else {
 			login();
 		}
+	}
+	
+	function onBtnRefresh (e) {
+		login();
 	}
 
 	function login() {
