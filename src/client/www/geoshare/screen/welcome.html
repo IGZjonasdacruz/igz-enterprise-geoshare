@@ -23,6 +23,17 @@
 							<span class="glyphicon glyphicon-globe"></span> Map
 						</a>
 					</li>
+					<li class="dropdown">
+						<a data-toggle="dropdown">
+							<span class="glyphicon glyphicon-share"> Privacy</span>
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a data-id="shareMode_info_btn"><span class="glyphicon glyphicon-info-sign"> Info</span></a></li>
+							<li><a data-id="shareMode_calendars_btn"><span class="glyphicon glyphicon-calendar"> Calendars</a></li>
+							<li><a data-id="shareMode_users_btn"><span class="glyphicon glyphicon-user"> User collections</a></li>
+						</ul>
+					</li>
 				</ul>
 				<ul class='nav navbar-nav navbar-right' data-jq-toggle='showMenu'>
 					<li><a href='#' data-id='logout_btn'>Sign out</a></li>
@@ -32,8 +43,10 @@
 	</nav>
 
 	<div data-id='notify'></div>
-	
+
 	<div class="container">
+		
+		<div data-id='privacy'></div>
 
 		<div data-id='login_box' class='jumbotron' data-jq-toggle='showLogin'>
 			<h1>Welcome!</h1>
@@ -43,22 +56,7 @@
 			</button>
 		</div>
 
-		<div data-id='user_box' class='jumbotron' data-jq-toggle='showUserBox'>
-			<img data-jq-attr-src='user.photo' alt='No photo found' height='100' width='100' class='hidden-xs' />
-			<h1>Welcome <span data-jq-text='user.name'></span>!</h1>
-			<p>You will be visible to other users for <span data-jq-text='timeRemaining'>3600</span> seconds.<br>
-				You can change what information you want to share:</p>
-			<div data-id='shareMode_btn' class='btn btn-primary'>
-				<span class="glyphicon glyphicon-share"></span> Privacy
-			</div>
-			<p>You can update your location and get the current location of your teammates:</p>
-			<div data-id='refresh_btn' class='btn btn-info'>
-				<span class="glyphicon glyphicon-refresh"></span> Refresh
-			</div>
-		</div>
-
-		<div data-id='screens'></div>
-
+		
 		<div data-id='loader' class="panel panel-info" style='display:none;'>
 			<div class="panel-heading">
 				<h3 class="panel-title">Please wait...</h3>
@@ -71,7 +69,18 @@
 			</div>
 		</div>
 		
-		<div data-id='privacy'></div>
+		<div data-id='user_box' class='jumbotron' data-jq-toggle='showUserBox'>
+			<img data-jq-attr-src='user.photo' alt='No photo found' height='100' width='100' class='hidden-xs' />
+			<h1>Welcome <span data-jq-text='user.name'></span>!</h1>
+			<p>You will be visible to other users for <span data-jq-text='timeRemaining'>3600</span> seconds.</p>
+			<p>You can update your location and get the current location of your teammates:</p>
+				<div data-id='refresh_btn' class='btn btn-info'>
+				<span class="glyphicon glyphicon-refresh"></span> Refresh
+			</div>
+		</div>
+		
+		<div data-id='screens'></div>
+
 	</div>
 
 </div>

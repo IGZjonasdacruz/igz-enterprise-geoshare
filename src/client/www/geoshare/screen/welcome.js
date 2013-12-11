@@ -23,8 +23,9 @@ iris.screen(function(self) {
 
 		var shareModeUI = self.ui('privacy', iris.path.ui.shareMode.js, {showStatus: showStatus, hideStatus: hideStatus});
 
-		self.get('shareMode_btn').on('click', function() {
+		self.get('shareMode_info_btn').on('click', function(e) {
 			shareModeUI.get().modal('toggle');
+			e.preventDefault();
 		});
 
 		// collapse nav-bar on click
