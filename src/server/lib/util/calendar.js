@@ -46,7 +46,7 @@ function checkAttendee(user, event) {
 	}
 	
 	if (event.attendees) {
-		return rdo =event.attendees.some(function(attendee) {
+		return rdo = event.attendees.some(function(attendee) {
 			return attendee.email === user.email && attendee.responseStatus === "accepted";
 		});
 	}
@@ -58,7 +58,7 @@ function upcomingEventsFromCalendar(user, calendarId, done) {
 	time.setHours(time.getHours() + 24);
 	var timeMax = time.toISOString();
 
-	var url = 'calendars/' + encodeURIComponent(calendarId) + "/events?timeMin=" + timeMin + "&timeMax=" + timeMax;
+	var url = 'calendars/' + encodeURIComponent(calendarId) + "/events?singleEvents=true&timeMin=" + timeMin + "&timeMax=" + timeMax;
 	util.doCall('GET', BASE_URL_CALENDAR, url, user.accessToken, function(err, events) {
 		if (err) {
 			return done(err, null);
