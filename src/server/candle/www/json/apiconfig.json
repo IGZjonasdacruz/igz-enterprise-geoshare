@@ -256,7 +256,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRgD6v-wbufIqLN9MeZWfln3Poflf3Z1_zwrWuyKwZ2",
+										"value": "Bearer ya29.1.AADtN_VAQ6JaoQSpIoKuGiMhVelzjvwvgh7J484JYYVVY6DISkbDIYGF3S36h6Yqzpuu8q-R_sE6q9IDH1exAZ7IKss",
 										"javaType": "",
 										"description": ""
 									}
@@ -277,7 +277,7 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZRgD6v-wbufIqLN9MeZWfln3Poflf3Z1_zwrWuyKwZ2",
+										"value": "Bearer ya29.1.AADtN_VAQ6JaoQSpIoKuGiMhVelzjvwvgh7J484JYYVVY6DISkbDIYGF3S36h6Yqzpuu8q-R_sE6q9IDH1exAZ7IKss",
 										"javaType": "",
 										"description": ""
 									},
@@ -286,7 +286,7 @@
 										"location": "path",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "intelygenz.com_2d38383638353438302d323337@resource.calendar.google.com",
+										"value": "javier.perez@intelygenz.com",
 										"javaType": "",
 										"description": ""
 									},
@@ -295,7 +295,7 @@
 										"location": "query",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "2013-11-02T19:55:09.767Z",
+										"value": "2013-12-11T19:55:09.767Z",
 										"javaType": "",
 										"description": ""
 									},
@@ -304,7 +304,7 @@
 										"location": "query",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "2013-11-03T11:00:00+01:00",
+										"value": "2013-12-12T19:00:00+01:00",
 										"javaType": "",
 										"description": ""
 									}

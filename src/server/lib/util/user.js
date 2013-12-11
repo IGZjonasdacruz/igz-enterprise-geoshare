@@ -19,6 +19,7 @@ function userEvents(user, event, callback) {
 	}
 
 	eventDao.get(search, function(err, userEvents) {
+		adjustStartAndEndTime(userEvents);
 		callback(err, userEvents);
 	});
 }
@@ -43,6 +44,16 @@ function reduceOverlappingTimeEvents(events) {
 			}
 		}
 	}
+}
+
+function adjustStartAndEndTime(events) {
+	var now = (new Date()).getTime();
+	var tomorrow = now + 24 * 60 * 60 * 1000;
+	
+	events.forEach(function(event) {
+		event.start = Math.max(event.start, now);
+		event.end = Math.min(event.end, tomorrow);
+	});
 }
 
 
@@ -158,7 +169,7 @@ function contactEvents(user, cbk) {
 		if (err) {
 			return cbk(err);
 		}
-
+		adjustStartAndEndTime(contactEvents);
 		cbk(null, contactEvents);
 	});
 }
@@ -220,7 +231,8 @@ function futureNearestContacts(user, event, cbk) {
 		if (err) {
 			return cbk(err);
 		}
-
+		
+		adjustStartAndEndTime(nearEvents);
 		cbk(null, nearEvents);
 	});
 }
