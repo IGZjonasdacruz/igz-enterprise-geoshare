@@ -8,29 +8,12 @@ var logger = require('../util/logger')(__filename),
 
 function addRoutes(app) {
 
-	app.put('/user/me/shareMode', ensureAuth, updateShareMode);
 	app.put('/user/me/gcm-id', ensureAuth, changeGcmId);
 	app.put('/user/me/futureNearestContacts', ensureAuth, futureNearestContacts);
 	app.get('/user/me/events', ensureAuth, userEvents);
 	app.get('/user/me/contactEvents', ensureAuth, contactEvents);
 
 	logger.info('User routes added');
-}
-
-function updateShareMode(req, res) {
-	var update = {
-		$set: {shareMode: req.body.shareMode || 'all'}
-	};
-
-	userDao.update(req.user._id, update, function(err, user) {
-
-		if (err) {
-			logger.error(err);
-			return res.send(500);
-		}
-
-		res.json({status: 200});
-	});
 }
 
 function changeGcmId(req, res) {

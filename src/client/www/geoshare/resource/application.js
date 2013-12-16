@@ -29,10 +29,10 @@ iris.resource(function(self) {
 		});
 	};
 
-	self.sendShareMode = function(shareMode) {
-		return self.put("user/me/shareMode", {shareMode: shareMode}).done(function(data) {
-			iris.log('sendShareMode done');
-			me.shareMode = shareMode;
+	self.sendPrivacy = function(privacy) {
+		return self.put("privacy", {privacy: privacy}).done(function(data) {
+			iris.log('sendPrivacy done');
+			me.privacy = data.privacy;
 		});
 	};
 

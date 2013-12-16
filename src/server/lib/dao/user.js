@@ -37,7 +37,7 @@ function locationIndex(next) {
 	mongodb(function(err, db) {
 		if (err) {
 			throw err;
-			}
+		}
 
 		db.collection('user').ensureIndex({
 			"location": "2dsphere"
@@ -57,10 +57,10 @@ function nearestUsersIndex(next) {
 	mongodb(function(err, db) {
 		if (err) {
 			throw err;
-			}
+		}
 
 		db.collection('user').ensureIndex({
-			"location": "2dsphere", "domain": 1, "shareMode": 1
+			"location": "2dsphere", "domain": 1
 		},
 		function(err, result) {
 			if (err) {
@@ -75,7 +75,7 @@ function nearestUsersIndex(next) {
 
 function userIndexes(callback) {
 	async.parallel([statusIndex, locationIndex, nearestUsersIndex], function(err) {
-		
+
 		if (err) {
 			return callback(err);
 		}
@@ -111,7 +111,7 @@ User.prototype.save = function(user, callback) {
 		}
 
 		user.status = new Date();
-		db.collection('user').save(user, { safe : true }, callback);
+		db.collection('user').save(user, {safe: true}, callback);
 	});
 };
 
@@ -145,7 +145,7 @@ User.prototype.get = function(id, callback) {
 		db.collection('user').findOne({
 			_id: id
 		}, function(err, doc) {
-			if (err){
+			if (err) {
 				return callback(err, null);
 			}
 
@@ -156,10 +156,9 @@ User.prototype.get = function(id, callback) {
 	});
 };
 
-User.prototype.nearestContacts = function(user, callback) {
+User.prototype.nearestContacts = function(user, contacts, callback) {
 	try {
 		check(user._id).notNull();
-		check(user.domain).notEmpty();
 		check(user.location.coordinates[0], 'user.location.coordinates[0]').isFloat();
 		check(user.location.coordinates[1], 'user.location.coordinates[1]').isFloat();
 	} catch (e) {
@@ -169,16 +168,14 @@ User.prototype.nearestContacts = function(user, callback) {
 	mongodb(function(err, db) {
 
 		var search = {
-				location: {
-					$near: { $geometry: user.location },
-					$maxDistance: 1000000
-				},
-			domain: user.domain,
-			shareMode: { $ne: 'none' },
-			_id: { $ne: user._id }
+			location: {
+				$near: {$geometry: user.location},
+				$maxDistance: 1000000
+			},
+			_id: {$in: contacts}
 		};
 
-		db.collection('user').find(search, { limit: 20 }).toArray(callback);
+		db.collection('user').find(search, {limit: 20}).toArray(callback);
 	});
 };
 

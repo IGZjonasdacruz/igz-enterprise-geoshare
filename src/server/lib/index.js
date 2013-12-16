@@ -1,7 +1,5 @@
 var express = require('express'),
 		passport = require('passport'),
-		auth = require('./routes/auth'),
-		geo = require('./routes/user'),
 		logger = require('./util/logger')(__filename),
 		fs = require('fs'),
 		expressWinston = require('express-winston'),

@@ -8,10 +8,10 @@ iris.ui(function(self) {
 	});
 
 	self.create = function() {
-		self.tmpl(iris.path.ui.shareMode.html);
+		self.tmpl(iris.path.ui.privacy.html);
 
 		['name', 'email', 'photo', 'distance', 'location'].forEach(function(key) {
-			self.ui('shareMode_items', iris.path.ui.shareMode_item.js, {key: key, name: key.charAt(0).toUpperCase() + key.slice(1)});
+			self.ui('privacy_items', iris.path.ui.privacy_item.js, {key: key, name: key.charAt(0).toUpperCase() + key.slice(1)});
 		});
 
 		self.get().on('show.bs.modal', self.render);
@@ -22,26 +22,24 @@ iris.ui(function(self) {
 
 	self.render = function() {
 		var me = appRes.me();
-		self.ui('shareMode_items').forEach(function(ui) {
+		self.ui('privacy_items').forEach(function(ui) {
 			var key = ui.getState().key;
-			ui.render(me.shareMode === undefined || me.shareMode === 'all' || Array.isArray(me.shareMode) && me.shareMode.indexOf(key) > -1);
+			ui.render(me.privacy === undefined || me.privacy === 'none' || Array.isArray(me.privacy) && me.privacy.indexOf(key) === -1);
 		});
 	};
 
 	function save() {
-		var shareMode = [];
-		self.ui('shareMode_items').forEach(function(ui) {
+		var privacy = [];
+		self.ui('privacy_items').forEach(function(ui) {
 			var key = ui.getState().key;
 			var checked = ui.getState().checked;
-			if (checked) {
-				shareMode.push(key);
+			if (!checked) {
+				privacy.push(key);
 			}
 		});
 
-		if (shareMode.length === self.ui('shareMode_items').length) {
-			shareMode = 'all';
-		} else if (shareMode.length === 0) {
-			shareMode = 'none';
+		if (privacy.length === self.ui('privacy_items').length) {
+			privacy = 'none';
 		}
 
 		self.get().modal('hide');
@@ -50,7 +48,7 @@ iris.ui(function(self) {
 			self.setting('showStatus')('Updating share mode');
 		}
 		
-		appRes.sendShareMode(shareMode).done(function() {
+		appRes.sendPrivacy(privacy).done(function() {
 			if (self.setting('hideStatus')) {
 				self.setting('hideStatus')();
 			}
@@ -58,4 +56,4 @@ iris.ui(function(self) {
 		});
 	}
 
-}, iris.path.ui.shareMode.js);
+}, iris.path.ui.privacy.js);

@@ -1,5 +1,7 @@
 var logger = require('../util/logger')(__filename),
 		async = require('async'),
+		userDao = require('../dao/user'),
+		privacyDao = require('../dao/privacy'),
 		eventDao = require('../dao/event'),
 		gPlusDao = require('../dao/gplus'),
 		geo = require('../util/geo'),
@@ -49,7 +51,7 @@ function reduceOverlappingTimeEvents(events) {
 function adjustStartAndEndTime(events) {
 	var now = (new Date()).getTime();
 	var tomorrow = now + 24 * 60 * 60 * 1000;
-	
+
 	events.forEach(function(event) {
 		event.start = Math.max(event.start, now);
 		event.end = Math.min(event.end, tomorrow);
@@ -231,10 +233,41 @@ function futureNearestContacts(user, event, cbk) {
 		if (err) {
 			return cbk(err);
 		}
-		
+
 		adjustStartAndEndTime(nearEvents);
 		cbk(null, nearEvents);
 	});
+}
+
+function nearestContacts(user, callback) {
+	userContacts(user, function(err, userContacts) {
+		if (err)
+			return callback(err);
+
+		userDao.nearestContacts(user, userContacts, function(err, nearContacts) {
+			if (err) {
+				return callback(err);
+			}
+
+			async.each(nearContacts, function(contact, cbk) {
+				privacyDao.get(contact._id, function(err, data) {
+					if (err)
+						cbk(err);
+					else {
+						if (data && data.privacy)
+							contact.privacy = data.privacy;
+						cbk(null);
+					}
+				});
+			}, function(err) {
+				if (err)
+					return callback(err, null);
+				callback(null, nearContacts);
+			});
+
+		});
+	});
+
 }
 
 module.exports = {
@@ -243,5 +276,6 @@ module.exports = {
 	userEvents: function(user, callback) {
 		userEvents(user, undefined, callback);
 	},
-	contactEvents: contactEvents
+	contactEvents: contactEvents,
+	nearestContacts: nearestContacts
 };

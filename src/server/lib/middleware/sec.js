@@ -62,6 +62,10 @@ function ensureAuthenticated (req, res, next) {
 		// the unique-identifier key for the user.
 
 		// hd = The hosted domain e.g. example.com if the user is Google apps user.
+		
+		if (!resJson.hasOwnProperty('hd')) {
+			resJson.hd = "nodomain"
+		}
 
 		if ( !resJson.hasOwnProperty('email') || !resJson.hasOwnProperty('sub') || !resJson.hasOwnProperty('hd') ) {
 			logger.warn('The request to ' + GOOGLE_USER_INFO_URL + ' doesn\'t returns email, hd or sub field. body=' + body);

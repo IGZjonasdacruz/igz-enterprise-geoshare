@@ -6,6 +6,7 @@ var logger = require('../util/logger')(__filename),
 		calendar = require('../util/calendar'),
 		userUtil = require('../util/user'),
 		userDao = require('../dao/user'),
+		privacyDao = require('../dao/privacy'),
 		eventDao = require('../dao/event'),
 		gPlusDao = require('../dao/gplus'),
 		sanitize = require('validator').sanitize,
@@ -53,6 +54,9 @@ function signIn(req, res) {
 		},
 		function(callback) {
 			saveUser(user, callback);
+		},
+		function(callback) {
+			getPrivacy(user, callback);
 		}
 	], function(err, result) {
 		if (err) {
@@ -98,18 +102,17 @@ function signOut(req, res) {
 // Util
 //
 
-function applyShareFilter(user, contact) {
-	var shareMode = contact.shareMode;
-	if (shareMode) {
+function applyPrivateFilter(user, contact) {
+	var privacy = contact.privacy;
+	if (!privacy || privacy.indexOf('distance') === -1) {
+		contact.distance = geoUtil.distance(user.location.coordinates, contact.location.coordinates);
+	}
+	if (privacy) {
 		Object.keys(contact).forEach(function(key) {
-			if (key !== '_id' && shareMode.indexOf(key) === -1) {
+			if (key !== '_id' && privacy.indexOf(key) !== -1) {
 				delete contact[key];
 			}
 		});
-	}
-
-	if (!shareMode || shareMode.indexOf('distance') !== -1) {
-		contact.distance = geoUtil.distance(user.location.coordinates, contact.location.coordinates);
 	}
 }
 
@@ -173,18 +176,30 @@ function saveUser(user, callback) {
 			return callback(err);
 		}
 
-		userDao.nearestContacts(user, function(err, contacts) {
+		userUtil.nearestContacts(user, function(err, contacts) {
 			if (err) {
 				return callback(err);
 			}
-
+			
 			contacts.forEach(function(contact) {
-				applyShareFilter(user, contact);
+				applyPrivateFilter(user, contact);
 			});
 
 			notification.sendToNearestContacts(user, contacts);
 			callback(err, {user: user, nearestContacts: contacts});
 		});
+
+	});
+}
+
+function getPrivacy(user, callback) {
+	privacyDao.get(user._id, function(err, data) {
+
+		if (err) {
+			return callback(err);
+		}
+		user.privacy = data.privacy;
+		callback(null, user);
 
 	});
 }

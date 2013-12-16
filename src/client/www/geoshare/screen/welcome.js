@@ -21,10 +21,10 @@ iris.screen(function(self) {
 
 		self.ui('notify', iris.path.ui.notify.js);
 
-		var shareModeUI = self.ui('privacy', iris.path.ui.shareMode.js, {showStatus: showStatus, hideStatus: hideStatus});
+		var privacyUI = self.ui('privacy', iris.path.ui.privacy.js, {showStatus: showStatus, hideStatus: hideStatus});
 
-		self.get('shareMode_info_btn').on('click', function(e) {
-			shareModeUI.get().modal('toggle');
+		self.get('privacy_info_btn').on('click', function(e) {
+			privacyUI.get().modal('toggle');
 			e.preventDefault();
 		});
 

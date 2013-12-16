@@ -7,7 +7,7 @@ iris.ui(function(self) {
 
 	self.create = function() {
 		self.tmplMode(self.APPEND);
-		self.tmpl(iris.path.ui.shareMode_item.html);
+		self.tmpl(iris.path.ui.privacy_item.html);
 		self.inflate({name: self.setting('name')});
 	};
 
@@ -22,4 +22,4 @@ iris.ui(function(self) {
 		};
 	};
 
-}, iris.path.ui.shareMode_item.js);
+}, iris.path.ui.privacy_item.js);
