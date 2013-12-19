@@ -1,24 +1,26 @@
 iris.ui(function(self) {
 	
 	self.settings({
-		name: 'item_name',
-		key: 'item_key'
+		id: 'item_id',
+		value: 'item_value',
+		privacy: false
 	});
 
 	self.create = function() {
 		self.tmplMode(self.APPEND);
 		self.tmpl(iris.path.ui.privacy_item.html);
-		self.inflate({name: self.setting('name')});
+		self.inflate({value: self.setting('value')});
+		self.render();
 	};
 
-	self.render = function(checked) {
-		self.inflate({state: checked ? 'checked':''});
+	self.render = function() {
+		self.inflate({privacy: self.setting('privacy')});
 	};
 	
 	self.getState = function() {
 		return {
-			key: self.setting('key'),
-			checked: self.get('item').prop('checked')
+			id: self.setting('id'),
+			privacy: self.get('item').prop('checked')
 		};
 	};
 

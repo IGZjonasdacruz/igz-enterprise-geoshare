@@ -31,7 +31,7 @@ iris.resource(function(self) {
 
 	self.sendPrivacy = function(privacy) {
 		return self.put("privacy", {privacy: privacy}).done(function(data) {
-			iris.log('sendPrivacy done');
+			iris.log('sendPrivacy done', data);
 			me.privacy = data.privacy;
 		});
 	};

@@ -21,10 +21,19 @@ iris.screen(function(self) {
 
 		self.ui('notify', iris.path.ui.notify.js);
 
-		var privacyUI = self.ui('privacy', iris.path.ui.privacy.js, {showStatus: showStatus, hideStatus: hideStatus});
-
 		self.get('privacy_info_btn').on('click', function(e) {
-			privacyUI.get().modal('toggle');
+			var me = appRes.me();
+			var data = [{id: 'name', value: 'Name'}, {id: 'email', value: 'Email'}, {id: 'photo', value: 'Photo'}, {id: 'distance', value: 'Distance'}, {id: 'location', value: 'Location'}];
+			data.forEach(function(item) {
+				item.privacy = me.privacy !== undefined && me.privacy.data !== 'none' && Array.isArray(me.privacy.data) && me.privacy.data.indexOf(item.id) !== -1;
+			});
+			showPrivacy(data, 'data');
+			e.preventDefault();
+		});
+		
+		self.get('privacy_calendars_btn').on('click', function(e) {
+			var me = appRes.me();
+			showPrivacy(me.privacy.calendars, 'calendars');
 			e.preventDefault();
 		});
 
@@ -49,6 +58,12 @@ iris.screen(function(self) {
 			showUserBox: false,
 			showLogin: true
 		});
+	}
+
+	function showPrivacy(data, type) {
+		self.destroyUIs('privacy');
+		var privacyUI = self.ui('privacy', iris.path.ui.privacy.js, {data: data, type: type, showStatus: showStatus, hideStatus: hideStatus});
+		privacyUI.get().modal('toggle');
 	}
 
 	function onBeforeNavigation() {

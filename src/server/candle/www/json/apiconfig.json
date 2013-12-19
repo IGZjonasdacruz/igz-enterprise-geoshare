@@ -67,7 +67,7 @@
 								"description": ""
 							},
 							{
-								"name": "Update my share mode",
+								"name": "Update my privacy",
 								"method": "PUT",
 								"type": "text",
 								"content-type": "application/x-www-form-urlencoded",
@@ -79,12 +79,12 @@
 										"location": "header",
 										"isList": "false",
 										"isJavaPojo": "false",
-										"value": "Bearer ya29.AHES6ZQC_VWQaRH3NiZ1L5PSZ017Ctqs3s0WiVhUULltf_g",
+										"value": "Bearer ya29.1.AADtN_UAJq4_lYSHZ0zoV1Lqmyxsl5HRO9xA_oWSTsyJyLR7szpNrw7nG2pS7ByW9TP5hWjWw5Q_cAlLkh-WNb3QFB0",
 										"javaType": "",
 										"description": ""
 									},
 									{
-										"name": "shareMode",
+										"name": "privacy",
 										"location": "body",
 										"isList": "true",
 										"isJavaPojo": "false",
@@ -93,7 +93,7 @@
 										"description": ""
 									}
 								],
-								"path": "/me/shareMode",
+								"path": "/privacy",
 								"description": ""
 							},
 							{
@@ -217,6 +217,27 @@
 									}
 								],
 								"path": "/user/me/futureNearestContacts",
+								"description": ""
+							},
+							{
+								"name": "Get calendars",
+								"method": "GET",
+								"type": "text",
+								"content-type": "application/x-www-form-urlencoded",
+								"response content-type": "application/x-www-form-urlencoded",
+								"java return type": "Response",
+								"param": [
+									{
+										"name": "Authorization",
+										"location": "header",
+										"isList": "false",
+										"isJavaPojo": "false",
+										"value": "Bearer ya29.1.AADtN_UAJq4_lYSHZ0zoV1Lqmyxsl5HRO9xA_oWSTsyJyLR7szpNrw7nG2pS7ByW9TP5hWjWw5Q_cAlLkh-WNb3QFB0",
+										"javaType": "",
+										"description": ""
+									}
+								],
+								"path": "/privacy/calendars",
 								"description": ""
 							}
 						],

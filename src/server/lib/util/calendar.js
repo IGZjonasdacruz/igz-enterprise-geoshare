@@ -161,5 +161,6 @@ function allUpcomingEvents(user, done) {
 }
 
 module.exports = {
-	upcomingEvents: allUpcomingEvents
+	upcomingEvents: allUpcomingEvents,
+	calendars: calendars
 };

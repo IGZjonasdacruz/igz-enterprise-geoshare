@@ -180,7 +180,7 @@ function saveUser(user, callback) {
 			if (err) {
 				return callback(err);
 			}
-			
+
 			contacts.forEach(function(contact) {
 				applyPrivateFilter(user, contact);
 			});
@@ -193,14 +193,42 @@ function saveUser(user, callback) {
 }
 
 function getPrivacy(user, callback) {
-	privacyDao.get(user._id, function(err, data) {
+
+	privacyDao.get(user._id, function(err, privacy) {
 
 		if (err) {
 			return callback(err);
 		}
-		user.privacy = data.privacy;
-		callback(null, user);
+		user.privacy = {};
+		user.privacy.data = !privacy || !privacy.data ? [] : privacy.data;
 
+		user.privacy.calendars = [];
+
+		var privacyCalendars = !privacy || !privacy.calendars ? [] : privacy.calendars;
+
+		calendar.calendars(user, function(err, calendars) {
+
+			if (err) {
+				return callback(err);
+			}
+
+			calendars.forEach(function(calendar) {
+				calendar.privacy = false;
+				for (var i = 0; i< privacyCalendars.length; i++) {
+					if (privacyCalendars[i] = calendar.id) {
+						calendar.privacy = true;
+						break;
+					}
+				}
+				user.privacy.calendars.push({
+					id: calendar.id,
+					value: calendar.summary,
+					privacy: calendar.privacy
+				});
+			});
+
+			callback(null, user);
+		});
 	});
 }
 
